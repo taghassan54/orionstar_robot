@@ -94,4 +94,16 @@ abstract class OrionstarRobotPlatform extends PlatformInterface {
   Future<String?> checkMapName() {
     throw UnimplementedError('checkMapName() has not been implemented.');
   }
+
+  Future<String?> getRequestResponse() {
+    throw UnimplementedError('getRequestResponse() has not been implemented.');
+  }
+
+  Future<String?> resetRequestResponse() {
+    throw UnimplementedError('resetRequestResponse() has not been implemented.');
+  }
+
+  Future<String?> robotPlayText({required String textToPlay}) {
+    throw UnimplementedError('robotPlayText() has not been implemented.');
+  }
 }

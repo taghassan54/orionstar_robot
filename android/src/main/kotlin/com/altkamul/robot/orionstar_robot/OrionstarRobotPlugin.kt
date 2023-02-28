@@ -16,13 +16,15 @@ import com.ainirobot.coreservice.client.actionbean.Pose
 import com.ainirobot.coreservice.client.listener.ActionListener
 import com.ainirobot.coreservice.client.listener.CommandListener
 import com.ainirobot.coreservice.client.listener.Person
+import com.ainirobot.coreservice.client.listener.TextListener
 import com.ainirobot.coreservice.client.module.ModuleCallbackApi
 import com.ainirobot.coreservice.client.person.PersonApi
 import com.ainirobot.coreservice.client.person.PersonListener
 import com.ainirobot.coreservice.client.person.PersonUtils
 import com.ainirobot.coreservice.client.speech.SkillApi
-import com.altkamul.robot.orionstar_robot.application.ModuleCallback
-import com.altkamul.robot.orionstar_robot.application.SpeechCallback
+import com.ainirobot.coreservice.client.speech.SkillCallback
+import com.ainirobot.coreservice.client.speech.entity.TTSEntity
+import com.google.gson.Gson
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -46,18 +48,20 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
     private var checkTimes = 0
     private var action = ""
     private var reqId = 0
-    private var mSkillCallback: SpeechCallback? = null
     private var mApiCallbackThread: HandlerThread? = null
-    private var mModuleCallback: ModuleCallbackApi? = null
     private var mSkillApi: SkillApi? = null
     var applicationContext: Context? = null
 
     private var picture: String? = null
     private var places: String? = null
-    private var  mapName : String? = null
+    private var mapName: String? = null
     var messages: String? = null
+    var botReqType: String? = null
+    var botReqText: String? = null
+    var botReqParam: String? = null
 
     private lateinit var channel: MethodChannel
+
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "orionstar_robot")
@@ -81,6 +85,22 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                 result.success("Android ${android.os.Build.VERSION.RELEASE}")
             }
 
+            "resetRequestResponse" -> {
+                botReqType = null
+                botReqText = null
+                botReqParam = null
+            }
+            "getRequestResponse" -> {
+
+                var requestResponse =
+                    "{\"botReqType\":$botReqType,\"botReqText\":$botReqText,\"botReqParam\":$botReqParam}"
+                result.success(botReqParam)
+            }
+            "playText" -> {
+                Log.d("call.arguments", "${call.arguments}")
+                if (call.arguments != null)
+                    playText("${call.arguments}")
+            }
             "getPerson" -> {
                 val person = PersonApi.getInstance().focusPerson
                 result.success("$person")
@@ -102,6 +122,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                 registerPersonListener()
             }
             "startNavigation" -> {
+//                playText("i'm smart service robot , you can ask me what i can do")
                 Log.d("call.arguments", "${call.arguments}")
                 if (call.arguments != null)
                     startNavigation("${call.arguments}")
@@ -197,13 +218,11 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
     }
 
 
-
-
     private fun init() {
-        mSkillCallback = SpeechCallback()
-        mModuleCallback = ModuleCallback()
+
         mApiCallbackThread = HandlerThread("RobotOSDemo")
         mApiCallbackThread!!.start()
+
     }
 
     private fun initRobotApi() {
@@ -226,6 +245,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                 )
                 addApiCallBack()
                 initSkillApi()
+
             }
 
             /**
@@ -258,7 +278,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
     private fun addApiCallBack() {
         Log.d(TAG, "CoreService connected ")
-        RobotApi.getInstance().setCallback(mModuleCallback)
+        RobotApi.getInstance().setCallback(mModuleCallbackApi)
         RobotApi.getInstance().setResponseThread(mApiCallbackThread)
     }
 
@@ -273,7 +293,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
              * 语音服务连接成功，注册语音回调
              */
             override fun handleApiConnected() {
-                mSkillApi!!.registerCallBack(mSkillCallback)
+                mSkillApi!!.registerCallBack(mSpeechCallbackApi)
             }
 
             /**
@@ -362,7 +382,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
         })
     }
 
-    public fun checkMapName() {
+    private fun checkMapName() {
         RobotApi.getInstance().getMapName(reqId, object : CommandListener() {
             override fun onResult(result: Int, message: String) {
                 if (!TextUtils.isEmpty(message)) {
@@ -372,6 +392,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             }
         })
     }
+
     private fun startCruise() {
         val reqId = 0
         val route = RobotApi.getInstance().placeList
@@ -420,6 +441,115 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 //    }
 
 
+    private val mSpeechCallbackApi: SkillCallback = object : SkillCallback() {
+
+        @Throws(RemoteException::class)
+        override fun onSpeechParResult(s: String) {
+            LogTools.info("$TAG onSpeechParResult:$s")
+        }
+
+        @Throws(RemoteException::class)
+        override fun onStart() {
+            LogTools.info("$TAG onStart")
+        }
+
+        @Throws(RemoteException::class)
+        override fun onStop() {
+            LogTools.info("$TAG onStop")
+        }
+
+        @Throws(RemoteException::class)
+        override fun onVolumeChange(i: Int) {
+            //LogTools.info(TAG+" onVolumeChange :" + i);
+        }
+
+        @Throws(RemoteException::class)
+        override fun onQueryEnded(i: Int) {
+            LogTools.info("$TAG onQueryEnded :$i")
+        }
+
+        @Throws(RemoteException::class)
+        override fun onQueryAsrResult(asrResult: String) {
+            LogTools.info("$TAG onQueryAsrResult :$asrResult")
+        }
+    }
+    private val mModuleCallbackApi: ModuleCallbackApi = object : ModuleCallbackApi() {
+
+
+        /**
+         * Receive speech request
+         * 接收语音指令 底层发起request 请求
+         *
+         * @param reqId
+         * @param reqType 语音指令类型, Speech type
+         * @param reqText 语音识别内容, Speech text
+         * @param reqParam 语音指令参数, Speech param
+         * @throws RemoteException
+         */
+        @Throws(RemoteException::class)
+        override fun onSendRequest(
+            reqId: Int,
+            reqType: String,
+            reqText: String,
+            reqParam: String
+        ): Boolean {
+            Log.d(
+                TAG,
+                "New request:  type is:$reqType text is:$reqText reqParam = $reqParam"
+            )
+            val text =
+                "New request:  type is:$reqType text is:$reqText reqParam = $reqParam"
+            LogTools.info(text)
+            botReqType = (reqType)
+            botReqText = (reqText)
+            botReqParam = (reqParam)
+
+            return true
+        }
+
+
+        /**
+         * hardware error callback
+         * 硬件出现异常回调
+         * @param function
+         * @param type
+         * @param message
+         * @throws RemoteException
+         */
+        @Throws(RemoteException::class)
+        override fun onHWReport(function: Int, type: String, message: String) {
+            Log.i(
+                TAG,
+                "onHWReport function:$function type:$type message:$message"
+            )
+            LogTools.info("onHWReport function:$function type:$type message:$message")
+            messages = ("onHWReport function:$function type:$type message:$message")
+        }
+
+        /**
+         * Suspend system, after this message, RobotOS can not work with this APP
+         * 控制权被系统剥夺，收到该事件后，所有Api调用无效
+         * @throws RemoteException
+         */
+        @Throws(RemoteException::class)
+        override fun onSuspend() {
+            Log.d(TAG, "onSuspend")
+            LogTools.info("onSuspend")
+            messages = ("onSuspend")
+        }
+
+        /**
+         * Recovery system, after this message, RobotOS can work with this APP again.
+         * 控制权恢复，收到该事件后，重新恢复对机器人的控制
+         * @throws RemoteException
+         */
+        @Throws(RemoteException::class)
+        override fun onRecovery() {
+            Log.d(TAG, "onRecovery")
+            LogTools.info("onRecovery")
+            messages = ("onRecovery")
+        }
+    }
     private val mNavigationListener: ActionListener = object : ActionListener() {
         @Throws(RemoteException::class)
         override fun onResult(status: Int, response: String) {
@@ -714,9 +844,8 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             when (status) {
                 Definition.STATUS_NAVI_OUT_MAP -> {}
                 Definition.STATUS_START_CRUISE -> {}
-                Definition.STATUS_CRUISE_REACH_POINT ->
-                {
-                    messages="${data.toInt()}"
+                Definition.STATUS_CRUISE_REACH_POINT -> {
+                    messages = "${data.toInt()}"
                 }
                 Definition.STATUS_NAVI_AVOID -> {}
                 Definition.STATUS_NAVI_AVOID_END -> {}
@@ -733,6 +862,68 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                 Definition.ACTION_RESPONSE_REQUEST_RES_ERROR -> {}
             }
         }
+    }
+
+    /**
+     *
+     */
+
+    open fun playText(text: String) {
+        if (mSkillApi != null) {
+            connectApi()
+            LogTools.info("text $text")
+            mSkillApi!!.playText(TTSEntity("sid-1234567890", text), mTextListener)
+        }
+    }
+
+    private val mTextListener: TextListener = object : TextListener() {
+        override fun onStart() {
+            super.onStart()
+            LogTools.info("onStart")
+            messages = ("onStart")
+        }
+
+        override fun onStop() {
+            super.onStop()
+            LogTools.info("onStop")
+            messages = ("onStop")
+        }
+
+        override fun onComplete() {
+            super.onComplete()
+            messages = ("onComplete")
+        }
+
+        override fun onError() {
+            super.onError()
+            LogTools.info("onError")
+        }
+    }
+
+    private fun stopTTS() {
+        if (mSkillApi != null) {
+            mSkillApi!!.stopTTS()
+        }
+    }
+
+    private fun queryByText(text: String) {
+        if (mSkillApi != null) {
+            mSkillApi!!.queryByText(text)
+        }
+    }
+
+    private fun connectApi() {
+        mSkillApi?.connectApi(applicationContext, object : ApiListener {
+            override fun handleApiDisabled() {}
+            override fun handleApiConnected() {
+                //Voice service connection is successful, register voice callback
+                mSkillApi?.registerCallBack(mSpeechCallbackApi)
+            }
+
+            override fun handleApiDisconnected() {
+                //Voice service has been disconnected
+            }
+        })
     }
 
     /**

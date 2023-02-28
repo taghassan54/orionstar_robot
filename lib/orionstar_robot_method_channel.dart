@@ -109,7 +109,7 @@ class MethodChannelOrionstarRobot extends OrionstarRobotPlatform {
   Future<PersonResDataModel?> getPerson() async {
     final result = await methodChannel.invokeMethod<String>('getPerson');
     var userMap = jsonDecode("$result");
-    LoggerHelper.debug("$result");
+    // LoggerHelper.debug("$result");
     if (userMap != null) {
       return PersonResDataModel.fromJson(userMap);
     }
@@ -128,6 +128,16 @@ class MethodChannelOrionstarRobot extends OrionstarRobotPlatform {
     return result;
   }
   @override
+  Future<String?> getRequestResponse() async {
+    final result = await methodChannel.invokeMethod<String>('getRequestResponse');
+    return result;
+  }
+  @override
+  Future<String?> resetRequestResponse() async {
+    final result = await methodChannel.invokeMethod<String>('resetRequestResponse');
+    return result;
+  }
+  @override
   Future<String?> checkMapName() async {
     final result = await methodChannel.invokeMethod<String>('checkMapName');
     return result;
@@ -137,6 +147,13 @@ class MethodChannelOrionstarRobot extends OrionstarRobotPlatform {
   Future<String?> setLocation({required String locationName}) async {
     final result =
         await methodChannel.invokeMethod<String>('setLocation', locationName);
+    return result;
+  }
+
+  @override
+  Future<String?> robotPlayText({required String textToPlay}) async {
+    final result =
+        await methodChannel.invokeMethod<String>('playText', textToPlay);
     return result;
   }
 }

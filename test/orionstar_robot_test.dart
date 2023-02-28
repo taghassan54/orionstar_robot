@@ -74,6 +74,15 @@ class MockOrionstarRobotPlatform
 
   @override
   Future<String?> setLocation({required String locationName}) =>Future.value('');
+
+  @override
+  Future<String?> getRequestResponse() =>Future.value('');
+  @override
+  Future<String?> resetRequestResponse() =>Future.value('');
+  @override
+  Future<String?> robotPlayText({required String textToPlay}) =>Future.value('');
+
+
 }
 
 void main() {

@@ -20,6 +20,16 @@ class OrionstarRobot {
     return OrionstarRobotPlatform.instance.getPicture();
   }
 
+  Future<String?> playText({required String textToPlay}) {
+    return OrionstarRobotPlatform.instance.robotPlayText(textToPlay:textToPlay);
+  }
+  Future<String?> getRequestResponse() {
+    return OrionstarRobotPlatform.instance.getRequestResponse();
+  }
+  Future<String?> resetRequestResponse() {
+    return OrionstarRobotPlatform.instance.resetRequestResponse();
+  }
+
   Future<String?> checkStatus() {
     return OrionstarRobotPlatform.instance.checkStatus();
   }
