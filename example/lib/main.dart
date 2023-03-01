@@ -46,12 +46,13 @@ class _MyAppState extends State<MyApp> {
 
     dataList = await _orionstarRobotPlugin.robotGetLocation();
     // await _orionstarRobotPlugin.startCruise();
+    await _orionstarRobotPlugin.startFocusFollow();
     const oneSec = Duration(milliseconds: 1000);
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) async {
         final String? resultPicture = await _orionstarRobotPlugin.getPicture();
-        if (imagePath.length > 3) {
+        if (imagePath.length > 10) {
           imagePath.removeLast();
         }
         setState(() {
@@ -75,9 +76,13 @@ class _MyAppState extends State<MyApp> {
 
         var zoal = await _orionstarRobotPlugin.getPerson();
         if (mounted) {
-          setState(() {
-            person = zoal;
-          });
+          if(zoal!=null)
+         {
+
+           setState(() {
+             person = zoal;
+           });
+         }
         }
 
         final String? requestResponse =
@@ -103,6 +108,14 @@ class _MyAppState extends State<MyApp> {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: ()async{
+            // _orionstarRobotPlugin.goForward(distance:2);
+           await _orionstarRobotPlugin.stopFocusFollow();
+           await  Future.delayed(Duration.zero,()async => await _orionstarRobotPlugin.turnLeft(),);
+          },
+          child: const Icon(Icons.rocket_launch_sharp),
+        ),
         body: SingleChildScrollView(
           child: Column(
             children: [

@@ -128,6 +128,21 @@ class MethodChannelOrionstarRobot extends OrionstarRobotPlatform {
     return result;
   }
   @override
+  Future<String?> registerById() async {
+    final result = await methodChannel.invokeMethod<String>('registerById');
+    return result;
+  }
+  @override
+  Future<String?> goBackward() async {
+    final result = await methodChannel.invokeMethod<String>('goBackward');
+    return result;
+  }
+  @override
+  Future<String?> goForward({required double distance}) async {
+    final result = await methodChannel.invokeMethod<String>('goForward',distance);
+    return result;
+  }
+  @override
   Future<String?> getRequestResponse() async {
     final result = await methodChannel.invokeMethod<String>('getRequestResponse');
     return result;

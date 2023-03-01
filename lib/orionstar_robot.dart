@@ -19,7 +19,17 @@ class OrionstarRobot {
   Future<String?> getPicture() {
     return OrionstarRobotPlatform.instance.getPicture();
   }
+  Future<String?> registerById() {
+    return OrionstarRobotPlatform.instance.registerById();
+  }
 
+  Future<String?> goForward({required double distance}) {
+    return OrionstarRobotPlatform.instance.goForward(distance:distance);
+  }
+
+  Future<String?> goBackward() {
+    return OrionstarRobotPlatform.instance.goBackward();
+  }
   Future<String?> playText({required String textToPlay}) {
     return OrionstarRobotPlatform.instance.robotPlayText(textToPlay:textToPlay);
   }

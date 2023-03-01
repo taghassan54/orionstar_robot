@@ -21,10 +21,10 @@ import com.ainirobot.coreservice.client.module.ModuleCallbackApi
 import com.ainirobot.coreservice.client.person.PersonApi
 import com.ainirobot.coreservice.client.person.PersonListener
 import com.ainirobot.coreservice.client.person.PersonUtils
+import com.ainirobot.coreservice.client.robotsetting.RobotSettingApi
 import com.ainirobot.coreservice.client.speech.SkillApi
 import com.ainirobot.coreservice.client.speech.SkillCallback
 import com.ainirobot.coreservice.client.speech.entity.TTSEntity
-import com.google.gson.Gson
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -85,15 +85,20 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                 result.success("Android ${android.os.Build.VERSION.RELEASE}")
             }
 
+            "getRobotBatteryInfo" -> {
+                var robotBatteryInfo = RobotSettingApi.getInstance()
+                    .getRobotString(Definition.ROBOT_SETTINGS_BATTERY_INFO);
+                result.success(robotBatteryInfo)
+            }
+            "stopAutoChargeAction" -> {
+                RobotApi.getInstance().stopAutoChargeAction(reqId, true)
+            }
             "resetRequestResponse" -> {
                 botReqType = null
                 botReqText = null
                 botReqParam = null
             }
             "getRequestResponse" -> {
-
-                var requestResponse =
-                    "{\"botReqType\":$botReqType,\"botReqText\":$botReqText,\"botReqParam\":$botReqParam}"
                 result.success(botReqParam)
             }
             "playText" -> {
@@ -104,6 +109,11 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             "getPerson" -> {
                 val person = PersonApi.getInstance().focusPerson
                 result.success("$person")
+            }
+            "registerById" -> {
+
+                registerById()
+
             }
             "stopFocusFollow" -> {
                 stopFocusFollow()
@@ -146,38 +156,25 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                 result.success("turn Right")
             }
             "mHeadUp" -> {
-                RobotApi.getInstance().moveHead(
-                    reqId++,
-                    "relative",
-                    "relative",
-                    0,
-                    -20,
-                    mMotionListener
-                )
+                moveHead(0, -20)
 
                 result.success("turn mHeadUp")
             }
             "mHeadDown" -> {
-                RobotApi.getInstance().moveHead(
-                    reqId++,
-                    "relative",
-                    "relative",
-                    0,
-                    20,
-                    mMotionListener
-                )
+                moveHead(0, 20)
                 result.success("turn mHeadDown")
             }
             "moveHead" -> {
-                RobotApi.getInstance()
-                    .moveHead(
-                        reqId,
-                        "relative",
-                        "relative",
-                        call.argument<Int>("faceX")!!.toInt(),
-                        call.argument<Int>("faceY")!!.toInt(),
-                        mMotionListener
-                    )
+                moveHead(0, 20)
+
+            }
+            "goBackward" -> {
+                goBackward()
+            }
+            "goForward" -> {
+
+                if (call.arguments != null)
+                    goForward("${call.arguments}".toFloat())
             }
             "getPicture" -> {
                 getPictureById()
@@ -215,6 +212,46 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             }
         }
 
+    }
+
+    private fun goForward(distance: Float) {
+        try {
+            Log.d("goForwardCallArguments", "$distance")
+            RobotApi.getInstance().goForward(reqId++, 0.2f, distance, true, mMotionListener)
+        } catch (e: Exception) {
+            messages = e.message
+        }
+    }
+
+    private fun goBackward() {
+        RobotApi.getInstance().goBackward(reqId++, 0.2f, 2.toFloat(), mMotionListener)
+    }
+
+    private fun moveHead(i: Int, i1: Int) {
+        RobotApi.getInstance()
+            .moveHead(
+                reqId,
+                "relative",
+                "relative",
+                i,
+                i1,
+                mMotionListener
+            )
+    }
+
+    private fun registerById() {
+        val person = PersonApi.getInstance().focusPerson
+        if (person != null) {
+            PersonApi.getInstance()
+                .registerById(person.id, "register By Id", object : CommandListener() {
+                    override fun onResult(result: Int, message: String) {
+                        Log.d("registerById", result.toString() + message)
+                        messages =
+                            (result.toString() + " " + message + " person id is ${person.id}")
+                    }
+                })
+
+        }
     }
 
 
@@ -310,17 +347,19 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
     private val mMotionListener: CommandListener = object : CommandListener() {
         override fun onResult(result: Int, message: String) {
             LogTools.info("result: $result message:$message")
-            if ("succeed" == message) {
+            messages = if ("succeed" == message) {
+                "Motion Listener succeed"
             } else {
+                "Motion Listener failed"
             }
         }
     }
 
     private fun getPosition() {
-        var persons: List<Pose> = RobotApi.getInstance().placeList
+        var placesList: List<Pose> = RobotApi.getInstance().placeList
 
         val sb = StringBuilder()
-        for (pose in persons) {
+        for (pose in placesList) {
             sb.append(pose.name)
             sb.append(',')
         }
@@ -404,6 +443,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             sb.append(',')
         }
         LogTools.info("Place list:$sb")
+        messages = ("Place list:$sb")
         val startPoint = 0
         val dockingPoints: MutableList<Int> = java.util.ArrayList()
         dockingPoints.add(1)
@@ -473,6 +513,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             LogTools.info("$TAG onQueryAsrResult :$asrResult")
         }
     }
+
     private val mModuleCallbackApi: ModuleCallbackApi = object : ModuleCallbackApi() {
 
 
@@ -500,10 +541,10 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             val text =
                 "New request:  type is:$reqType text is:$reqText reqParam = $reqParam"
             LogTools.info(text)
+
             botReqType = (reqType)
             botReqText = (reqText)
             botReqParam = (reqParam)
-
             return true
         }
 
@@ -764,15 +805,18 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
     private fun startFocusFollow() {
         val person = PersonApi.getInstance().focusPerson
+
         if (person != null)
             RobotApi.getInstance()
-                .startFocusFollow(reqId, person.id, 10, 10F, object : ActionListener() {
+                .startFocusFollow(reqId, person.id, 0, 10F, object : ActionListener() {
                     override fun onStatusUpdate(status: Int, data: String) {
                         when (status) {
                             Definition.STATUS_TRACK_TARGET_SUCCEED -> {}
                             Definition.STATUS_GUEST_LOST -> {}
                             Definition.STATUS_GUEST_FARAWAY -> {}
-                            Definition.STATUS_GUEST_APPEAR -> {}
+                            Definition.STATUS_GUEST_APPEAR -> {
+
+                            }
                         }
                     }
 
@@ -841,6 +885,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
         @Throws(RemoteException::class)
         override fun onStatusUpdate(status: Int, data: String) {
             LogTools.info("startCruise onStatusUpdate : $status || $data")
+            messages = ("startCruise onStatusUpdate : $status || $data")
             when (status) {
                 Definition.STATUS_NAVI_OUT_MAP -> {}
                 Definition.STATUS_START_CRUISE -> {}
@@ -855,6 +900,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
         @Throws(RemoteException::class)
         override fun onError(errorCode: Int, errorString: String) {
             LogTools.info("startCruise onError : $errorCode || $errorString")
+            messages = ("startCruise onError : $errorCode || $errorString")
             when (errorCode) {
                 Definition.ACTION_RESPONSE_ALREADY_RUN -> {}
                 Definition.ERROR_NOT_ESTIMATE -> {}

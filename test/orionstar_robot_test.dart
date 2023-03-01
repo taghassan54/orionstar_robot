@@ -28,61 +28,67 @@ class MockOrionstarRobotPlatform
       Future.value("");
 
   @override
-  Future<List<String>?> robotGetLocation() =>Future.value([]);
+  Future<List<String>?> robotGetLocation() => Future.value([]);
 
   @override
-  Future<String?> mHeadDown() =>
-      Future.value("");
+  Future<String?> mHeadDown() => Future.value("");
 
   @override
-  Future<String?> mHeadUp() =>
-      Future.value("");
+  Future<String?> mHeadUp() => Future.value("");
 
   @override
-  Future<String?> resetHead() =>
-      Future.value("");
+  Future<String?> resetHead() => Future.value("");
 
   @override
-  Future<String?> startFocusFollow() =>
-      Future.value("");
-  @override
-  Future<String?> stopFocusFollow() =>
-      Future.value("");
+  Future<String?> startFocusFollow() => Future.value("");
 
   @override
-  Future<String?> stopMove() =>
-      Future.value("");
+  Future<String?> stopFocusFollow() => Future.value("");
 
   @override
-  Future<String?> turnLeft() =>
-      Future.value("");
-  @override
-  Future<String?> turnRight() =>
-      Future.value("");
+  Future<String?> stopMove() => Future.value("");
 
   @override
-  Future<PersonResDataModel?> getPerson() =>Future.value(null);
+  Future<String?> turnLeft() => Future.value("");
 
   @override
-  Future<String?> checkInit() =>Future.value("");
+  Future<String?> turnRight() => Future.value("");
 
   @override
-  Future<String?> startCruise() =>Future.value("");
+  Future<PersonResDataModel?> getPerson() => Future.value(null);
 
   @override
-  Future<String?> checkMapName() =>Future.value("");
+  Future<String?> checkInit() => Future.value("");
 
   @override
-  Future<String?> setLocation({required String locationName}) =>Future.value('');
+  Future<String?> startCruise() => Future.value("");
 
   @override
-  Future<String?> getRequestResponse() =>Future.value('');
-  @override
-  Future<String?> resetRequestResponse() =>Future.value('');
-  @override
-  Future<String?> robotPlayText({required String textToPlay}) =>Future.value('');
+  Future<String?> checkMapName() => Future.value("");
 
+  @override
+  Future<String?> setLocation({required String locationName}) =>
+      Future.value('');
 
+  @override
+  Future<String?> getRequestResponse() => Future.value('');
+
+  @override
+  Future<String?> resetRequestResponse() => Future.value('');
+
+  @override
+  Future<String?> registerById() => Future.value('');
+
+  @override
+  Future<String?> robotPlayText({required String textToPlay}) =>
+      Future.value('');
+
+  @override
+  Future<String?> goBackward() =>
+      Future.value('');
+  @override
+  Future<String?> goForward({required double distance}) =>
+      Future.value('');
 }
 
 void main() {
