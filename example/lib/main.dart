@@ -110,9 +110,10 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: ()async{
-            // _orionstarRobotPlugin.goForward(distance:2);
-           await _orionstarRobotPlugin.stopFocusFollow();
-           await  Future.delayed(Duration.zero,()async => await _orionstarRobotPlugin.turnLeft(),);
+
+           await _orionstarRobotPlugin.startCruise();
+           await  Future.delayed(Duration(seconds: 30),()async =>  await _orionstarRobotPlugin.stopCruise(),);
+           await  Future.delayed(Duration(seconds: 30),()async =>  await _orionstarRobotPlugin.startCruise(),);
           },
           child: const Icon(Icons.rocket_launch_sharp),
         ),
