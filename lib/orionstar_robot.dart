@@ -111,6 +111,11 @@ class OrionstarRobot {
         .startLead(locationName: locationName);
   }
 
+  Future<String?> queryByText({required String text}) {
+    return OrionstarRobotPlatform.instance
+        .googleQueryByText(text: text);
+  }
+
 
   Future<String?> startCruise() {
     return OrionstarRobotPlatform.instance

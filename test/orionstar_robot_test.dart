@@ -71,8 +71,7 @@ class MockOrionstarRobotPlatform
       Future.value('');
 
   @override
-  Future<String?> startLead({required String locationName}) =>
-      Future.value('');
+  Future<String?> startLead({required String locationName}) => Future.value('');
 
   @override
   Future<String?> getRequestResponse() => Future.value('');
@@ -91,11 +90,13 @@ class MockOrionstarRobotPlatform
       Future.value('');
 
   @override
-  Future<String?> goBackward() =>
-      Future.value('');
+  Future<String?> goBackward() => Future.value('');
+
   @override
-  Future<String?> goForward({required double distance}) =>
-      Future.value('');
+  Future<String?> goForward({required double distance}) => Future.value('');
+
+  @override
+  Future<String?> googleQueryByText({required String text}) => Future.value('');
 }
 
 void main() {

@@ -178,6 +178,13 @@ class MethodChannelOrionstarRobot extends OrionstarRobotPlatform {
   }
 
   @override
+  Future<String?> googleQueryByText({required String text}) async {
+    final result =
+        await methodChannel.invokeMethod<String>('queryByText', text);
+    return result;
+  }
+
+  @override
   Future<String?> robotPlayText({required String textToPlay}) async {
     final result =
         await methodChannel.invokeMethod<String>('playText', textToPlay);

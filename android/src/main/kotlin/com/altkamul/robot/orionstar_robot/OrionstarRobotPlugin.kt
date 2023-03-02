@@ -102,6 +102,12 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             "getRequestResponse" -> {
                 result.success(botReqParam)
             }
+            "queryByText" -> {
+                Log.d("call.arguments", "${call.arguments}")
+                if (call.arguments != null)
+                    queryByText("${call.arguments}")
+
+            }
             "playText" -> {
                 Log.d("call.arguments", "${call.arguments}")
                 if (call.arguments != null)
@@ -580,6 +586,17 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
         })
     }
 
+    /**
+     * leading stop
+     * 结束引领
+     * isResetHW： 引领时会切换摄像头到后置摄像头，isResetHW是用于设置停止引领时是否恢复摄像头状态，
+     * true: reset front camera, false: doesn't do anything
+     * true：恢复摄像头为前置，false : 保持停止时的状态
+     */
+    private fun stopLead() {
+        RobotApi.getInstance().stopLead(0, true)
+    }
+
 
     /**
      * startNavigation
@@ -939,7 +956,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
         if (person != null)
             RobotApi.getInstance()
-                .startFocusFollow(reqId, person.id, 0, 10F, object : ActionListener() {
+                .startFocusFollow(reqId, person.id, 60, 10F, object : ActionListener() {
                     override fun onStatusUpdate(status: Int, data: String) {
                         when (status) {
                             Definition.STATUS_TRACK_TARGET_SUCCEED -> {}
