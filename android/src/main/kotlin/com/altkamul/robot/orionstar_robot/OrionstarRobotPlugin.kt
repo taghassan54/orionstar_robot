@@ -12,6 +12,7 @@ import com.ainirobot.base.analytics.utils.StringUtil
 import com.ainirobot.coreservice.client.ApiListener
 import com.ainirobot.coreservice.client.Definition
 import com.ainirobot.coreservice.client.RobotApi
+import com.ainirobot.coreservice.client.actionbean.LeadingParams
 import com.ainirobot.coreservice.client.actionbean.Pose
 import com.ainirobot.coreservice.client.listener.ActionListener
 import com.ainirobot.coreservice.client.listener.CommandListener
@@ -191,6 +192,14 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                 Log.d("call.arguments", "${call.arguments}")
                 if (call.arguments != null)
                     removeLocation("${call.arguments}")
+
+                result.success("save the location point successfully")
+            }
+            "startLead" -> {
+
+                Log.d("call.arguments", "${call.arguments}")
+                if (call.arguments != null)
+                    startLead("${call.arguments}")
 
                 result.success("save the location point successfully")
             }
@@ -457,6 +466,120 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
         dockingPoints.add(1)
         RobotApi.getInstance().startCruise(reqId++, route, startPoint, dockingPoints, cruiseListener)
     }
+
+    /**
+     * 开始引领
+     */
+    private fun startLead(destinationName:String) {
+        val params = LeadingParams()
+
+        //获取机器人视野内所有人体信息的人员列表
+
+        //Get all bodies from robot
+        val personList = PersonApi.getInstance().allBodyList
+        if (personList == null || personList.size < 1) {
+            LogTools.info("No person found.  没有找到需要引领的人。")
+            return
+        }
+        //最佳身体意思是，机器人认为最像人身体的身体
+        //best body mean it looks like body most
+        val person = PersonUtils.getBestBody(personList, 3.0)
+        LogTools.info("PersionID" + person.id)
+        params.personId = person.id
+        params.destinationName = destinationName
+        params.lostTimer = (10 * 1000).toLong()
+        params.detectDelay = (5 * 1000).toLong()
+        params.maxDistance = 3.0
+        val reqId = 0
+        LogTools.info("startLead:$destinationName")
+        RobotApi.getInstance().startLead(reqId, params, object : ActionListener() {
+            @Throws(RemoteException::class)
+            override fun onResult(status: Int, responseString: String) {
+                when (status) {
+                    Definition.RESULT_OK -> {
+                        LogTools.info("onResult status :$status(Lead success) result:$responseString")
+                        LogTools.info("onResult status :$status(成功将目标引领到目的地) result:$responseString")
+                    }
+                    Definition.ACTION_RESPONSE_STOP_SUCCESS -> {
+                        LogTools.info("onResult status :$status(Lead in progress, but stopped) result:$responseString")
+                        LogTools.info("onResult status :$status(成功将目标引领到目的地在引领执行中，主动调用stopLead，成功停止引领) result:$responseString")
+                    }
+                    else -> {}
+                }
+            }
+
+            @Throws(RemoteException::class)
+            override fun onError(errorCode: Int, errorString: String) {
+                when (errorCode) {
+                    Definition.ERROR_NOT_ESTIMATE -> {
+                        LogTools.info("onError errorCode :$errorCode(not estimate) result:$errorString")
+                        LogTools.info("onError errorCode :$errorCode(当前未定位) result:$errorString")
+                    }
+                    Definition.ERROR_SET_TRACK_FAILED, Definition.ERROR_TARGET_NOT_FOUND -> {
+                        LogTools.info("onError errorCode :$errorCode(No person found) result:$errorString")
+                        LogTools.info("onError errorCode :$errorCode(引领目标未找到) result:$errorString")
+                    }
+                    Definition.ERROR_IN_DESTINATION -> {
+                        LogTools.info("onError errorCode :$errorCode(Already in destination) result:$errorString")
+                        LogTools.info("onError errorCode :$errorCode(当前已经在引领目的地) result:$errorString")
+                    }
+                    Definition.ERROR_DESTINATION_CAN_NOT_ARRAIVE -> {
+                        LogTools.info("onError errorCode :$errorCode(Avoid timeout，default 20s run less than 0.1m) result:$errorString")
+                        LogTools.info("onError errorCode :$errorCode(避障超时，默认为机器人20s的前进距离不足0.1m) result:$errorString")
+                    }
+                    Definition.ERROR_DESTINATION_NOT_EXIST -> {
+                        LogTools.info("onError errorCode :$errorCode(destination not exist) result:$errorString")
+                        LogTools.info("onError errorCode :$errorCode(引领目的地不存在) result:$errorString")
+                    }
+                    Definition.ERROR_HEAD -> {
+                        LogTools.info("onError errorCode :$errorCode(Head can't work in the process of leading) result:$errorString")
+                        LogTools.info("onError errorCode :$errorCode(引领中操作头部云台失败) result:$errorString")
+                    }
+                    Definition.ACTION_RESPONSE_ALREADY_RUN -> {
+                        LogTools.info("onError errorCode :$errorCode(Leading function already started, please stop and then restart) result:$errorString")
+                        LogTools.info("onError errorCode :$errorCode(引领已经在进行中，请先停止上次引领，才能重新执行) result:$errorString")
+                    }
+                    Definition.ACTION_RESPONSE_REQUEST_RES_ERROR -> {
+                        LogTools.info("onError errorCode :$errorCode(Other function using wheels, please stop them first) result:$errorString")
+                        LogTools.info("onError errorCode :$errorCode(已经有需要控制底盘的接口调用，请先停止，才能继续调用) result:$errorString")
+                    }
+                    else -> {}
+                }
+            }
+
+            @Throws(RemoteException::class)
+            override fun onStatusUpdate(status: Int, data: String) {
+                when (status) {
+                    Definition.STATUS_NAVI_OUT_MAP -> {
+                        LogTools.info("onStatusUpdate status :$status(can't find destination, maybe it's out of this map ) result:$data")
+                        LogTools.info("onStatusUpdate status :$status(目标点不能到达，引领目的地在地图外，有可能为地图与位置点不匹配，请重新设置位置点) result:$data")
+                    }
+                    Definition.STATUS_NAVI_AVOID -> {
+                        LogTools.info("onStatusUpdate status :$status(can not avoid obstacles) result:$data")
+                        LogTools.info("onStatusUpdate status :$status(当前引领路线已被障碍物堵死) result:$data")
+                    }
+                    Definition.STATUS_NAVI_AVOID_END -> {
+                        LogTools.info("onStatusUpdate status :$status(obstacles removed) result:$data")
+                        LogTools.info("onStatusUpdate status :$status(障碍物已移除) result:$data")
+                    }
+                    Definition.STATUS_GUEST_FARAWAY -> {
+                        LogTools.info("onStatusUpdate status :$status(destination is too far away, please change maxDistance settings ) result:$data")
+                        LogTools.info("onStatusUpdate status :$status(引领目标距离机器人太远，判断标准通过参数maxDistance设置) result:$data")
+                    }
+                    Definition.STATUS_DEST_NEAR -> {
+                        LogTools.info("onStatusUpdate status :$status(leading person in near destination) result:$data")
+                        LogTools.info("onStatusUpdate status :$status(引领目标进入机器人maxDistance范围内) result:$data")
+                    }
+                    Definition.STATUS_LEAD_NORMAL -> {
+                        LogTools.info("onStatusUpdate status :$status(leading started) result:$data")
+                        LogTools.info("onStatusUpdate status :$status(正式开始导航) result:$data")
+                    }
+                    else -> {}
+                }
+            }
+        })
+    }
+
 
     /**
      * startNavigation

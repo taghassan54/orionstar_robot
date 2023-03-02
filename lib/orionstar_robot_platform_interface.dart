@@ -113,4 +113,6 @@ abstract class OrionstarRobotPlatform extends PlatformInterface {
   Future<String?> goForward({required double distance}) =>throw UnimplementedError('goForward() has not been implemented.');
 
   Future<String?> stopCruise() =>throw UnimplementedError('stopCruise() has not been implemented.');
+
+  Future<String?> startLead({required String locationName})=>throw UnimplementedError('startLead() has not been implemented.');
 }

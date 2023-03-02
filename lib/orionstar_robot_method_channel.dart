@@ -171,6 +171,13 @@ class MethodChannelOrionstarRobot extends OrionstarRobotPlatform {
   }
 
   @override
+  Future<String?> startLead({required String locationName}) async {
+    final result =
+        await methodChannel.invokeMethod<String>('startLead', locationName);
+    return result;
+  }
+
+  @override
   Future<String?> robotPlayText({required String textToPlay}) async {
     final result =
         await methodChannel.invokeMethod<String>('playText', textToPlay);

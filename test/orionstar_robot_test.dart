@@ -71,6 +71,10 @@ class MockOrionstarRobotPlatform
       Future.value('');
 
   @override
+  Future<String?> startLead({required String locationName}) =>
+      Future.value('');
+
+  @override
   Future<String?> getRequestResponse() => Future.value('');
 
   @override

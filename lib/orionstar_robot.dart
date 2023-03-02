@@ -105,6 +105,13 @@ class OrionstarRobot {
     return OrionstarRobotPlatform.instance
         .setLocation(locationName: locationName);
   }
+
+  Future<String?> startLead({required String locationName}) {
+    return OrionstarRobotPlatform.instance
+        .startLead(locationName: locationName);
+  }
+
+  
   Future<String?> startCruise() {
     return OrionstarRobotPlatform.instance
         .startCruise();
