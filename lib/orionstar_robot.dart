@@ -111,7 +111,7 @@ class OrionstarRobot {
         .startLead(locationName: locationName);
   }
 
-  
+
   Future<String?> startCruise() {
     return OrionstarRobotPlatform.instance
         .startCruise();
