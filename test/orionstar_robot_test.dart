@@ -74,6 +74,9 @@ class MockOrionstarRobotPlatform
   Future<String?> getRequestResponse() => Future.value('');
 
   @override
+  Future<String?> stopCruise() => Future.value('');
+
+  @override
   Future<String?> resetRequestResponse() => Future.value('');
 
   @override

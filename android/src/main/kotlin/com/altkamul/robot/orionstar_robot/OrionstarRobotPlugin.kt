@@ -198,6 +198,10 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                 startCruise()
                 result.success("$messages")
             }
+            "stopCruise" -> {
+                stopCruise()
+                result.success("$messages")
+            }
             "robotGetLocation" -> {
                 getPosition()
 
@@ -212,6 +216,10 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             }
         }
 
+    }
+
+    private fun stopCruise() {
+        RobotApi.getInstance().stopCruise(reqId);
     }
 
     private fun goForward(distance: Float) {

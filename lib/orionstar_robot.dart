@@ -109,4 +109,8 @@ class OrionstarRobot {
     return OrionstarRobotPlatform.instance
         .startCruise();
   }
+  Future<String?> stopCruise() {
+    return OrionstarRobotPlatform.instance
+        .stopCruise();
+  }
 }

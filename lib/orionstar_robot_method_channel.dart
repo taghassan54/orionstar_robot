@@ -128,6 +128,11 @@ class MethodChannelOrionstarRobot extends OrionstarRobotPlatform {
     return result;
   }
   @override
+  Future<String?> stopCruise() async {
+    final result = await methodChannel.invokeMethod<String>('stopCruise');
+    return result;
+  }
+  @override
   Future<String?> registerById() async {
     final result = await methodChannel.invokeMethod<String>('registerById');
     return result;
