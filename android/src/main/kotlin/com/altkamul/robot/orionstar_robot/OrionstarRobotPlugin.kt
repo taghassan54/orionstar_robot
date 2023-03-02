@@ -441,7 +441,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
     }
 
     private fun startCruise() {
-        val reqId = 0
+
         val route = RobotApi.getInstance().placeList
 //        route.removeAt(0)
 //        route.removeAt(1)
@@ -455,7 +455,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
         val startPoint = 0
         val dockingPoints: MutableList<Int> = java.util.ArrayList()
         dockingPoints.add(1)
-        RobotApi.getInstance().startCruise(reqId, route, startPoint, dockingPoints, cruiseListener)
+        RobotApi.getInstance().startCruise(reqId++, route, startPoint, dockingPoints, cruiseListener)
     }
 
     /**
