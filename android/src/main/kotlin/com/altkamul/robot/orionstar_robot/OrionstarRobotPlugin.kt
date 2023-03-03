@@ -139,10 +139,13 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                 registerPersonListener()
             }
             "startNavigation" -> {
-//                playText("i'm smart service robot , you can ask me what i can do")
+
                 Log.d("call.arguments", "${call.arguments}")
-                if (call.arguments != null)
+                if (call.arguments != null){
+                    playText("i'll take you to ${call.arguments}")
                     startNavigation("${call.arguments}")
+                }
+
             }
             "checkStatus" -> {
                 result.success(messages.toString())
