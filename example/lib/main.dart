@@ -7,6 +7,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:orionstar_robot/logger_helper.dart';
 import 'package:orionstar_robot/models/person_res_data_model.dart';
 import 'package:orionstar_robot/models/GoogleAnswerTextModel.dart';
 import 'package:orionstar_robot/orionstar_robot.dart';
@@ -39,7 +40,49 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     startTimer();
+
   }
+
+  queryByText(String text)=>  _orionstarRobotPlugin.queryByText(text: text);
+
+
+  voiceListener() async {
+    final String? requestResponse = await _orionstarRobotPlugin.getRequestResponse();
+    if (requestResponse != null) {
+      googleAnswerText =
+          GoogleAnswerTextModel.fromJson(jsonDecode(requestResponse));
+      if (googleAnswerText != null && googleAnswerText!.answerTextPlay!) {
+        // payFullScreenVideo(Assets.speechVideo);
+
+        LoggerHelper.debug("intent = ${googleAnswerText?.intent}");
+        if (googleAnswerText?.intent == "guide&guide") {
+          String placeName =
+              "${googleAnswerText?.nlpData?.detail?.first.slots?.destination?.first.value}";
+          LoggerHelper.debug(
+              "placeName ${googleAnswerText?.nlpData?.detail?.first.slots?.destination?.first.value}");
+
+          if (placeName != "null") {
+            _orionstarRobotPlugin.startNavigation(placeName: placeName);
+          }
+          await  _orionstarRobotPlugin.playText(textToPlay: "i'll take you to $placeName");
+
+         setState(() {
+
+         });
+        } else {
+
+          await _orionstarRobotPlugin.playText(
+              textToPlay: "${googleAnswerText?.answerText}");
+        }
+
+      }
+      _orionstarRobotPlugin.resetRequestResponse();
+
+      //
+    }
+  }
+
+  goTo(String placeName)=>_orionstarRobotPlugin.startNavigation(placeName: placeName);
 
   void startTimer() async {
     await _orionstarRobotPlugin.initRobot();
@@ -51,6 +94,7 @@ class _MyAppState extends State<MyApp> {
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) async {
+        voiceListener();
         final String? resultPicture = await _orionstarRobotPlugin.getPicture();
         if (imagePath.length > 10) {
           imagePath.removeLast();
@@ -110,10 +154,10 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: ()async{
-
-           await _orionstarRobotPlugin.startCruise();
-           await  Future.delayed(Duration(seconds: 30),()async =>  await _orionstarRobotPlugin.stopCruise(),);
-           await  Future.delayed(Duration(seconds: 30),()async =>  await _orionstarRobotPlugin.startCruise(),);
+            queryByText("take me to Reception Point");
+           // await _orionstarRobotPlugin.startCruise();
+           // await  Future.delayed(Duration(seconds: 30),()async =>  await _orionstarRobotPlugin.stopCruise(),);
+           // await  Future.delayed(Duration(seconds: 30),()async =>  await _orionstarRobotPlugin.startCruise(),);
           },
           child: const Icon(Icons.rocket_launch_sharp),
         ),

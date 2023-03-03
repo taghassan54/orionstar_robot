@@ -457,32 +457,30 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
     private fun startCruise() {
 
-        try {
-            RobotApi.getInstance().stopCruise(reqId++);
-            val route = RobotApi.getInstance().placeList
+try {
+    RobotApi.getInstance().stopCruise(reqId++);
+    val route = RobotApi.getInstance().placeList
 //        route.removeAt(0)
 //        route.removeAt(1)
-            val sb = java.lang.StringBuilder()
-            for (pose in route) {
-                sb.append(pose.name)
-                sb.append(',')
-            }
-            LogTools.info("Place list:$sb")
-            messages = ("Place list:$sb")
-            val startPoint = 0
-            val dockingPoints: MutableList<Int> = java.util.ArrayList()
-            dockingPoints.add(1)
-            RobotApi.getInstance()
-                .startCruise(reqId++, route, startPoint, dockingPoints, cruiseListener)
+    val sb = java.lang.StringBuilder()
+    for (pose in route) {
+        sb.append(pose.name)
+        sb.append(',')
+    }
+    LogTools.info("Place list:$sb")
+    messages = ("Place list:$sb")
+    val startPoint = 0
+    val dockingPoints: MutableList<Int> = java.util.ArrayList()
+    dockingPoints.add(1)
+    RobotApi.getInstance().startCruise(reqId++, route, startPoint, dockingPoints, cruiseListener)
 
-        } catch (ex: Exception) {
-        }
+}catch (ex:Exception){}
     }
 
     /**
      * 开始引领
      */
-    private fun startLead(destinationName: String) {
+    private fun startLead(destinationName:String) {
         val params = LeadingParams()
 
         //获取机器人视野内所有人体信息的人员列表
@@ -745,141 +743,88 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             messages = ("onRecovery")
         }
     }
-
-    var mNavigationListener: ActionListener = object : ActionListener() {
+    private val mNavigationListener: ActionListener = object : ActionListener() {
         @Throws(RemoteException::class)
         override fun onResult(status: Int, response: String) {
             when (status) {
                 Definition.RESULT_OK -> if ("true" == response) {
-                    //navigation is successful
+                    // messages="$status(Navigation success) message: $response"
+//                    messages= response
+                    messages =
+                        ("startNavigation result: $status(Navigation success) message: $response")
+                    LogTools.info("startNavigation result: $status(Navigation success) message: $response")
+                    LogTools.info("startNavigation result: $status(导航成功) message: $response")
                 } else {
-                    //navigation is failed
+                    messages = "$status(Navigation failed) message: $response"
+                    messages = response
+                    messages =
+                        ("startNavigation result: $status(Navigation failed) message: $response")
+                    LogTools.info("startNavigation result: $status(Navigation failed) message: $response")
+                    LogTools.info("startNavigation result: $status(导航失败) message: $response")
                 }
+                else -> {}
             }
         }
 
         @Throws(RemoteException::class)
         override fun onError(errorCode: Int, errorString: String) {
             when (errorCode) {
-                Definition.ERROR_NOT_ESTIMATE -> {}
-                Definition.ERROR_IN_DESTINATION -> {}
-                Definition.ERROR_DESTINATION_NOT_EXIST -> {}
-                Definition.ERROR_DESTINATION_CAN_NOT_ARRAIVE -> {}
-                Definition.ACTION_RESPONSE_ALREADY_RUN -> {}
-                Definition.ACTION_RESPONSE_REQUEST_RES_ERROR -> {}
-                Definition.ERROR_MULTI_ROBOT_WAITING_TIMEOUT -> {}
-                Definition.ERROR_NAVIGATION_FAILED -> {}
+                Definition.ERROR_NOT_ESTIMATE -> {
+
+//                    messages=("onError result: $errorCode(not estimate) message: $errorString")
+                    messages = errorString
+                    LogTools.info("onError result: $errorCode(not estimate) message: $errorString")
+                    LogTools.info("onError result: $errorCode(当前未定位) message: $errorString")
+                }
+                Definition.ERROR_IN_DESTINATION -> {
+                    //   messages=("onError result: $errorCode(in destination, no action) message: $errorString")
+                    messages = errorString
+                    LogTools.info("onError result: $errorCode(in destination, no action) message: $errorString")
+                    LogTools.info("onError result: $errorCode(当前机器人已经在目的地范围内) message: $errorString")
+                }
+                Definition.ERROR_DESTINATION_NOT_EXIST -> {
+                    //   messages=("onError result: $errorCode(destination not exist) message: $errorString")
+                    messages = errorString
+                    LogTools.info("onError result: $errorCode(destination not exist) message: $errorString")
+                    LogTools.info("onError result: $errorCode(导航目的地不存在) message: $errorString")
+                }
+                Definition.ERROR_DESTINATION_CAN_NOT_ARRAIVE -> {
+                    //   messages=("onError result: $errorCode(avoid timeout, can not arrive) message: $errorString")
+                    messages = errorString
+                    LogTools.info("onError result: $errorCode(avoid timeout, can not arrive) message: $errorString")
+                    LogTools.info("onError result: $errorCode(避障超时，目的地不能到达，超时时间通过参数设置) message: $errorString")
+                }
+                Definition.ACTION_RESPONSE_ALREADY_RUN -> {
+                    //   messages=("onError result: $errorCode(already started, please stop first) message: $errorString")
+                    messages = errorString
+                    LogTools.info("onError result: $errorCode(当前接口已经调用，请先停止，才能再次调用) message: $errorString")
+                }
+                Definition.ACTION_RESPONSE_REQUEST_RES_ERROR -> {
+                    //  messages=("onError result: $errorCode(wheels are busy for other actions, please stop first) message: $errorString")
+                    messages = errorString
+                    LogTools.info("onError result: $errorCode(已经有需要控制底盘的接口调用，请先停止，才能继续调用) message: $errorString")
+                }
+                else -> {}
             }
         }
 
         @Throws(RemoteException::class)
         override fun onStatusUpdate(status: Int, data: String) {
             when (status) {
-                Definition.STATUS_NAVI_AVOID -> {}
-                Definition.STATUS_NAVI_AVOID_END -> {}
-                Definition.STATUS_START_NAVIGATION -> {}
-                Definition.STATUS_START_CRUISE -> {}
-                Definition.STATUS_NAVI_OUT_MAP -> {}
-                Definition.STATUS_NAVI_MULTI_ROBOT_WAITING -> {}
-                Definition.STATUS_NAVI_MULTI_ROBOT_WAITING_END -> {}
-                Definition.STATUS_NAVI_GO_STRAIGHT -> {}
-                Definition.STATUS_NAVI_TURN_LEFT -> {}
-                Definition.STATUS_NAVI_TURN_RIGHT -> {}
+                Definition.STATUS_NAVI_AVOID -> {
+                    // messages=("onStatusUpdate result: $status(can not avoid obstacles) message: $data")
+                    messages = data
+                    LogTools.info("onStatusUpdate result: $status(当前路线已经被障碍物堵死) message: $data")
+                }
+                Definition.STATUS_NAVI_AVOID_END -> {
+                    messages = data
+//                    messages=("onStatusUpdate result: $status(Obstacle removed) message: $data")
+                    LogTools.info("onStatusUpdate result: $status(障碍物已移除) message: $data")
+                }
+                else -> {}
             }
         }
     }
-
-//    private val mNavigationListener: ActionListener = object : ActionListener() {
-//        @Throws(RemoteException::class)
-//        override fun onResult(status: Int, response: String) {
-//            try {
-//                when (status) {
-//                    Definition.RESULT_OK -> if ("true" == response) {
-//                        // messages="$status(Navigation success) message: $response"
-////                    messages= response
-//                        messages =
-//                            ("startNavigation result: $status(Navigation success) message: $response")
-//                        LogTools.info("startNavigation result: $status(Navigation success) message: $response")
-//                        LogTools.info("startNavigation result: $status(导航成功) message: $response")
-//                    } else {
-//                        messages = "$status(Navigation failed) message: $response"
-//                        messages = response
-//                        messages =
-//                            ("startNavigation result: $status(Navigation failed) message: $response")
-//                        LogTools.info("startNavigation result: $status(Navigation failed) message: $response")
-//                        LogTools.info("startNavigation result: $status(导航失败) message: $response")
-//                    }
-//                    else -> {}
-//                }
-//            } catch (ex: Exception) {
-//            }
-//        }
-//
-//        @Throws(RemoteException::class)
-//        override fun onError(errorCode: Int, errorString: String) {
-//            try {
-//                when (errorCode) {
-//                    Definition.ERROR_NOT_ESTIMATE -> {
-//
-////                    messages=("onError result: $errorCode(not estimate) message: $errorString")
-//                        messages = errorString
-//                        LogTools.info("onError result: $errorCode(not estimate) message: $errorString")
-//                        LogTools.info("onError result: $errorCode(当前未定位) message: $errorString")
-//                    }
-//                    Definition.ERROR_IN_DESTINATION -> {
-//                        //   messages=("onError result: $errorCode(in destination, no action) message: $errorString")
-//                        messages = errorString
-//                        LogTools.info("onError result: $errorCode(in destination, no action) message: $errorString")
-//                        LogTools.info("onError result: $errorCode(当前机器人已经在目的地范围内) message: $errorString")
-//                    }
-//                    Definition.ERROR_DESTINATION_NOT_EXIST -> {
-//                        //   messages=("onError result: $errorCode(destination not exist) message: $errorString")
-//                        messages = errorString
-//                        LogTools.info("onError result: $errorCode(destination not exist) message: $errorString")
-//                        LogTools.info("onError result: $errorCode(导航目的地不存在) message: $errorString")
-//                    }
-//                    Definition.ERROR_DESTINATION_CAN_NOT_ARRAIVE -> {
-//                        //   messages=("onError result: $errorCode(avoid timeout, can not arrive) message: $errorString")
-//                        messages = errorString
-//                        LogTools.info("onError result: $errorCode(avoid timeout, can not arrive) message: $errorString")
-//                        LogTools.info("onError result: $errorCode(避障超时，目的地不能到达，超时时间通过参数设置) message: $errorString")
-//                    }
-//                    Definition.ACTION_RESPONSE_ALREADY_RUN -> {
-//                        //   messages=("onError result: $errorCode(already started, please stop first) message: $errorString")
-//                        messages = errorString
-//                        LogTools.info("onError result: $errorCode(当前接口已经调用，请先停止，才能再次调用) message: $errorString")
-//                    }
-//                    Definition.ACTION_RESPONSE_REQUEST_RES_ERROR -> {
-//                        //  messages=("onError result: $errorCode(wheels are busy for other actions, please stop first) message: $errorString")
-//                        messages = errorString
-//                        LogTools.info("onError result: $errorCode(已经有需要控制底盘的接口调用，请先停止，才能继续调用) message: $errorString")
-//                    }
-//                    else -> {}
-//                }
-//            } catch (ex: Exception) {
-//            }
-//        }
-//
-//        @Throws(RemoteException::class)
-//        override fun onStatusUpdate(status: Int, data: String) {
-//            try {
-//                when (status) {
-//                    Definition.STATUS_NAVI_AVOID -> {
-//                        // messages=("onStatusUpdate result: $status(can not avoid obstacles) message: $data")
-//                        messages = data
-//                        LogTools.info("onStatusUpdate result: $status(当前路线已经被障碍物堵死) message: $data")
-//                    }
-//                    Definition.STATUS_NAVI_AVOID_END -> {
-//                        messages = data
-////                    messages=("onStatusUpdate result: $status(Obstacle removed) message: $data")
-//                        LogTools.info("onStatusUpdate result: $status(障碍物已移除) message: $data")
-//                    }
-//                    else -> {}
-//                }
-//            } catch (ex: Exception) {
-//            }
-//        }
-//    }
 
 
     /**
@@ -1082,46 +1027,38 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
     var cruiseListener: ActionListener = object : ActionListener() {
         @Throws(RemoteException::class)
         override fun onResult(status: Int, responseString: String) {
-            try{
-                LogTools.info("startCruise onResult : $status || $responseString")
-                when (status) {
-                    Definition.RESULT_OK -> {}
-                    Definition.ACTION_RESPONSE_STOP_SUCCESS -> {}
-                }
-            }catch (ex:Exception){}
+            LogTools.info("startCruise onResult : $status || $responseString")
+            when (status) {
+                Definition.RESULT_OK -> {}
+                Definition.ACTION_RESPONSE_STOP_SUCCESS -> {}
+            }
         }
 
         @Throws(RemoteException::class)
         override fun onStatusUpdate(status: Int, data: String) {
-       try{
-           LogTools.info("startCruise onStatusUpdate : $status || $data")
-           messages = ("startCruise onStatusUpdate : $status || $data")
-           when (status) {
-               Definition.STATUS_NAVI_OUT_MAP -> {}
-               Definition.STATUS_START_CRUISE -> {}
-               Definition.STATUS_CRUISE_REACH_POINT -> {
-                   messages = "${data.toInt()}"
-               }
-               Definition.STATUS_NAVI_AVOID -> {}
-               Definition.STATUS_NAVI_AVOID_END -> {}
-           }
-       }catch (ex:Exception){}
+            LogTools.info("startCruise onStatusUpdate : $status || $data")
+            messages = ("startCruise onStatusUpdate : $status || $data")
+            when (status) {
+                Definition.STATUS_NAVI_OUT_MAP -> {}
+                Definition.STATUS_START_CRUISE -> {}
+                Definition.STATUS_CRUISE_REACH_POINT -> {
+                    messages = "${data.toInt()}"
+                }
+                Definition.STATUS_NAVI_AVOID -> {}
+                Definition.STATUS_NAVI_AVOID_END -> {}
+            }
         }
 
         @Throws(RemoteException::class)
         override fun onError(errorCode: Int, errorString: String) {
-
-            try {
-                LogTools.info("startCruise onError : $errorCode || $errorString")
-                messages = ("startCruise onError : $errorCode || $errorString")
-                when (errorCode) {
-                    Definition.ACTION_RESPONSE_ALREADY_RUN -> {}
-                    Definition.ERROR_NOT_ESTIMATE -> {}
-                    Definition.ERROR_NAVIGATION_FAILED -> {}
-                    Definition.ACTION_RESPONSE_REQUEST_RES_ERROR -> {}
-                }
-            }catch (ex:Exception){}
-
+            LogTools.info("startCruise onError : $errorCode || $errorString")
+            messages = ("startCruise onError : $errorCode || $errorString")
+            when (errorCode) {
+                Definition.ACTION_RESPONSE_ALREADY_RUN -> {}
+                Definition.ERROR_NOT_ESTIMATE -> {}
+                Definition.ERROR_NAVIGATION_FAILED -> {}
+                Definition.ACTION_RESPONSE_REQUEST_RES_ERROR -> {}
+            }
         }
     }
 
@@ -1129,7 +1066,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
      *
      */
 
-    private fun playText(text: String) {
+    open fun playText(text: String) {
         if (mSkillApi != null) {
             connectApi()
             LogTools.info("text $text")
