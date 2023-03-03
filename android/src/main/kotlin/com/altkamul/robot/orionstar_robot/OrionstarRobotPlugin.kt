@@ -280,8 +280,8 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
     private fun init() {
 
-//        mApiCallbackThread = HandlerThread("RobotOSDemo")
-//        mApiCallbackThread!!.start()
+        mApiCallbackThread = HandlerThread("RobotOSDemo")
+        mApiCallbackThread!!.start()
 
     }
 
@@ -339,7 +339,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
     private fun addApiCallBack() {
         Log.d(TAG, "CoreService connected ")
         RobotApi.getInstance().setCallback(mModuleCallbackApi)
-//        RobotApi.getInstance().setResponseThread(mApiCallbackThread)
+        RobotApi.getInstance().setResponseThread(mApiCallbackThread)
     }
 
 
