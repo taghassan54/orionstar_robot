@@ -151,18 +151,18 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                 result.success(messages.toString())
             }
             "resetHead" -> {
-                RobotApi.getInstance().resetHead(reqId, mMotionListener)
+                RobotApi.getInstance().resetHead(reqId++, mMotionListener)
             }
             "stopMove" -> {
-                RobotApi.getInstance().stopMove(0, mMotionListener)
+                RobotApi.getInstance().stopMove(reqId++, mMotionListener)
                 result.success("stop Move")
             }
             "turnLeft" -> {
-                RobotApi.getInstance().turnLeft(0, 0.2f, mMotionListener)
+                RobotApi.getInstance().turnLeft(reqId++, 0.2f, mMotionListener)
                 result.success("turn Left")
             }
             "turnRight" -> {
-                RobotApi.getInstance().turnRight(0, 0.2f, mMotionListener)
+                RobotApi.getInstance().turnRight(reqId++, 0.2f, mMotionListener)
                 result.success("turn Right")
             }
             "mHeadUp" -> {
@@ -395,7 +395,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
     private fun getPictureById() {
         RobotApi.getInstance()
-            .getPictureById(reqId, 0, 10, object : CommandListener() {
+            .getPictureById(reqId, reqId++, 10, object : CommandListener() {
                 override fun onResult(result: Int, message: String) {
                     try {
                         val json = JSONObject(message)
@@ -611,13 +611,15 @@ try {
      */
     private fun startNavigation(placeName: String?) {
 
-        RobotApi.getInstance().startNavigation(
-            0,
-            placeName,
-            1.5,
-            (10 * 1000).toLong(),
-            mNavigationListener
-        )
+       try {
+           RobotApi.getInstance().startNavigation(
+               reqId++,
+               placeName,
+               1.5,
+               (10 * 1000).toLong(),
+               mNavigationListener
+           )
+       }catch (ex:Exception){}
     }
 
     /**
