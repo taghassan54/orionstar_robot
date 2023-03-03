@@ -1038,38 +1038,46 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
     var cruiseListener: ActionListener = object : ActionListener() {
         @Throws(RemoteException::class)
         override fun onResult(status: Int, responseString: String) {
-            LogTools.info("startCruise onResult : $status || $responseString")
-            when (status) {
-                Definition.RESULT_OK -> {}
-                Definition.ACTION_RESPONSE_STOP_SUCCESS -> {}
-            }
+            try{
+                LogTools.info("startCruise onResult : $status || $responseString")
+                when (status) {
+                    Definition.RESULT_OK -> {}
+                    Definition.ACTION_RESPONSE_STOP_SUCCESS -> {}
+                }
+            }catch (ex:Exception){}
         }
 
         @Throws(RemoteException::class)
         override fun onStatusUpdate(status: Int, data: String) {
-            LogTools.info("startCruise onStatusUpdate : $status || $data")
-            messages = ("startCruise onStatusUpdate : $status || $data")
-            when (status) {
-                Definition.STATUS_NAVI_OUT_MAP -> {}
-                Definition.STATUS_START_CRUISE -> {}
-                Definition.STATUS_CRUISE_REACH_POINT -> {
-                    messages = "${data.toInt()}"
-                }
-                Definition.STATUS_NAVI_AVOID -> {}
-                Definition.STATUS_NAVI_AVOID_END -> {}
-            }
+       try{
+           LogTools.info("startCruise onStatusUpdate : $status || $data")
+           messages = ("startCruise onStatusUpdate : $status || $data")
+           when (status) {
+               Definition.STATUS_NAVI_OUT_MAP -> {}
+               Definition.STATUS_START_CRUISE -> {}
+               Definition.STATUS_CRUISE_REACH_POINT -> {
+                   messages = "${data.toInt()}"
+               }
+               Definition.STATUS_NAVI_AVOID -> {}
+               Definition.STATUS_NAVI_AVOID_END -> {}
+           }
+       }catch (ex:Exception){}
         }
 
         @Throws(RemoteException::class)
         override fun onError(errorCode: Int, errorString: String) {
-            LogTools.info("startCruise onError : $errorCode || $errorString")
-            messages = ("startCruise onError : $errorCode || $errorString")
-            when (errorCode) {
-                Definition.ACTION_RESPONSE_ALREADY_RUN -> {}
-                Definition.ERROR_NOT_ESTIMATE -> {}
-                Definition.ERROR_NAVIGATION_FAILED -> {}
-                Definition.ACTION_RESPONSE_REQUEST_RES_ERROR -> {}
-            }
+
+            try {
+                LogTools.info("startCruise onError : $errorCode || $errorString")
+                messages = ("startCruise onError : $errorCode || $errorString")
+                when (errorCode) {
+                    Definition.ACTION_RESPONSE_ALREADY_RUN -> {}
+                    Definition.ERROR_NOT_ESTIMATE -> {}
+                    Definition.ERROR_NAVIGATION_FAILED -> {}
+                    Definition.ACTION_RESPONSE_REQUEST_RES_ERROR -> {}
+                }
+            }catch (ex:Exception){}
+
         }
     }
 
@@ -1077,7 +1085,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
      *
      */
 
-    open fun playText(text: String) {
+    private fun playText(text: String) {
         if (mSkillApi != null) {
             connectApi()
             LogTools.info("text $text")
