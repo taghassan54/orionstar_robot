@@ -754,13 +754,21 @@ try {
     }
 
     private val mNavigationListener: ActionListener = object : ActionListener() {
-        @kotlin.Throws(RemoteException::class)
-        fun onResult(status: Int, response: String) {
+        @Throws(RemoteException::class)
+        override fun onResult(status: Int, response: String) {
             when (status) {
                 Definition.RESULT_OK -> if ("true" == response) {
+                    // messages="$status(Navigation success) message: $response"
+//                    messages= response
+                    messages =
+                        ("startNavigation result: $status(Navigation success) message: $response")
                     LogTools.info("startNavigation result: $status(Navigation success) message: $response")
                     LogTools.info("startNavigation result: $status(导航成功) message: $response")
                 } else {
+                    messages = "$status(Navigation failed) message: $response"
+                    messages = response
+                    messages =
+                        ("startNavigation result: $status(Navigation failed) message: $response")
                     LogTools.info("startNavigation result: $status(Navigation failed) message: $response")
                     LogTools.info("startNavigation result: $status(导航失败) message: $response")
                 }
@@ -768,53 +776,65 @@ try {
             }
         }
 
-        @kotlin.Throws(RemoteException::class)
-        fun onError(errorCode: Int, errorString: String) {
+        @Throws(RemoteException::class)
+        override fun onError(errorCode: Int, errorString: String) {
             when (errorCode) {
                 Definition.ERROR_NOT_ESTIMATE -> {
+
+//                    messages=("onError result: $errorCode(not estimate) message: $errorString")
+                    messages = errorString
                     LogTools.info("onError result: $errorCode(not estimate) message: $errorString")
                     LogTools.info("onError result: $errorCode(当前未定位) message: $errorString")
                 }
                 Definition.ERROR_IN_DESTINATION -> {
+                    //   messages=("onError result: $errorCode(in destination, no action) message: $errorString")
+                    messages = errorString
                     LogTools.info("onError result: $errorCode(in destination, no action) message: $errorString")
                     LogTools.info("onError result: $errorCode(当前机器人已经在目的地范围内) message: $errorString")
                 }
                 Definition.ERROR_DESTINATION_NOT_EXIST -> {
+                    //   messages=("onError result: $errorCode(destination not exist) message: $errorString")
+                    messages = errorString
                     LogTools.info("onError result: $errorCode(destination not exist) message: $errorString")
                     LogTools.info("onError result: $errorCode(导航目的地不存在) message: $errorString")
                 }
                 Definition.ERROR_DESTINATION_CAN_NOT_ARRAIVE -> {
+                    //   messages=("onError result: $errorCode(avoid timeout, can not arrive) message: $errorString")
+                    messages = errorString
                     LogTools.info("onError result: $errorCode(avoid timeout, can not arrive) message: $errorString")
                     LogTools.info("onError result: $errorCode(避障超时，目的地不能到达，超时时间通过参数设置) message: $errorString")
                 }
                 Definition.ACTION_RESPONSE_ALREADY_RUN -> {
-                    LogTools.info("onError result: $errorCode(already started, please stop first) message: $errorString")
+                    //   messages=("onError result: $errorCode(already started, please stop first) message: $errorString")
+                    messages = errorString
                     LogTools.info("onError result: $errorCode(当前接口已经调用，请先停止，才能再次调用) message: $errorString")
                 }
                 Definition.ACTION_RESPONSE_REQUEST_RES_ERROR -> {
-                    LogTools.info("onError result: $errorCode(wheels are busy for other actions, please stop first) message: $errorString")
+                    //  messages=("onError result: $errorCode(wheels are busy for other actions, please stop first) message: $errorString")
+                    messages = errorString
                     LogTools.info("onError result: $errorCode(已经有需要控制底盘的接口调用，请先停止，才能继续调用) message: $errorString")
                 }
                 else -> {}
             }
         }
 
-        @kotlin.Throws(RemoteException::class)
-        fun onStatusUpdate(status: Int, data: String) {
+        @Throws(RemoteException::class)
+        override fun onStatusUpdate(status: Int, data: String) {
             when (status) {
                 Definition.STATUS_NAVI_AVOID -> {
-                    LogTools.info("onStatusUpdate result: $status(can not avoid obstacles) message: $data")
+                    // messages=("onStatusUpdate result: $status(can not avoid obstacles) message: $data")
+                    messages = data
                     LogTools.info("onStatusUpdate result: $status(当前路线已经被障碍物堵死) message: $data")
                 }
                 Definition.STATUS_NAVI_AVOID_END -> {
-                    LogTools.info("onStatusUpdate result: $status(Obstacle removed) message: $data")
+                    messages = data
+//                    messages=("onStatusUpdate result: $status(Obstacle removed) message: $data")
                     LogTools.info("onStatusUpdate result: $status(障碍物已移除) message: $data")
                 }
                 else -> {}
             }
         }
     }
-
 
     /**
      *
