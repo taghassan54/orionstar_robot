@@ -142,7 +142,8 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
                 Log.d("call.arguments", "${call.arguments}")
                 if (call.arguments != null){
-                    playText("i'll take you to ${call.arguments}")
+//                    playText("i'll take you to ${call.arguments}")
+
                     startNavigation("${call.arguments}")
                 }
 
@@ -612,14 +613,17 @@ try {
     private fun startNavigation(placeName: String?) {
 
        try {
+           stopFocusFollow()
            RobotApi.getInstance().startNavigation(
-               reqId++,
+               0,
                placeName,
                1.5,
                (10 * 1000).toLong(),
                mNavigationListener
            )
-       }catch (ex:Exception){}
+       }catch (ex:Exception){
+           Log.e("NavigationException",ex.message.toString())
+       }
     }
 
     /**
@@ -749,25 +753,7 @@ try {
         }
     }
     private val mNavigationListener: ActionListener = object : ActionListener() {
-        @Throws(RemoteException::class)
-        override fun onResult(status: Int, response: String) {
-            when (status) {
-                Definition.STATUS_TRACK_TARGET_SUCCEED -> {}
-                Definition.STATUS_GUEST_LOST -> {}
-                Definition.STATUS_GUEST_FARAWAY -> {}
-                Definition.STATUS_GUEST_APPEAR -> {}
-            }
-        }
 
-        @Throws(RemoteException::class)
-        override fun onError(errorCode: Int, errorString: String) {
-
-        }
-
-        @Throws(RemoteException::class)
-        override fun onStatusUpdate(status: Int, data: String) {
-
-        }
     }
 
 
@@ -896,7 +882,7 @@ try {
     }
 
     private fun stopFocusFollow() {
-        RobotApi.getInstance().stopFocusFollow(reqId);
+        RobotApi.getInstance().stopFocusFollow(0);
     }
 
     private fun startFocusFollow() {
@@ -904,33 +890,7 @@ try {
 
         if (person != null)
             RobotApi.getInstance()
-                .startFocusFollow(reqId, person.id, 60, 10F, object : ActionListener() {
-                    override fun onStatusUpdate(status: Int, data: String) {
-                        when (status) {
-                            Definition.STATUS_TRACK_TARGET_SUCCEED -> {}
-                            Definition.STATUS_GUEST_LOST -> {}
-                            Definition.STATUS_GUEST_FARAWAY -> {}
-                            Definition.STATUS_GUEST_APPEAR -> {
-
-                            }
-                        }
-                    }
-
-                    override fun onError(errorCode: Int, errorString: String) {
-                        when (errorCode) {
-                            Definition.ERROR_SET_TRACK_FAILED, Definition.ERROR_TARGET_NOT_FOUND -> {}
-                            Definition.ACTION_RESPONSE_ALREADY_RUN -> {}
-                            Definition.ACTION_RESPONSE_REQUEST_RES_ERROR -> {}
-                        }
-                    }
-
-                    override fun onResult(status: Int, responseString: String) {
-                        Log.d(TAG, "startTrackPerson onResult status: $status")
-                        when (status) {
-                            Definition.ACTION_RESPONSE_STOP_SUCCESS -> {}
-                        }
-                    }
-                })
+                .startFocusFollow(0, person.id, 120, 10F,mNavigationListener)
     }
 
     private fun registerPerson(person: Person) {
