@@ -749,7 +749,21 @@ try {
         }
     }
     private val mNavigationListener: ActionListener = object : ActionListener() {
+        @Throws(RemoteException::class)
+        override fun onResult(status: Int, response: String) {
+    
 
+        }
+
+        @Throws(RemoteException::class)
+        override fun onError(errorCode: Int, errorString: String) {
+
+        }
+
+        @Throws(RemoteException::class)
+        override fun onStatusUpdate(status: Int, data: String) {
+
+        }
     }
 
 
