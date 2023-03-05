@@ -761,18 +761,12 @@ try {
 
         @Throws(RemoteException::class)
         override fun onError(errorCode: Int, errorString: String) {
-            when (errorCode) {
-                Definition.ERROR_SET_TRACK_FAILED, Definition.ERROR_TARGET_NOT_FOUND -> {}
-                Definition.ACTION_RESPONSE_ALREADY_RUN -> {}
-                Definition.ACTION_RESPONSE_REQUEST_RES_ERROR -> {}
-            }
+
         }
 
         @Throws(RemoteException::class)
         override fun onStatusUpdate(status: Int, data: String) {
-            when (status) {
-                Definition.ACTION_RESPONSE_STOP_SUCCESS -> {}
-            }
+
         }
     }
 
