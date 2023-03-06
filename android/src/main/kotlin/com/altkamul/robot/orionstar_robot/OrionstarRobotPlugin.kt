@@ -144,7 +144,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                 result.success("register success")
             }
             "startNavigation" -> {
-                navigationResult=null
+                navigationResult="NavigationResult:Code=9999,message=startNavigation"
                 Log.d("call.arguments", "${call.arguments}")
                 if (call.arguments != null){
                     startNavigation("${call.arguments}")
