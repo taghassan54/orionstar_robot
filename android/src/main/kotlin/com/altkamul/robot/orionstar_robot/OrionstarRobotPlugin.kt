@@ -767,7 +767,7 @@ try {
         override fun onResult(status: Int, response: String) {
             when (status) {
                 Definition.RESULT_OK -> if ("true" == response) {
-                     messages="NavigationResult:Code=$status,message=$response"
+                    navigationResult="NavigationResult:Code=$status,message=$response"
                     // messages="$status(Navigation success) message: $response"
 //                    messages= response
 //                    messages =
@@ -775,7 +775,7 @@ try {
                     LogTools.info("startNavigation result: $status(Navigation success) message: $response")
                     LogTools.info("startNavigation result: $status(导航成功) message: $response")
                 } else {
-                    messages="NavigationResult:Code=$status,message=$response"
+                    navigationResult="NavigationResult:Code=$status,message=$response"
 //                    messages = "$status(Navigation failed) message: $response"
 //                    messages = response
 //                    messages =
