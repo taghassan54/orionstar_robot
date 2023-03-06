@@ -112,6 +112,8 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                 Log.d("call.arguments", "${call.arguments}")
                 if (call.arguments != null)
                     playText("${call.arguments}")
+
+                result.success("play Text success")
             }
             "getPerson" -> {
                 val person = PersonApi.getInstance().focusPerson
@@ -120,7 +122,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             "registerById" -> {
 
                 registerById()
-
+                result.success("register By Id success")
             }
             "stopFocusFollow" -> {
                 stopFocusFollow()
@@ -133,10 +135,12 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             "findPeople" -> {
                 action = FIND_FACE
                 registerPersonListener()
+                result.success("find People success")
             }
             "register" -> {
                 action = REGISTER
                 registerPersonListener()
+                result.success("register success")
             }
             "startNavigation" -> {
 
@@ -146,13 +150,14 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
                     startNavigation("${call.arguments}")
                 }
-
+                result.success("start Navigation success")
             }
             "checkStatus" -> {
                 result.success(messages.toString())
             }
             "resetHead" -> {
                 RobotApi.getInstance().resetHead(reqId++, mMotionListener)
+                result.success("reset Head success")
             }
             "stopMove" -> {
                 RobotApi.getInstance().stopMove(reqId++, mMotionListener)
@@ -183,7 +188,6 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                 goBackward()
             }
             "goForward" -> {
-
                 if (call.arguments != null)
                     goForward("${call.arguments}".toFloat())
             }
