@@ -58,6 +58,19 @@ class MethodChannelOrionstarRobot extends OrionstarRobotPlatform {
   }
 
   @override
+  Future<String?> getNavigationResult() async {
+    final result =
+        await methodChannel.invokeMethod<String>('getNavigationResult');
+    return result;
+  }
+
+  @override
+  Future<String?> stopNavigation() async {
+    final result = await methodChannel.invokeMethod<String>('stopNavigation');
+    return result;
+  }
+
+  @override
   Future<List<String>?> robotGetLocation() async {
     final result = await methodChannel.invokeMethod<String>('robotGetLocation');
     return result?.split(',');
@@ -127,36 +140,46 @@ class MethodChannelOrionstarRobot extends OrionstarRobotPlatform {
     final result = await methodChannel.invokeMethod<String>('startCruise');
     return result;
   }
+
   @override
   Future<String?> stopCruise() async {
     final result = await methodChannel.invokeMethod<String>('stopCruise');
     return result;
   }
+
   @override
   Future<String?> registerById() async {
     final result = await methodChannel.invokeMethod<String>('registerById');
     return result;
   }
+
   @override
   Future<String?> goBackward() async {
     final result = await methodChannel.invokeMethod<String>('goBackward');
     return result;
   }
+
   @override
   Future<String?> goForward({required double distance}) async {
-    final result = await methodChannel.invokeMethod<String>('goForward',distance);
+    final result =
+        await methodChannel.invokeMethod<String>('goForward', distance);
     return result;
   }
+
   @override
   Future<String?> getRequestResponse() async {
-    final result = await methodChannel.invokeMethod<String>('getRequestResponse');
+    final result =
+        await methodChannel.invokeMethod<String>('getRequestResponse');
     return result;
   }
+
   @override
   Future<String?> resetRequestResponse() async {
-    final result = await methodChannel.invokeMethod<String>('resetRequestResponse');
+    final result =
+        await methodChannel.invokeMethod<String>('resetRequestResponse');
     return result;
   }
+
   @override
   Future<String?> checkMapName() async {
     final result = await methodChannel.invokeMethod<String>('checkMapName');

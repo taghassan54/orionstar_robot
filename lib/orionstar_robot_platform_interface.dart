@@ -55,66 +55,77 @@ abstract class OrionstarRobotPlatform extends PlatformInterface {
   Future<List<String>?> robotGetLocation() {
     throw UnimplementedError('robotGetLocation() has not been implemented.');
   }
+
   Future<String?> stopMove() {
     throw UnimplementedError('stopMove() has not been implemented.');
   }
+
   Future<String?> turnLeft() {
     throw UnimplementedError('turnLeft() has not been implemented.');
   }
+
   Future<String?> turnRight() {
     throw UnimplementedError('turnRight() has not been implemented.');
   }
+
   Future<String?> mHeadDown() {
     throw UnimplementedError('mHeadDown() has not been implemented.');
   }
-  Future<String?> mHeadUp() {
-    throw UnimplementedError('mHeadUp() has not been implemented.');
-  }
-  Future<String?> resetHead() {
-    throw UnimplementedError('resetHead() has not been implemented.');
-  }
-  Future<String?> startFocusFollow() {
-    throw UnimplementedError('startFocusFollow() has not been implemented.');
-  }
-  Future<String?> stopFocusFollow() {
-    throw UnimplementedError('stopFocusFollow() has not been implemented.');
-  }
-  Future<PersonResDataModel?> getPerson() {
-    throw UnimplementedError('getPerson() has not been implemented.');
-  }
 
-  Future<String?> setLocation({required String locationName}) {
-    throw UnimplementedError('setLocation() has not been implemented.');
-  }
+  Future<String?> mHeadUp() =>
+      throw UnimplementedError('mHeadUp() has not been implemented.');
 
-  Future<String?> startCruise() {
-    throw UnimplementedError('startCruise() has not been implemented.');
-  }
+  Future<String?> resetHead() =>
+      throw UnimplementedError('resetHead() has not been implemented.');
 
-  Future<String?> checkMapName() {
-    throw UnimplementedError('checkMapName() has not been implemented.');
-  }
+  Future<String?> startFocusFollow() =>
+      throw UnimplementedError('startFocusFollow() has not been implemented.');
 
-  Future<String?> getRequestResponse() {
-    throw UnimplementedError('getRequestResponse() has not been implemented.');
-  }
+  Future<String?> stopFocusFollow() =>
+      throw UnimplementedError('stopFocusFollow() has not been implemented.');
 
-  Future<String?> resetRequestResponse() {
-    throw UnimplementedError('resetRequestResponse() has not been implemented.');
-  }
+  Future<PersonResDataModel?> getPerson() =>
+      throw UnimplementedError('getPerson() has not been implemented.');
 
-  Future<String?> robotPlayText({required String textToPlay}) {
-    throw UnimplementedError('robotPlayText() has not been implemented.');
-  }
+  Future<String?> setLocation({required String locationName}) =>
+      throw UnimplementedError('setLocation() has not been implemented.');
 
-  Future<String?> registerById() =>    throw UnimplementedError('registerById() has not been implemented.');
+  Future<String?> startCruise() =>
+      throw UnimplementedError('startCruise() has not been implemented.');
 
-  Future<String?> goBackward() =>throw UnimplementedError('goBackward() has not been implemented.');
-  Future<String?> goForward({required double distance}) =>throw UnimplementedError('goForward() has not been implemented.');
+  Future<String?> checkMapName() =>
+      throw UnimplementedError('checkMapName() has not been implemented.');
 
-  Future<String?> stopCruise() =>throw UnimplementedError('stopCruise() has not been implemented.');
+  Future<String?> getRequestResponse() => throw UnimplementedError(
+      'getRequestResponse() has not been implemented.');
 
-  Future<String?> startLead({required String locationName})=>throw UnimplementedError('startLead() has not been implemented.');
+  Future<String?> resetRequestResponse() => throw UnimplementedError(
+      'resetRequestResponse() has not been implemented.');
 
-  Future<String?> googleQueryByText({required String text}) =>throw UnimplementedError('googleQueryByText() has not been implemented.');
-}//queryByText
+  Future<String?> robotPlayText({required String textToPlay}) =>
+      throw UnimplementedError('robotPlayText() has not been implemented.');
+
+  Future<String?> registerById() =>
+      throw UnimplementedError('registerById() has not been implemented.');
+
+  Future<String?> goBackward() =>
+      throw UnimplementedError('goBackward() has not been implemented.');
+
+  Future<String?> goForward({required double distance}) =>
+      throw UnimplementedError('goForward() has not been implemented.');
+
+  Future<String?> stopCruise() =>
+      throw UnimplementedError('stopCruise() has not been implemented.');
+
+  Future<String?> startLead({required String locationName}) =>
+      throw UnimplementedError('startLead() has not been implemented.');
+
+  Future<String?> googleQueryByText({required String text}) =>
+      throw UnimplementedError('googleQueryByText() has not been implemented.');
+
+  Future<String?> stopNavigation() =>
+      throw UnimplementedError('stopNavigation() has not been implemented.');
+
+  Future<String?> getNavigationResult() => throw UnimplementedError(
+      'getNavigationResult() has not been implemented.');
+} //queryByText

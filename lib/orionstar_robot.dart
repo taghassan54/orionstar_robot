@@ -48,6 +48,14 @@ class OrionstarRobot {
     return OrionstarRobotPlatform.instance
         .startNavigation(placeName: placeName);
   }
+  Future<String?> stopNavigation() {
+    return OrionstarRobotPlatform.instance
+        .stopNavigation();
+  }
+  Future<String?> getNavigationResult() {
+    return OrionstarRobotPlatform.instance
+        .getNavigationResult();
+  }
 
   Future<int?> findPeople() {
     return OrionstarRobotPlatform.instance.findPeople();

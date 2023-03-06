@@ -57,6 +57,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
     private var places: String? = null
     private var mapName: String? = null
     var messages: String? = null
+    var navigationResult: String? = null
     var botReqType: String? = null
     var botReqText: String? = null
     var botReqParam: String? = null
@@ -151,6 +152,12 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                     startNavigation("${call.arguments}")
                 }
                 result.success("start Navigation success")
+            }
+            "getNavigationResult" -> {
+                result.success(navigationResult.toString())
+            } "stopNavigation" -> {
+            stopNavigation()
+                result.success(navigationResult.toString())
             }
             "checkStatus" -> {
                 result.success(messages.toString())
@@ -789,41 +796,41 @@ try {
 
 //                    messages=("onError result: $errorCode(not estimate) message: $errorString")
 //                    messages = errorString
-                    messages="NavigationResult:Code=$errorCode,message=$errorString"
+                    navigationResult="NavigationResult:Code=$errorCode,message=$errorString"
                     LogTools.info("onError result: $errorCode(not estimate) message: $errorString")
                     LogTools.info("onError result: $errorCode(当前未定位) message: $errorString")
                 }
                 Definition.ERROR_IN_DESTINATION -> {
                     //   messages=("onError result: $errorCode(in destination, no action) message: $errorString")
 //                    messages = errorString
-                    messages="NavigationResult:Code=$errorCode,message=$errorString"
+                    navigationResult="NavigationResult:Code=$errorCode,message=$errorString"
                     LogTools.info("onError result: $errorCode(in destination, no action) message: $errorString")
                     LogTools.info("onError result: $errorCode(当前机器人已经在目的地范围内) message: $errorString")
                 }
                 Definition.ERROR_DESTINATION_NOT_EXIST -> {
                     //   messages=("onError result: $errorCode(destination not exist) message: $errorString")
 //                    messages = errorString
-                    messages="NavigationResult:Code=$errorCode,message=$errorString"
+                    navigationResult="NavigationResult:Code=$errorCode,message=$errorString"
                     LogTools.info("onError result: $errorCode(destination not exist) message: $errorString")
                     LogTools.info("onError result: $errorCode(导航目的地不存在) message: $errorString")
                 }
                 Definition.ERROR_DESTINATION_CAN_NOT_ARRAIVE -> {
                     //   messages=("onError result: $errorCode(avoid timeout, can not arrive) message: $errorString")
 //                    messages = errorString
-                    messages="NavigationResult:Code=$errorCode,message=$errorString"
+                    navigationResult="NavigationResult:Code=$errorCode,message=$errorString"
                     LogTools.info("onError result: $errorCode(avoid timeout, can not arrive) message: $errorString")
                     LogTools.info("onError result: $errorCode(避障超时，目的地不能到达，超时时间通过参数设置) message: $errorString")
                 }
                 Definition.ACTION_RESPONSE_ALREADY_RUN -> {
                     //   messages=("onError result: $errorCode(already started, please stop first) message: $errorString")
 //                    messages = errorString
-                    messages="NavigationResult:Code=$errorCode,message=$errorString"
+                    navigationResult="NavigationResult:Code=$errorCode,message=$errorString"
                     LogTools.info("onError result: $errorCode(当前接口已经调用，请先停止，才能再次调用) message: $errorString")
                 }
                 Definition.ACTION_RESPONSE_REQUEST_RES_ERROR -> {
                     //  messages=("onError result: $errorCode(wheels are busy for other actions, please stop first) message: $errorString")
 //                    messages = errorString
-                    messages="NavigationResult:Code=$errorCode,message=$errorString"
+                    navigationResult="NavigationResult:Code=$errorCode,message=$errorString"
                     LogTools.info("onError result: $errorCode(已经有需要控制底盘的接口调用，请先停止，才能继续调用) message: $errorString")
                 }
                 else -> {}
@@ -836,13 +843,13 @@ try {
                 Definition.STATUS_NAVI_AVOID -> {
                     // messages=("onStatusUpdate result: $status(can not avoid obstacles) message: $data")
 //                    messages = data
-                    messages="NavigationResult:Code=$status,message=$data"
+                    navigationResult="NavigationResult:Code=$status,message=$data"
                     LogTools.info("onStatusUpdate result: $status(当前路线已经被障碍物堵死) message: $data")
                 }
                 Definition.STATUS_NAVI_AVOID_END -> {
 //                    messages = data
 //                    messages=("onStatusUpdate result: $status(Obstacle removed) message: $data")
-                    messages="NavigationResult:Code=$status,message=$data"
+                    navigationResult="NavigationResult:Code=$status,message=$data"
                     LogTools.info("onStatusUpdate result: $status(障碍物已移除) message: $data")
                 }
                 else -> {}

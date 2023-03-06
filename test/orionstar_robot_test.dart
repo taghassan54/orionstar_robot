@@ -97,6 +97,12 @@ class MockOrionstarRobotPlatform
 
   @override
   Future<String?> googleQueryByText({required String text}) => Future.value('');
+
+  @override
+  Future<String?> getNavigationResult() => Future.value('');
+
+  @override
+  Future<String?> stopNavigation() => Future.value('');
 }
 
 void main() {

@@ -15,7 +15,7 @@ class MainScreenController extends GetxController with StateMixin<MainScreenStat
   final orionstarRobot =OrionstarRobot();
   VideoPlayerController videoController =
   VideoPlayerController.asset(Assets.welcomeVideo);
-  Timer? mainTimer;
+  Timer? mainTimer,navigationCheck;
   bool petrolStatus = false, startGreeting = false,speeching=false;
   GoogleAnswerTextModel? googleAnswerText;
   List<String>? points;
@@ -25,6 +25,7 @@ class MainScreenController extends GetxController with StateMixin<MainScreenStat
     await orionstarRobot.initRobot();
     playTimer();
    points=await orionstarRobot.robotGetLocation();
+
 
     change(null,status: RxStatus.success());
     super.onInit();
@@ -41,7 +42,7 @@ class MainScreenController extends GetxController with StateMixin<MainScreenStat
 
         // voiceListener();
       final String? result = await orionstarRobot.checkStatus();
-      if (!result!.startsWith("personResData")) {
+      if (!result!.startsWith("personResData")&&!result.startsWith("NavigationResult")) {
         if (resultMesseges.isNotEmpty) {
           if (resultMesseges.last != result) {
 
@@ -54,9 +55,24 @@ class MainScreenController extends GetxController with StateMixin<MainScreenStat
 
         }
       }
+
+      // voiceListener();
+      final String? resultString = await orionstarRobot.getNavigationResult();
+
+// Extract the code value
+      int code = int.parse(resultString!.split("Code=")[1].split(",")[0]);
+
+// Extract the message value
+      String message = resultString.split("message=")[1];
+
+      print("Code value: $code");
+      print("Message value: $message");
+
       update();
     });
   }
+
+
 
   void payFullScreenVideo(String video) {
     videoController.pause();
@@ -121,8 +137,9 @@ class MainScreenController extends GetxController with StateMixin<MainScreenStat
   }
 
   goTo(String placeName)async{
+    navigationCheck?.reactive();
     await Future.delayed(
-      const Duration(seconds: 2),
+       Duration.zero,
           () async => await orionstarRobot.startNavigation(placeName: placeName),
     );
   }
