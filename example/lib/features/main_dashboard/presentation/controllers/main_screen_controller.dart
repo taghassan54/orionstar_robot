@@ -137,7 +137,7 @@ class MainScreenController extends GetxController with StateMixin<MainScreenStat
   }
 
   goTo(String placeName)async{
-    navigationCheck?.reactive();
+
     await Future.delayed(
        Duration.zero,
           () async => await orionstarRobot.startNavigation(placeName: placeName),
