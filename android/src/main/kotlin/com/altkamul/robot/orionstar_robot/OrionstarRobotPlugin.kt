@@ -630,6 +630,8 @@ try {
 
        try {
            stopFocusFollow()
+           stopNavigation()
+           stopCruise()
            RobotApi.getInstance().startNavigation(
                0,
                placeName,
