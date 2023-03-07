@@ -83,6 +83,12 @@ class MethodChannelOrionstarRobot extends OrionstarRobotPlatform {
   }
 
   @override
+  Future<String?> getTextListenerStatus() async {
+    final result = await methodChannel.invokeMethod<String>('getTextListenerStatus');
+    return result;
+  }
+
+  @override
   Future<String?> turnLeft() async {
     final result = await methodChannel.invokeMethod<String>('turnLeft');
     return result;

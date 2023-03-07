@@ -56,6 +56,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
     private var picture: String? = null
     private var places: String? = null
     private var mapName: String? = null
+    var textListenerStatus: String? = null
     var messages: String? = null
     var navigationResult: String? = null
     var botReqType: String? = null
@@ -159,6 +160,9 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             }
             "checkStatus" -> {
                 result.success(messages.toString())
+            }
+            "getTextListenerStatus" -> {
+                result.success(textListenerStatus.toString())
             }
             "resetHead" -> {
                 RobotApi.getInstance().resetHead(reqId++, mMotionListener)
@@ -1080,23 +1084,24 @@ try {
         override fun onStart() {
             super.onStart()
             LogTools.info("onStart")
-            messages = ("onStart")
+            textListenerStatus = ("onStart")
         }
 
         override fun onStop() {
             super.onStop()
             LogTools.info("onStop")
-            messages = ("onStop")
+            textListenerStatus = ("onStop")
         }
 
         override fun onComplete() {
             super.onComplete()
-            messages = ("onComplete")
+            textListenerStatus = ("onComplete")
         }
 
         override fun onError() {
             super.onError()
             LogTools.info("onError")
+            textListenerStatus=("onError")
         }
     }
 

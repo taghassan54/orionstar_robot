@@ -103,6 +103,8 @@ class MockOrionstarRobotPlatform
 
   @override
   Future<String?> stopNavigation() => Future.value('');
+  @override
+  Future<String?> getTextListenerStatus() => Future.value('');
 }
 
 void main() {

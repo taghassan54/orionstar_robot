@@ -19,23 +19,28 @@ class OrionstarRobot {
   Future<String?> getPicture() {
     return OrionstarRobotPlatform.instance.getPicture();
   }
+
   Future<String?> registerById() {
     return OrionstarRobotPlatform.instance.registerById();
   }
 
   Future<String?> goForward({required double distance}) {
-    return OrionstarRobotPlatform.instance.goForward(distance:distance);
+    return OrionstarRobotPlatform.instance.goForward(distance: distance);
   }
 
   Future<String?> goBackward() {
     return OrionstarRobotPlatform.instance.goBackward();
   }
+
   Future<String?> playText({required String textToPlay}) {
-    return OrionstarRobotPlatform.instance.robotPlayText(textToPlay:textToPlay);
+    return OrionstarRobotPlatform.instance
+        .robotPlayText(textToPlay: textToPlay);
   }
+
   Future<String?> getRequestResponse() {
     return OrionstarRobotPlatform.instance.getRequestResponse();
   }
+
   Future<String?> resetRequestResponse() {
     return OrionstarRobotPlatform.instance.resetRequestResponse();
   }
@@ -48,13 +53,17 @@ class OrionstarRobot {
     return OrionstarRobotPlatform.instance
         .startNavigation(placeName: placeName);
   }
+
   Future<String?> stopNavigation() {
-    return OrionstarRobotPlatform.instance
-        .stopNavigation();
+    return OrionstarRobotPlatform.instance.stopNavigation();
   }
+
   Future<String?> getNavigationResult() {
-    return OrionstarRobotPlatform.instance
-        .getNavigationResult();
+    return OrionstarRobotPlatform.instance.getNavigationResult();
+  }
+
+  Future<String?> getTextListenerStatus() {
+    return OrionstarRobotPlatform.instance.getTextListenerStatus();
   }
 
   Future<int?> findPeople() {
@@ -120,17 +129,14 @@ class OrionstarRobot {
   }
 
   Future<String?> queryByText({required String text}) {
-    return OrionstarRobotPlatform.instance
-        .googleQueryByText(text: text);
+    return OrionstarRobotPlatform.instance.googleQueryByText(text: text);
   }
-
 
   Future<String?> startCruise() {
-    return OrionstarRobotPlatform.instance
-        .startCruise();
+    return OrionstarRobotPlatform.instance.startCruise();
   }
+
   Future<String?> stopCruise() {
-    return OrionstarRobotPlatform.instance
-        .stopCruise();
+    return OrionstarRobotPlatform.instance.stopCruise();
   }
 }
