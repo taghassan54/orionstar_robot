@@ -58,6 +58,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
     private var mapName: String? = null
     var textListenerStatus: String? = null
     var messages: String? = null
+    var isRobotEstimateMessage: String? = null
     var navigationResult: String? = null
     var botReqType: String? = null
     var botReqText: String? = null
@@ -131,7 +132,8 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                 result.success("Stop Focus Follow")
             }
             "isRobotEstimate" -> {
-                isRobotEstimate(result)
+                isRobotEstimate()
+                result.success(isRobotEstimateMessage)
             }
             "startFocusFollow" -> {
                 startFocusFollow()
@@ -1145,15 +1147,17 @@ try {
         })
     }
 
-    private fun isRobotEstimate(methodResult: Result) {
+    private fun isRobotEstimate() {
         RobotApi.getInstance().isRobotEstimate(reqId, object : CommandListener() {
             override fun onResult(result: Int, message: String) {
                 if ("true" != message) {
                     //currently not located
-                    methodResult.success(message)
+                    isRobotEstimateMessage=message
+
                 } else {
                     //currently located
-                    methodResult.success(message)
+                    isRobotEstimateMessage=message
+
                 }
             }
         })
