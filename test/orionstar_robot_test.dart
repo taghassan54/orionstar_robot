@@ -103,8 +103,12 @@ class MockOrionstarRobotPlatform
 
   @override
   Future<String?> stopNavigation() => Future.value('');
+
   @override
   Future<String?> getTextListenerStatus() => Future.value('');
+
+  @override
+  Future<String?> isRobotEstimate() => Future.value('');
 }
 
 void main() {

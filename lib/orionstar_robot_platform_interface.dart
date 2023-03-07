@@ -131,4 +131,7 @@ abstract class OrionstarRobotPlatform extends PlatformInterface {
 
   Future<String?> getTextListenerStatus() => throw UnimplementedError(
       'getTextListenerStatus() has not been implemented.');
+
+  Future<String?> isRobotEstimate() =>throw UnimplementedError(
+      'isRobotEstimate() has not been implemented.'); //
 } //queryByText

@@ -66,6 +66,10 @@ class OrionstarRobot {
     return OrionstarRobotPlatform.instance.getTextListenerStatus();
   }
 
+  Future<String?> isRobotEstimate() {
+    return OrionstarRobotPlatform.instance.isRobotEstimate();
+  }
+
   Future<int?> findPeople() {
     return OrionstarRobotPlatform.instance.findPeople();
   }

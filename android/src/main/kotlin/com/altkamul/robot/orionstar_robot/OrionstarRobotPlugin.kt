@@ -130,6 +130,9 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                 stopFocusFollow()
                 result.success("Stop Focus Follow")
             }
+            "isRobotEstimate" -> {
+                isRobotEstimate(result)
+            }
             "startFocusFollow" -> {
                 startFocusFollow()
                 result.success("Start Focus Follow")
@@ -787,7 +790,12 @@ try {
                     LogTools.info("startNavigation result: $status(Navigation failed) message: $response")
                     LogTools.info("startNavigation result: $status(导航失败) message: $response")
                 }
-                else -> {}
+                Definition.ACTION_RESPONSE_STOP_SUCCESS->{
+                    navigationResult="NavigationResult:Code=$status,message=$response"
+                }
+                else -> {
+                    navigationResult="NavigationResult:Code=$status,message=$response"
+                }
             }
         }
 
@@ -835,7 +843,9 @@ try {
                     navigationResult="NavigationResult:Code=$errorCode,message=$errorString"
                     LogTools.info("onError result: $errorCode(已经有需要控制底盘的接口调用，请先停止，才能继续调用) message: $errorString")
                 }
-                else -> {}
+                else -> {
+                    navigationResult="NavigationResult:Code=$errorCode,message=$errorString"
+                }
             }
         }
 
@@ -854,7 +864,9 @@ try {
                     navigationResult="NavigationResult:Code=$status,message=$data"
                     LogTools.info("onStatusUpdate result: $status(障碍物已移除) message: $data")
                 }
-                else -> {}
+                else -> {
+                    navigationResult="NavigationResult:Code=$status,message=$data"
+                }
             }
         }
     }
@@ -992,7 +1004,7 @@ try {
 
         if (person != null)
             RobotApi.getInstance()
-                .startFocusFollow(0, person.id, 120, 10F,mNavigationListener)
+                .startFocusFollow(0, person.id, 120, 4F,mNavigationListener)
     }
 
     private fun registerPerson(person: Person) {
@@ -1127,6 +1139,20 @@ try {
 
             override fun handleApiDisconnected() {
                 //Voice service has been disconnected
+            }
+        })
+    }
+
+    private fun isRobotEstimate(methodResult: Result) {
+        RobotApi.getInstance().isRobotEstimate(reqId, object : CommandListener() {
+            override fun onResult(result: Int, message: String) {
+                if ("true" != message) {
+                    //currently not located
+                    methodResult.success(message)
+                } else {
+                    //currently located
+                    methodResult.success(message)
+                }
             }
         })
     }
