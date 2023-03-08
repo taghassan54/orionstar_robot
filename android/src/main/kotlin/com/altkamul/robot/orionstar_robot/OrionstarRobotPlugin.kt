@@ -35,6 +35,10 @@ import org.json.JSONException
 import org.json.JSONObject
 
 
+
+
+
+
 /** OrionstarRobotPlugin */
 class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
@@ -1162,6 +1166,33 @@ try {
             }
         })
     }
+
+   fun stopChargingByApp(){
+       RobotApi.getInstance().stopChargingByApp()
+   }
+   fun startNaviToAutoChargeAction(){
+       RobotApi.getInstance()
+           .startNaviToAutoChargeAction(reqId, 60, object : ActionListener() {
+               @Throws(RemoteException::class)
+               override fun onResult(status: Int, responseString: String) {
+                   when (status) {
+                       Definition.RESULT_OK -> {}
+                       Definition.RESULT_FAILURE -> {}
+                   }
+               }
+
+               @Throws(RemoteException::class)
+               override fun onStatusUpdate(status: Int, data: String) {
+                   when (status) {
+                       Definition.STATUS_NAVI_GLOBAL_PATH_FAILED -> {}
+                       Definition.STATUS_NAVI_OUT_MAP -> {}
+                       Definition.STATUS_NAVI_AVOID -> {}
+                       Definition.STATUS_NAVI_AVOID_END -> {}
+                       else -> {}
+                   }
+               }
+           })
+   }
 
     /**
      *
