@@ -33,6 +33,10 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import org.json.JSONException
 import org.json.JSONObject
+import jdk.internal.net.http.common.Log.channel
+
+
+
 
 
 
@@ -634,20 +638,23 @@ try {
      */
     private fun startNavigation(placeName: String?) {
 
-       try {
-           stopFocusFollow()
-           stopNavigation()
-           stopCruise()
-           RobotApi.getInstance().startNavigation(
-               0,
-               placeName,
-               1.5,
-               (10 * 1000).toLong(),
-               mNavigationListener
-           )
-       }catch (ex:Exception){
-           Log.e("NavigationException",ex.message.toString())
-       }
+        if(!isRobotInLocation(placeName)){
+            try {
+                stopFocusFollow()
+                stopNavigation()
+                stopCruise()
+                RobotApi.getInstance().startNavigation(
+                    0,
+                    placeName,
+                    1.5,
+                    (10 * 1000).toLong(),
+                    mNavigationListener
+                )
+            }catch (ex:Exception){
+                Log.e("NavigationException",ex.message.toString())
+            }
+        }
+
     }
 
     /**
@@ -656,6 +663,31 @@ try {
      */
     private fun stopNavigation() {
         RobotApi.getInstance().stopNavigation(0)
+    }
+
+    fun isRobotInLocation(placeName: String?): Boolean {
+        var isInLocation=false
+        try {
+
+            val params = JSONObject()
+            params.put(Definition.JSON_NAVI_TARGET_PLACE_NAME, placeName) //position name
+            params.put(Definition.JSON_NAVI_COORDINATE_DEVIATION, 2) //position range
+            RobotApi.getInstance().isRobotInlocations(0,
+                params.toString(), object : CommandListener() {
+                    override fun onResult(result: Int, message: String?) {
+                        try {
+                            val json = JSONObject(message)
+                            //whether or not at the target point
+                            isInLocation= json.getBoolean(Definition.JSON_NAVI_IS_IN_LOCATION)
+                        } catch (e: JSONException) {
+                            e.printStackTrace()
+                        }
+                    }
+                })
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+        return isInLocation
     }
 
 //    private fun isCurrentMap(): Boolean {
