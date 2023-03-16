@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:orionstar_robot/models/person_res_data_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -54,7 +56,7 @@ class OrionstarRobot {
         .startNavigation(placeName: placeName);
   }
 
-  Future<String?> isRobotInLocation({required String placeName}) {
+  Future<bool?> isRobotInLocation({required String placeName}) {
     return OrionstarRobotPlatform.instance
         .isRobotInLocation(placeName: placeName);
   }

@@ -111,7 +111,7 @@ class MockOrionstarRobotPlatform
   Future<String?> isRobotEstimate() => Future.value('');
 
   @override
-  Future<String?> isRobotInLocation({required String placeName}) =>Future.value('');
+  Future<bool?> isRobotInLocation({required String placeName}) =>Future.value(true);
 }
 
 void main() {
