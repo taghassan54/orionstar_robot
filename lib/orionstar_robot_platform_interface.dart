@@ -135,6 +135,6 @@ abstract class OrionstarRobotPlatform extends PlatformInterface {
   Future<String?> isRobotEstimate() =>throw UnimplementedError(
       'isRobotEstimate() has not been implemented.');
 
-  Future<bool?> isRobotInLocation({required String placeName}) =>throw UnimplementedError(
+  Future<String?> isRobotInLocation({required String placeName}) =>throw UnimplementedError(
       'isRobotInLocation() has not been implemented.');
 } //queryByText

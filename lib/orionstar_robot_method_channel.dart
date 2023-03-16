@@ -51,9 +51,9 @@ class MethodChannelOrionstarRobot extends OrionstarRobotPlatform {
   }
 
   @override
-  Future<bool?> isRobotInLocation({required String placeName}) async {
+  Future<String?> isRobotInLocation({required String placeName}) async {
     final result =
-        await methodChannel.invokeMethod<bool>('isRobotInLocation', placeName);
+        await methodChannel.invokeMethod<String>('isRobotInLocation', placeName);
     return result;
   }
 
