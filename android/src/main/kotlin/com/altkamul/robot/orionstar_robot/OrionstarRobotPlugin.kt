@@ -157,6 +157,14 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                 registerPersonListener()
                 result.success("register success")
             }
+            "isRobotInLocation" -> {
+                var isInLocation=false
+                Log.d("call.arguments", "${call.arguments}")
+                if (call.arguments != null){
+                    isInLocation= isRobotInLocation("${call.arguments}")
+                }
+                result.success("$isInLocation")
+            }
             "startNavigation" -> {
                 navigationResult="NavigationResult:Code=9999,message=startNavigation"
                 Log.d("call.arguments", "${call.arguments}")
@@ -665,7 +673,7 @@ try {
         RobotApi.getInstance().stopNavigation(0)
     }
 
-    fun isRobotInLocation(placeName: String?): Boolean {
+    private fun isRobotInLocation(placeName: String?): Boolean {
         var isInLocation=false
         try {
 
