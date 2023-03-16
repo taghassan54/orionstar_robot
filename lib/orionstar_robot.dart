@@ -54,6 +54,11 @@ class OrionstarRobot {
         .startNavigation(placeName: placeName);
   }
 
+  Future<String?> isRobotInLocation({required String placeName}) {
+    return OrionstarRobotPlatform.instance
+        .isRobotInLocation(placeName: placeName);
+  }
+
   Future<String?> stopNavigation() {
     return OrionstarRobotPlatform.instance.stopNavigation();
   }
