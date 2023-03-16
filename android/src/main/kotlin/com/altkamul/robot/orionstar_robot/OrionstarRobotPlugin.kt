@@ -33,7 +33,7 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import org.json.JSONException
 import org.json.JSONObject
-import jdk.internal.net.http.common.Log.channel
+
 
 
 
@@ -98,8 +98,8 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             }
 
             "getRobotBatteryInfo" -> {
-                var robotBatteryInfo = RobotSettingApi.getInstance()
-                    .getRobotString(Definition.ROBOT_SETTINGS_BATTERY_INFO);
+                val robotBatteryInfo = RobotSettingApi.getInstance()
+                    .getRobotString(Definition.ROBOT_SETTINGS_BATTERY_INFO)
                 result.success(robotBatteryInfo)
             }
             "stopAutoChargeAction" -> {
@@ -272,7 +272,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
     }
 
     private fun stopCruise() {
-        RobotApi.getInstance().stopCruise(reqId++);
+        RobotApi.getInstance().stopCruise(reqId++)
     }
 
     private fun goForward(distance: Float) {
