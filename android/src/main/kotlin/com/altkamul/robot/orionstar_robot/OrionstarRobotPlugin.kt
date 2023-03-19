@@ -704,7 +704,7 @@ try {
                     placeName,
                     1.5,
                     (10 * 1000).toLong(),
-                    mFocusListener
+                    mNavigationListener
                 )
             }catch (ex:Exception){
                 Log.e("NavigationException",ex.message.toString())
@@ -1256,7 +1256,7 @@ try {
 
         if (person != null)
             RobotApi.getInstance()
-                .startFocusFollow(0, person.id, 120, 4F,mNavigationListener)
+                .startFocusFollow(0, person.id, 120, 4F, mFocusListener)
     }
 
     private fun registerPerson(person: Person) {
