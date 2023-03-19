@@ -112,6 +112,10 @@ class MockOrionstarRobotPlatform
 
   @override
   Future<String?> isRobotInLocation({required String placeName}) =>Future.value('');
+
+
+  @override
+  Future<String?> methodCallHandler() =>Future.value('');
 }
 
 void main() {

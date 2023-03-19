@@ -86,6 +86,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
 
         when (call.method) {
+
             "checkInit" -> {
                 checkTimes = 0
                 init()
@@ -269,6 +270,10 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             }
         }
 
+    }
+
+    fun sendNavigationResult(type:String,status: Int, data: String,) {
+        channel.invokeMethod("navigationResultEvent","{  \"type\":${type},\"status\":${status},\"data\":\"${data}\"}")
     }
 
     private fun stopCruise() {
@@ -545,10 +550,12 @@ try {
             override fun onResult(status: Int, responseString: String) {
                 when (status) {
                     Definition.RESULT_OK -> {
+                        sendNavigationResult("success",status,responseString)
                         LogTools.info("onResult status :$status(Lead success) result:$responseString")
                         LogTools.info("onResult status :$status(成功将目标引领到目的地) result:$responseString")
                     }
                     Definition.ACTION_RESPONSE_STOP_SUCCESS -> {
+                        sendNavigationResult("success",status,responseString)
                         LogTools.info("onResult status :$status(Lead in progress, but stopped) result:$responseString")
                         LogTools.info("onResult status :$status(成功将目标引领到目的地在引领执行中，主动调用stopLead，成功停止引领) result:$responseString")
                     }
@@ -560,34 +567,42 @@ try {
             override fun onError(errorCode: Int, errorString: String) {
                 when (errorCode) {
                     Definition.ERROR_NOT_ESTIMATE -> {
+                        sendNavigationResult("error",errorCode,errorString)
                         LogTools.info("onError errorCode :$errorCode(not estimate) result:$errorString")
                         LogTools.info("onError errorCode :$errorCode(当前未定位) result:$errorString")
                     }
                     Definition.ERROR_SET_TRACK_FAILED, Definition.ERROR_TARGET_NOT_FOUND -> {
+                        sendNavigationResult("error",errorCode,errorString)
                         LogTools.info("onError errorCode :$errorCode(No person found) result:$errorString")
                         LogTools.info("onError errorCode :$errorCode(引领目标未找到) result:$errorString")
                     }
                     Definition.ERROR_IN_DESTINATION -> {
+                        sendNavigationResult("error",errorCode,errorString)
                         LogTools.info("onError errorCode :$errorCode(Already in destination) result:$errorString")
                         LogTools.info("onError errorCode :$errorCode(当前已经在引领目的地) result:$errorString")
                     }
                     Definition.ERROR_DESTINATION_CAN_NOT_ARRAIVE -> {
+                        sendNavigationResult("error",errorCode,errorString)
                         LogTools.info("onError errorCode :$errorCode(Avoid timeout，default 20s run less than 0.1m) result:$errorString")
                         LogTools.info("onError errorCode :$errorCode(避障超时，默认为机器人20s的前进距离不足0.1m) result:$errorString")
                     }
                     Definition.ERROR_DESTINATION_NOT_EXIST -> {
+                        sendNavigationResult("error",errorCode,errorString)
                         LogTools.info("onError errorCode :$errorCode(destination not exist) result:$errorString")
                         LogTools.info("onError errorCode :$errorCode(引领目的地不存在) result:$errorString")
                     }
                     Definition.ERROR_HEAD -> {
+                        sendNavigationResult("error",errorCode,errorString)
                         LogTools.info("onError errorCode :$errorCode(Head can't work in the process of leading) result:$errorString")
                         LogTools.info("onError errorCode :$errorCode(引领中操作头部云台失败) result:$errorString")
                     }
                     Definition.ACTION_RESPONSE_ALREADY_RUN -> {
+                        sendNavigationResult("error",errorCode,errorString)
                         LogTools.info("onError errorCode :$errorCode(Leading function already started, please stop and then restart) result:$errorString")
                         LogTools.info("onError errorCode :$errorCode(引领已经在进行中，请先停止上次引领，才能重新执行) result:$errorString")
                     }
                     Definition.ACTION_RESPONSE_REQUEST_RES_ERROR -> {
+                        sendNavigationResult("error",errorCode,errorString)
                         LogTools.info("onError errorCode :$errorCode(Other function using wheels, please stop them first) result:$errorString")
                         LogTools.info("onError errorCode :$errorCode(已经有需要控制底盘的接口调用，请先停止，才能继续调用) result:$errorString")
                     }
@@ -599,26 +614,32 @@ try {
             override fun onStatusUpdate(status: Int, data: String) {
                 when (status) {
                     Definition.STATUS_NAVI_OUT_MAP -> {
+                        sendNavigationResult("update", status,data)
                         LogTools.info("onStatusUpdate status :$status(can't find destination, maybe it's out of this map ) result:$data")
                         LogTools.info("onStatusUpdate status :$status(目标点不能到达，引领目的地在地图外，有可能为地图与位置点不匹配，请重新设置位置点) result:$data")
                     }
                     Definition.STATUS_NAVI_AVOID -> {
+                        sendNavigationResult("update",status,data)
                         LogTools.info("onStatusUpdate status :$status(can not avoid obstacles) result:$data")
                         LogTools.info("onStatusUpdate status :$status(当前引领路线已被障碍物堵死) result:$data")
                     }
                     Definition.STATUS_NAVI_AVOID_END -> {
+                        sendNavigationResult("update",status,data)
                         LogTools.info("onStatusUpdate status :$status(obstacles removed) result:$data")
                         LogTools.info("onStatusUpdate status :$status(障碍物已移除) result:$data")
                     }
                     Definition.STATUS_GUEST_FARAWAY -> {
+                        sendNavigationResult("update",status,data)
                         LogTools.info("onStatusUpdate status :$status(destination is too far away, please change maxDistance settings ) result:$data")
                         LogTools.info("onStatusUpdate status :$status(引领目标距离机器人太远，判断标准通过参数maxDistance设置) result:$data")
                     }
                     Definition.STATUS_DEST_NEAR -> {
+                        sendNavigationResult("update",status,data)
                         LogTools.info("onStatusUpdate status :$status(leading person in near destination) result:$data")
                         LogTools.info("onStatusUpdate status :$status(引领目标进入机器人maxDistance范围内) result:$data")
                     }
                     Definition.STATUS_LEAD_NORMAL -> {
+                        sendNavigationResult("update",status,data)
                         LogTools.info("onStatusUpdate status :$status(leading started) result:$data")
                         LogTools.info("onStatusUpdate status :$status(正式开始导航) result:$data")
                     }

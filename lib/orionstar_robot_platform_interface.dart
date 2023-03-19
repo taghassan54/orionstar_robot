@@ -27,6 +27,9 @@ abstract class OrionstarRobotPlatform extends PlatformInterface {
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
+  Future<String?> methodCallHandler() {
+    throw UnimplementedError('methodCallHandler() has not been implemented.');
+  }
 
   Future<String?> checkInit() {
     throw UnimplementedError('checkInit() has not been implemented.');

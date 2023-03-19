@@ -15,6 +15,9 @@ class OrionstarRobot {
   Future<String?> getPlatformVersion() {
     return OrionstarRobotPlatform.instance.getPlatformVersion();
   }
+  Future<String?> methodCallHandler() {
+    return OrionstarRobotPlatform.instance.methodCallHandler();
+  }
 
   Future<String?> getPicture() {
     return OrionstarRobotPlatform.instance.getPicture();
