@@ -8,6 +8,7 @@ import android.os.RemoteException
 import android.text.TextUtils
 import android.util.Log
 import androidx.annotation.NonNull
+import androidx.annotation.Nullable
 import com.ainirobot.base.analytics.utils.StringUtil
 import com.ainirobot.coreservice.client.ApiListener
 import com.ainirobot.coreservice.client.Definition
@@ -272,8 +273,32 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
     }
 
-    fun sendNavigationResult(type:String,status: Int, data: String,) {
-        channel.invokeMethod("navigationResultEvent","{  \"type\":${type},\"status\":${status},\"data\":\"${data}\"}")
+    fun sendNavigationResult(type: String, status: Int, data: String) {
+
+
+//        methodChannel!!.invokeMethod("openCaller", false)
+
+        channel.invokeMethod(
+            "navigationResultEvent",
+            "{  \"type\":${type},\"status\":${status},\"data\":\"${data}\"}",
+            object : Result {
+                override fun success(@Nullable result: Any?) {
+                    Log.i("fromInvoke", "success" + result.toString())
+                }
+
+                override fun error(
+                    errorCode: String,
+                    @Nullable errorMessage: String?,
+                    @Nullable errorDetails: Any?
+                ) {
+                    Log.i("fromInvoke", "failed$errorMessage")
+                }
+
+                override fun notImplemented() {
+                    Log.i("fromInvoke", "not implemented")
+                }
+            }
+        )
     }
 
     private fun stopCruise() {
