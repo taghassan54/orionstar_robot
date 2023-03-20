@@ -120,6 +120,11 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                 if (call.arguments != null)
                     queryByText("${call.arguments}")
 
+                result.success("success")
+            }
+            "stopTTS" -> {
+                stopTTS()
+                result.success("success")
             }
             "playText" -> {
                 Log.d("call.arguments", "${call.arguments}")
@@ -577,12 +582,12 @@ try {
             override fun onResult(status: Int, responseString: String) {
                 when (status) {
                     Definition.RESULT_OK -> {
-                        sendNavigationResult("success",status,responseString,"$resultMethodName")
+                        sendNavigationResult("success",status,responseString,resultMethodName)
                         LogTools.info("onResult status :$status(Lead success) result:$responseString")
                         LogTools.info("onResult status :$status(成功将目标引领到目的地) result:$responseString")
                     }
                     Definition.ACTION_RESPONSE_STOP_SUCCESS -> {
-                        sendNavigationResult("success",status,responseString,"$resultMethodName")
+                        sendNavigationResult("success",status,responseString,resultMethodName)
                         LogTools.info("onResult status :$status(Lead in progress, but stopped) result:$responseString")
                         LogTools.info("onResult status :$status(成功将目标引领到目的地在引领执行中，主动调用stopLead，成功停止引领) result:$responseString")
                     }
@@ -599,37 +604,37 @@ try {
                         LogTools.info("onError errorCode :$errorCode(当前未定位) result:$errorString")
                     }
                     Definition.ERROR_SET_TRACK_FAILED, Definition.ERROR_TARGET_NOT_FOUND -> {
-                        sendNavigationResult("error",errorCode,errorString,"$resultMethodName")
+                        sendNavigationResult("error",errorCode,errorString, resultMethodName)
                         LogTools.info("onError errorCode :$errorCode(No person found) result:$errorString")
                         LogTools.info("onError errorCode :$errorCode(引领目标未找到) result:$errorString")
                     }
                     Definition.ERROR_IN_DESTINATION -> {
-                        sendNavigationResult("error",errorCode,errorString,"$resultMethodName")
+                        sendNavigationResult("error",errorCode,errorString, resultMethodName)
                         LogTools.info("onError errorCode :$errorCode(Already in destination) result:$errorString")
                         LogTools.info("onError errorCode :$errorCode(当前已经在引领目的地) result:$errorString")
                     }
                     Definition.ERROR_DESTINATION_CAN_NOT_ARRAIVE -> {
-                        sendNavigationResult("error",errorCode,errorString,"$resultMethodName")
+                        sendNavigationResult("error",errorCode,errorString, resultMethodName)
                         LogTools.info("onError errorCode :$errorCode(Avoid timeout，default 20s run less than 0.1m) result:$errorString")
                         LogTools.info("onError errorCode :$errorCode(避障超时，默认为机器人20s的前进距离不足0.1m) result:$errorString")
                     }
                     Definition.ERROR_DESTINATION_NOT_EXIST -> {
-                        sendNavigationResult("error",errorCode,errorString,"$resultMethodName")
+                        sendNavigationResult("error",errorCode,errorString, resultMethodName)
                         LogTools.info("onError errorCode :$errorCode(destination not exist) result:$errorString")
                         LogTools.info("onError errorCode :$errorCode(引领目的地不存在) result:$errorString")
                     }
                     Definition.ERROR_HEAD -> {
-                        sendNavigationResult("error",errorCode,errorString,"$resultMethodName")
+                        sendNavigationResult("error",errorCode,errorString, resultMethodName)
                         LogTools.info("onError errorCode :$errorCode(Head can't work in the process of leading) result:$errorString")
                         LogTools.info("onError errorCode :$errorCode(引领中操作头部云台失败) result:$errorString")
                     }
                     Definition.ACTION_RESPONSE_ALREADY_RUN -> {
-                        sendNavigationResult("error",errorCode,errorString,"$resultMethodName")
+                        sendNavigationResult("error",errorCode,errorString, resultMethodName)
                         LogTools.info("onError errorCode :$errorCode(Leading function already started, please stop and then restart) result:$errorString")
                         LogTools.info("onError errorCode :$errorCode(引领已经在进行中，请先停止上次引领，才能重新执行) result:$errorString")
                     }
                     Definition.ACTION_RESPONSE_REQUEST_RES_ERROR -> {
-                        sendNavigationResult("error",errorCode,errorString,"$resultMethodName")
+                        sendNavigationResult("error",errorCode,errorString,resultMethodName)
                         LogTools.info("onError errorCode :$errorCode(Other function using wheels, please stop them first) result:$errorString")
                         LogTools.info("onError errorCode :$errorCode(已经有需要控制底盘的接口调用，请先停止，才能继续调用) result:$errorString")
                     }
@@ -789,7 +794,7 @@ try {
 
     private val mModuleCallbackApi: ModuleCallbackApi = object : ModuleCallbackApi() {
 
-
+        val  resultMethodName:String="speechResultEvent"
         /**
          * Receive speech request
          * 接收语音指令 底层发起request 请求
@@ -814,6 +819,7 @@ try {
             val text =
                 "New request:  type is:$reqType text is:$reqText reqParam = $reqParam"
             LogTools.info(text)
+            sendNavigationResult("success",1,"request:$reqType,text:$reqText,reqParam:$reqParam", resultMethodName)
 
             botReqType = (reqType)
             botReqText = (reqText)
@@ -838,6 +844,8 @@ try {
             )
             LogTools.info("onHWReport function:$function type:$type message:$message")
             messages = ("onHWReport function:$function type:$type message:$message")
+            sendNavigationResult("success",0,"onHWReport function:$function type:$type message:$message", resultMethodName)
+
         }
 
         /**
@@ -850,6 +858,8 @@ try {
             Log.d(TAG, "onSuspend")
             LogTools.info("onSuspend")
             messages = ("onSuspend")
+            sendNavigationResult("success",0,"onSuspend", resultMethodName)
+
         }
 
         /**
@@ -862,6 +872,8 @@ try {
             Log.d(TAG, "onRecovery")
             LogTools.info("onRecovery")
             messages = ("onRecovery")
+            sendNavigationResult("success",0,"onRecovery", resultMethodName)
+
         }
     }
 
@@ -871,7 +883,7 @@ try {
         override fun onResult(status: Int, response: String) {
             when (status) {
                 Definition.RESULT_OK -> if ("true" == response) {
-                    sendNavigationResult("success",status,response,"$resultMethodName")
+                    sendNavigationResult("success",status,response,resultMethodName)
 
                     navigationResult="NavigationResult:Code=$status,message=$response"
                     // messages="$status(Navigation success) message: $response"
@@ -881,7 +893,7 @@ try {
                     LogTools.info("startNavigation result: $status(Navigation success) message: $response")
                     LogTools.info("startNavigation result: $status(导航成功) message: $response")
                 } else {
-                    sendNavigationResult("success",status,response,"$resultMethodName")
+                    sendNavigationResult("success",status,response,resultMethodName)
 
                     navigationResult="NavigationResult:Code=$status,message=$response"
 //                    messages = "$status(Navigation failed) message: $response"
@@ -892,12 +904,12 @@ try {
                     LogTools.info("startNavigation result: $status(导航失败) message: $response")
                 }
                 Definition.ACTION_RESPONSE_STOP_SUCCESS->{
-                    sendNavigationResult("success",status,response,"$resultMethodName")
+                    sendNavigationResult("success",status,response,resultMethodName)
 
                     navigationResult="NavigationResult:Code=$status,message=$response"
                 }
                 else -> {
-                    sendNavigationResult("success",status,response,"$resultMethodName")
+                    sendNavigationResult("success",status,response,resultMethodName)
 
                     navigationResult="NavigationResult:Code=$status,message=$response"
                 }
@@ -911,7 +923,7 @@ try {
 
 //                    messages=("onError result: $errorCode(not estimate) message: $errorString")
 //                    messages = errorString
-                    sendNavigationResult("success",errorCode,errorString,"$resultMethodName")
+                    sendNavigationResult("error",errorCode,errorString,resultMethodName)
 
                     navigationResult="NavigationResult:Code=$errorCode,message=$errorString"
                     LogTools.info("onError result: $errorCode(not estimate) message: $errorString")
@@ -920,7 +932,7 @@ try {
                 Definition.ERROR_IN_DESTINATION -> {
                     //   messages=("onError result: $errorCode(in destination, no action) message: $errorString")
 //                    messages = errorString
-                    sendNavigationResult("success",errorCode,errorString,"$resultMethodName")
+                    sendNavigationResult("error",errorCode,errorString,resultMethodName)
 
                     navigationResult="NavigationResult:Code=$errorCode,message=$errorString"
                     LogTools.info("onError result: $errorCode(in destination, no action) message: $errorString")
@@ -929,7 +941,7 @@ try {
                 Definition.ERROR_DESTINATION_NOT_EXIST -> {
                     //   messages=("onError result: $errorCode(destination not exist) message: $errorString")
 //                    messages = errorString
-                    sendNavigationResult("success",errorCode,errorString,"$resultMethodName")
+                    sendNavigationResult("error",errorCode,errorString,resultMethodName)
 
                     navigationResult="NavigationResult:Code=$errorCode,message=$errorString"
                     LogTools.info("onError result: $errorCode(destination not exist) message: $errorString")
@@ -938,7 +950,7 @@ try {
                 Definition.ERROR_DESTINATION_CAN_NOT_ARRAIVE -> {
                     //   messages=("onError result: $errorCode(avoid timeout, can not arrive) message: $errorString")
 //                    messages = errorString
-                    sendNavigationResult("success",errorCode,errorString,"$resultMethodName")
+                    sendNavigationResult("error",errorCode,errorString,resultMethodName)
 
                     navigationResult="NavigationResult:Code=$errorCode,message=$errorString"
                     LogTools.info("onError result: $errorCode(avoid timeout, can not arrive) message: $errorString")
@@ -947,7 +959,7 @@ try {
                 Definition.ACTION_RESPONSE_ALREADY_RUN -> {
                     //   messages=("onError result: $errorCode(already started, please stop first) message: $errorString")
 //                    messages = errorString
-                    sendNavigationResult("success",errorCode,errorString,"$resultMethodName")
+                    sendNavigationResult("error",errorCode,errorString,resultMethodName)
 
                     navigationResult="NavigationResult:Code=$errorCode,message=$errorString"
                     LogTools.info("onError result: $errorCode(当前接口已经调用，请先停止，才能再次调用) message: $errorString")
@@ -955,13 +967,13 @@ try {
                 Definition.ACTION_RESPONSE_REQUEST_RES_ERROR -> {
                     //  messages=("onError result: $errorCode(wheels are busy for other actions, please stop first) message: $errorString")
 //                    messages = errorString
-                    sendNavigationResult("success",errorCode,errorString,"$resultMethodName")
+                    sendNavigationResult("error",errorCode,errorString,resultMethodName)
 
                     navigationResult="NavigationResult:Code=$errorCode,message=$errorString"
                     LogTools.info("onError result: $errorCode(已经有需要控制底盘的接口调用，请先停止，才能继续调用) message: $errorString")
                 }
                 else -> {
-                    sendNavigationResult("success",errorCode,errorString,"$resultMethodName")
+                    sendNavigationResult("error",errorCode,errorString,resultMethodName)
 
                     navigationResult="NavigationResult:Code=$errorCode,message=$errorString"
                 }
@@ -974,7 +986,7 @@ try {
                 Definition.STATUS_NAVI_AVOID -> {
                     // messages=("onStatusUpdate result: $status(can not avoid obstacles) message: $data")
 //                    messages = data
-                    sendNavigationResult("success",status,data,"$resultMethodName")
+                    sendNavigationResult("success",status,data,resultMethodName)
 
                     navigationResult="NavigationResult:Code=$status,message=$data"
                     LogTools.info("onStatusUpdate result: $status(当前路线已经被障碍物堵死) message: $data")
@@ -982,7 +994,7 @@ try {
                 Definition.STATUS_NAVI_AVOID_END -> {
 //                    messages = data
 //                    messages=("onStatusUpdate result: $status(Obstacle removed) message: $data")
-                    sendNavigationResult("success",status,data,"$resultMethodName")
+                    sendNavigationResult("success",status,data,resultMethodName)
 
                     navigationResult="NavigationResult:Code=$status,message=$data"
                     LogTools.info("onStatusUpdate result: $status(障碍物已移除) message: $data")
@@ -1000,7 +1012,7 @@ try {
         override fun onResult(status: Int, response: String) {
             when (status) {
                 Definition.RESULT_OK -> if ("true" == response) {
-                    sendNavigationResult("success",status,response,"$resultMethodName")
+                    sendNavigationResult("success",status,response, resultMethodName)
 
                     navigationResult="NavigationResult:Code=$status,message=$response"
                     // messages="$status(Navigation success) message: $response"
@@ -1010,7 +1022,7 @@ try {
                     LogTools.info("startNavigation result: $status(Navigation success) message: $response")
                     LogTools.info("startNavigation result: $status(导航成功) message: $response")
                 } else {
-                    sendNavigationResult("success",status,response,"$resultMethodName")
+                    sendNavigationResult("success",status,response, resultMethodName)
 
                     navigationResult="NavigationResult:Code=$status,message=$response"
 //                    messages = "$status(Navigation failed) message: $response"
@@ -1021,12 +1033,12 @@ try {
                     LogTools.info("startNavigation result: $status(导航失败) message: $response")
                 }
                 Definition.ACTION_RESPONSE_STOP_SUCCESS->{
-                    sendNavigationResult("success",status,response,"$resultMethodName")
+                    sendNavigationResult("success",status,response, resultMethodName)
 
                     navigationResult="NavigationResult:Code=$status,message=$response"
                 }
                 else -> {
-                    sendNavigationResult("success",status,response,"$resultMethodName")
+                    sendNavigationResult("success",status,response, resultMethodName)
 
                     navigationResult="NavigationResult:Code=$status,message=$response"
                 }
@@ -1040,7 +1052,7 @@ try {
 
 //                    messages=("onError result: $errorCode(not estimate) message: $errorString")
 //                    messages = errorString
-                    sendNavigationResult("success",errorCode,errorString,"$resultMethodName")
+                    sendNavigationResult("error",errorCode,errorString, resultMethodName)
 
                     navigationResult="NavigationResult:Code=$errorCode,message=$errorString"
                     LogTools.info("onError result: $errorCode(not estimate) message: $errorString")
@@ -1049,7 +1061,7 @@ try {
                 Definition.ERROR_IN_DESTINATION -> {
                     //   messages=("onError result: $errorCode(in destination, no action) message: $errorString")
 //                    messages = errorString
-                    sendNavigationResult("success",errorCode,errorString,"$resultMethodName")
+                    sendNavigationResult("error",errorCode,errorString,resultMethodName)
 
                     navigationResult="NavigationResult:Code=$errorCode,message=$errorString"
                     LogTools.info("onError result: $errorCode(in destination, no action) message: $errorString")
@@ -1058,7 +1070,7 @@ try {
                 Definition.ERROR_DESTINATION_NOT_EXIST -> {
                     //   messages=("onError result: $errorCode(destination not exist) message: $errorString")
 //                    messages = errorString
-                    sendNavigationResult("success",errorCode,errorString,"$resultMethodName")
+                    sendNavigationResult("error",errorCode,errorString,resultMethodName)
 
                     navigationResult="NavigationResult:Code=$errorCode,message=$errorString"
                     LogTools.info("onError result: $errorCode(destination not exist) message: $errorString")
@@ -1067,7 +1079,7 @@ try {
                 Definition.ERROR_DESTINATION_CAN_NOT_ARRAIVE -> {
                     //   messages=("onError result: $errorCode(avoid timeout, can not arrive) message: $errorString")
 //                    messages = errorString
-                    sendNavigationResult("success",errorCode,errorString,"$resultMethodName")
+                    sendNavigationResult("error",errorCode,errorString,resultMethodName)
 
                     navigationResult="NavigationResult:Code=$errorCode,message=$errorString"
                     LogTools.info("onError result: $errorCode(avoid timeout, can not arrive) message: $errorString")
@@ -1076,7 +1088,7 @@ try {
                 Definition.ACTION_RESPONSE_ALREADY_RUN -> {
                     //   messages=("onError result: $errorCode(already started, please stop first) message: $errorString")
 //                    messages = errorString
-                    sendNavigationResult("success",errorCode,errorString,"$resultMethodName")
+                    sendNavigationResult("error",errorCode,errorString,resultMethodName)
 
                     navigationResult="NavigationResult:Code=$errorCode,message=$errorString"
                     LogTools.info("onError result: $errorCode(当前接口已经调用，请先停止，才能再次调用) message: $errorString")
@@ -1084,13 +1096,13 @@ try {
                 Definition.ACTION_RESPONSE_REQUEST_RES_ERROR -> {
                     //  messages=("onError result: $errorCode(wheels are busy for other actions, please stop first) message: $errorString")
 //                    messages = errorString
-                    sendNavigationResult("success",errorCode,errorString,"$resultMethodName")
+                    sendNavigationResult("error",errorCode,errorString, resultMethodName)
 
                     navigationResult="NavigationResult:Code=$errorCode,message=$errorString"
                     LogTools.info("onError result: $errorCode(已经有需要控制底盘的接口调用，请先停止，才能继续调用) message: $errorString")
                 }
                 else -> {
-                    sendNavigationResult("success",errorCode,errorString,"$resultMethodName")
+                    sendNavigationResult("success",errorCode,errorString, resultMethodName)
 
                     navigationResult="NavigationResult:Code=$errorCode,message=$errorString"
                 }
@@ -1103,7 +1115,7 @@ try {
                 Definition.STATUS_NAVI_AVOID -> {
                     // messages=("onStatusUpdate result: $status(can not avoid obstacles) message: $data")
 //                    messages = data
-                    sendNavigationResult("success",status,data,"$resultMethodName")
+                    sendNavigationResult("success",status,data, resultMethodName)
 
                     navigationResult="NavigationResult:Code=$status,message=$data"
                     LogTools.info("onStatusUpdate result: $status(当前路线已经被障碍物堵死) message: $data")
@@ -1111,12 +1123,14 @@ try {
                 Definition.STATUS_NAVI_AVOID_END -> {
 //                    messages = data
 //                    messages=("onStatusUpdate result: $status(Obstacle removed) message: $data")
-                    sendNavigationResult("success",status,data,"$resultMethodName")
+                    sendNavigationResult("success",status,data, resultMethodName)
 
                     navigationResult="NavigationResult:Code=$status,message=$data"
                     LogTools.info("onStatusUpdate result: $status(障碍物已移除) message: $data")
                 }
                 else -> {
+                    sendNavigationResult("success",status,data, resultMethodName)
+
                     navigationResult="NavigationResult:Code=$status,message=$data"
                 }
             }
@@ -1294,10 +1308,13 @@ try {
             })
     }
 
-    var cruiseListener: ActionListener = object : ActionListener() {
+    private var cruiseListener: ActionListener = object : ActionListener() {
+        val  resultMethodName:String="cruiseResultEvent"
         @Throws(RemoteException::class)
         override fun onResult(status: Int, responseString: String) {
             LogTools.info("startCruise onResult : $status || $responseString")
+            sendNavigationResult("success",status,"$status", resultMethodName)
+
             when (status) {
                 Definition.RESULT_OK -> {}
                 Definition.ACTION_RESPONSE_STOP_SUCCESS -> {}
@@ -1308,8 +1325,11 @@ try {
         override fun onStatusUpdate(status: Int, data: String) {
             LogTools.info("startCruise onStatusUpdate : $status || $data")
             messages = ("startCruise onStatusUpdate : $status || $data")
+            sendNavigationResult("success",status,"$status", resultMethodName)
+
             when (status) {
-                Definition.STATUS_NAVI_OUT_MAP -> {}
+                Definition.STATUS_NAVI_OUT_MAP -> {
+                }
                 Definition.STATUS_START_CRUISE -> {}
                 Definition.STATUS_CRUISE_REACH_POINT -> {
                     messages = "${data.toInt()}"
@@ -1323,6 +1343,8 @@ try {
         override fun onError(errorCode: Int, errorString: String) {
             LogTools.info("startCruise onError : $errorCode || $errorString")
             messages = ("startCruise onError : $errorCode || $errorString")
+            sendNavigationResult("error",errorCode,"$errorString", resultMethodName)
+
             when (errorCode) {
                 Definition.ACTION_RESPONSE_ALREADY_RUN -> {}
                 Definition.ERROR_NOT_ESTIMATE -> {}
@@ -1336,7 +1358,7 @@ try {
      *
      */
 
-    open fun playText(text: String) {
+    private fun playText(text: String) {
         if (mSkillApi != null) {
             connectApi()
             LogTools.info("text $text")
@@ -1345,16 +1367,21 @@ try {
     }
 
     private val mTextListener: TextListener = object : TextListener() {
+        val  resultMethodName:String="textListenerResultEvent"
         override fun onStart() {
             super.onStart()
             LogTools.info("onStart")
             textListenerStatus = ("onStart")
+            sendNavigationResult("success",1,"onStart", resultMethodName)
+
         }
 
         override fun onStop() {
             super.onStop()
             LogTools.info("onStop")
             textListenerStatus = ("onStop")
+            sendNavigationResult("success",1,"onStop", resultMethodName)
+
         }
 
         override fun onComplete() {
@@ -1366,6 +1393,8 @@ try {
             super.onError()
             LogTools.info("onError")
             textListenerStatus=("onError")
+            sendNavigationResult("success",0,"onError", resultMethodName)
+
         }
     }
 
@@ -1398,14 +1427,15 @@ try {
     private fun isRobotEstimate() {
         RobotApi.getInstance().isRobotEstimate(reqId, object : CommandListener() {
             override fun onResult(result: Int, message: String) {
+                val  resultMethodName:String="isRobotEstimateEvent"
                 if ("true" != message) {
                     //currently not located
                     isRobotEstimateMessage=message
-
+                    sendNavigationResult("success",1,message, resultMethodName)
                 } else {
                     //currently located
                     isRobotEstimateMessage=message
-
+                    sendNavigationResult("success",0,message, resultMethodName)
                 }
             }
         })
