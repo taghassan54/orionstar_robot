@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:orionstar_robot/models/person_res_data_model.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
@@ -27,7 +28,7 @@ abstract class OrionstarRobotPlatform extends PlatformInterface {
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
-  Future<String?> methodCallHandler() {
+  Future<String?> methodCallHandler(Future<String?> Function(MethodCall) helperHandler) {
     throw UnimplementedError('methodCallHandler() has not been implemented.');
   }
 

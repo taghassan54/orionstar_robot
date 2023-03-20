@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:orionstar_robot/models/person_res_data_model.dart';
 import 'package:orionstar_robot/orionstar_robot.dart';
@@ -115,7 +116,7 @@ class MockOrionstarRobotPlatform
 
 
   @override
-  Future<String?> methodCallHandler() =>Future.value('');
+  Future<String?> methodCallHandler(Future<String?> Function(MethodCall) helperHandler) =>Future.value('');
 }
 
 void main() {

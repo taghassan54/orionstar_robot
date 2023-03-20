@@ -26,14 +26,8 @@ class MethodChannelOrionstarRobot extends OrionstarRobotPlatform {
     return result;
   }
   @override
-  Future<String?> methodCallHandler() async {
-    methodChannel.setMethodCallHandler((call) async {
-      LoggerHelper.info("$call Method Called");
-      if (call.method == "eventName") {
-        // Handle the event here
-        // Access event data using call.arguments
-      }
-    });
+  Future<String?> methodCallHandler(Future<String?> Function(MethodCall) helperHandler) async {
+    methodChannel.setMethodCallHandler((call) => helperHandler(call));
     return null;
   }
 

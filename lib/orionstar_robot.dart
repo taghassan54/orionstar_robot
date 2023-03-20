@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:orionstar_robot/models/person_res_data_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -15,8 +16,8 @@ class OrionstarRobot {
   Future<String?> getPlatformVersion() {
     return OrionstarRobotPlatform.instance.getPlatformVersion();
   }
-  Future<String?> methodCallHandler() {
-    return OrionstarRobotPlatform.instance.methodCallHandler();
+  Future<String?> methodCallHandler(Future<String?> Function(MethodCall) helperHandler) {
+    return OrionstarRobotPlatform.instance.methodCallHandler(helperHandler);
   }
 
   Future<String?> getPicture() {

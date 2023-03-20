@@ -279,7 +279,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
         handler.post {
             channel.invokeMethod(
                 methodName,
-                "{  \"type\":${type},\"status\":${status},\"data\":\"${data}\"}",
+                "{\"type\":${type},\"status\":${status},\"data\":\"${data}\"}",
                 object : Result {
                     override fun success(@Nullable result: Any?) {
                         Log.i("fromInvoke", "success" + result.toString())
