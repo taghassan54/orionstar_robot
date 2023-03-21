@@ -1188,6 +1188,7 @@ try {
      * 人员变化时，可以调用获取当前人员列表接口获取机器人视野内所有人员
      */
     private val mListener: PersonListener = object : PersonListener() {
+
         override fun personChanged() {
             super.personChanged()
             val allFaceList = PersonApi.getInstance().allPersons
@@ -1210,6 +1211,7 @@ try {
             RobotApi.getInstance()
                 .getPictureById(reqID++, person.id, 1, object : CommandListener() {
                     override fun onResult(result: Int, message: String) {
+                        val resultMethodName:String="pictureByIdResultEvent"
                         try {
                             val json = JSONObject(message)
                             val status = json.optString("status")
@@ -1277,6 +1279,8 @@ try {
                                                 data: String,
                                                 extraData: String
                                             ) {
+                                                sendNavigationResult("success",status,data, resultMethodName)
+
                                                 LogTools.info("status$status | data:$data | extraData$extraData")
                                                 messages =
                                                     ("status$status | data:$data | extraData$extraData")
