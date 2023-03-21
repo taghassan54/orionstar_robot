@@ -56,6 +56,9 @@ abstract class OrionstarRobotPlatform extends PlatformInterface {
     throw UnimplementedError('startNavigation() has not been implemented.');
   }
 
+  Future<String?> resumeSpecialPlaceTheta({required String placeName}) =>throw UnimplementedError('startNavigation() has not been implemented.');
+
+
   Future<List<String>?> robotGetLocation() {
     throw UnimplementedError('robotGetLocation() has not been implemented.');
   }
@@ -109,6 +112,9 @@ abstract class OrionstarRobotPlatform extends PlatformInterface {
   Future<String?> robotPlayText({required String textToPlay}) =>
       throw UnimplementedError('robotPlayText() has not been implemented.');
 
+  Future<String?> startNaviToAutoChargeAction() =>
+      throw UnimplementedError('startNaviToAutoChargeAction() has not been implemented.');
+
   Future<String?> registerById() =>
       throw UnimplementedError('registerById() has not been implemented.');
 
@@ -120,6 +126,9 @@ abstract class OrionstarRobotPlatform extends PlatformInterface {
 
   Future<String?> stopCruise() =>
       throw UnimplementedError('stopCruise() has not been implemented.');
+
+  Future<String?> stopTTS() =>
+      throw UnimplementedError('stopTTS() has not been implemented.');
 
   Future<String?> startLead({required String locationName}) =>
       throw UnimplementedError('startLead() has not been implemented.');
@@ -141,4 +150,10 @@ abstract class OrionstarRobotPlatform extends PlatformInterface {
 
   Future<String?> isRobotInLocation({required String placeName}) =>throw UnimplementedError(
       'isRobotInLocation() has not been implemented.');
+
+  Future<String?> stopChargingByApp() =>throw UnimplementedError('stopChargingByApp() has not been implemented.');
+
+  Future<String?> disableRecognizable() =>throw UnimplementedError('disableRecognizable() has not been implemented.');
+
+  Future<String?> enableRecognizable() =>throw UnimplementedError('enableRecognizable() has not been implemented.');
 } //queryByText

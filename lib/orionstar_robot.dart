@@ -16,12 +16,21 @@ class OrionstarRobot {
   Future<String?> getPlatformVersion() {
     return OrionstarRobotPlatform.instance.getPlatformVersion();
   }
-  Future<String?> methodCallHandler(Future<String?> Function(MethodCall) helperHandler) {
+
+  Future<String?> methodCallHandler(
+      Future<String?> Function(MethodCall) helperHandler) {
     return OrionstarRobotPlatform.instance.methodCallHandler(helperHandler);
   }
 
   Future<String?> getPicture() {
     return OrionstarRobotPlatform.instance.getPicture();
+  }
+
+  Future<String?> startNaviToAutoChargeAction() {
+    return OrionstarRobotPlatform.instance.startNaviToAutoChargeAction();
+  }
+  Future<String?> stopChargingByApp() {
+    return OrionstarRobotPlatform.instance.stopChargingByApp();
   }
 
   Future<String?> registerById() {
@@ -53,6 +62,10 @@ class OrionstarRobot {
     return OrionstarRobotPlatform.instance.checkStatus();
   }
 
+  Future<String?> resumeSpecialPlaceTheta({required String placeName}) {
+    return OrionstarRobotPlatform.instance
+        .resumeSpecialPlaceTheta(placeName: placeName);
+  }
   Future<String?> startNavigation({required String placeName}) {
     return OrionstarRobotPlatform.instance
         .startNavigation(placeName: placeName);
@@ -151,5 +164,15 @@ class OrionstarRobot {
 
   Future<String?> stopCruise() {
     return OrionstarRobotPlatform.instance.stopCruise();
+  }
+
+  Future<String?> stopTTS() {
+    return OrionstarRobotPlatform.instance.stopTTS();
+  }
+  Future<String?> disableRecognizable() {
+    return OrionstarRobotPlatform.instance.disableRecognizable();
+  }
+  Future<String?> enableRecognizable() {
+    return OrionstarRobotPlatform.instance.enableRecognizable();
   }
 }

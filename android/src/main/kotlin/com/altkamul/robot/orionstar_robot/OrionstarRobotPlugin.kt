@@ -115,6 +115,16 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             "getRequestResponse" -> {
                 result.success(botReqParam)
             }
+            "startNaviToAutoChargeAction" -> {
+                startNaviToAutoChargeAction()
+
+                result.success("success")
+            }
+            "stopChargingByApp" -> {
+            stopChargingByApp()
+
+                result.success("success")
+            }
             "queryByText" -> {
                 Log.d("call.arguments", "${call.arguments}")
                 if (call.arguments != null)
@@ -126,6 +136,16 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                 stopTTS()
                 result.success("success")
             }
+
+            "enableRecognizable" -> {
+                enableRecognizable()
+                result.success("success")
+            }
+            "disableRecognizable" -> {
+                disableRecognizable()
+                result.success("success")
+            }
+
             "playText" -> {
                 Log.d("call.arguments", "${call.arguments}")
                 if (call.arguments != null)
@@ -179,6 +199,14 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                     startNavigation("${call.arguments}")
                 }
                 result.success("start Navigation success")
+            }
+            "resumeSpecialPlaceTheta" -> {
+
+                Log.d("call.arguments", "${call.arguments}")
+                if (call.arguments != null){
+                    resumeSpecialPlaceTheta("${call.arguments}")
+                }
+                result.success("Resume Special Place Theta success")
             }
             "getNavigationResult" -> {
                 result.success(navigationResult.toString())
@@ -438,6 +466,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
         }
         mSkillApi!!.addApiEventListener(apiListener)
         mSkillApi!!.connectApi(applicationContext)
+
     }
 
 
@@ -532,7 +561,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
     private fun startCruise() {
 
 try {
-    RobotApi.getInstance().stopCruise(reqId++);
+    RobotApi.getInstance().stopCruise(reqId++)
     val route = RobotApi.getInstance().placeList
 //        route.removeAt(0)
 //        route.removeAt(1)
@@ -716,6 +745,14 @@ try {
             }
         }
 
+    }
+
+    private fun resumeSpecialPlaceTheta(placeName: String?) {
+        RobotApi.getInstance().resumeSpecialPlaceTheta(reqId,
+            placeName,
+            object : CommandListener() {
+                fun onResponse(result: Int, message: String?) {}
+            })
     }
 
     /**
@@ -1262,7 +1299,7 @@ try {
     }
 
     private fun stopFocusFollow() {
-        RobotApi.getInstance().stopFocusFollow(0);
+        RobotApi.getInstance().stopFocusFollow(0)
     }
 
     private fun startFocusFollow() {
@@ -1404,6 +1441,19 @@ try {
         }
     }
 
+
+    private fun enableRecognizable() {
+        if (mSkillApi != null) {
+            mSkillApi!!.setRecognizable(true)
+        }
+    }
+
+    private fun disableRecognizable() {
+        if (mSkillApi != null) {
+            mSkillApi!!.setRecognizable(false)
+        }
+    }
+
     private fun queryByText(text: String) {
         if (mSkillApi != null) {
             mSkillApi!!.queryByText(text)
@@ -1441,24 +1491,34 @@ try {
         })
     }
 
-   fun stopChargingByApp(){
+   private fun stopChargingByApp(){
        RobotApi.getInstance().stopChargingByApp()
    }
-   fun startNaviToAutoChargeAction(){
+   private fun startNaviToAutoChargeAction(){
+
        RobotApi.getInstance()
            .startNaviToAutoChargeAction(reqId, 60, object : ActionListener() {
+               val resultMethodName:String ="naviToAutoChargeResultEvent"
                @Throws(RemoteException::class)
                override fun onResult(status: Int, responseString: String) {
+                   sendNavigationResult("success",status,responseString, resultMethodName)
+
                    when (status) {
-                       Definition.RESULT_OK -> {}
-                       Definition.RESULT_FAILURE -> {}
+                       Definition.RESULT_OK -> {
+                       }
+                       Definition.RESULT_FAILURE -> {
+                       }
                    }
                }
 
                @Throws(RemoteException::class)
                override fun onStatusUpdate(status: Int, data: String) {
+                   sendNavigationResult("success",status,data, resultMethodName)
+
                    when (status) {
-                       Definition.STATUS_NAVI_GLOBAL_PATH_FAILED -> {}
+                       Definition.STATUS_NAVI_GLOBAL_PATH_FAILED -> {
+
+                       }
                        Definition.STATUS_NAVI_OUT_MAP -> {}
                        Definition.STATUS_NAVI_AVOID -> {}
                        Definition.STATUS_NAVI_AVOID_END -> {}

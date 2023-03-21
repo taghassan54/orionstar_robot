@@ -29,6 +29,10 @@ class MockOrionstarRobotPlatform
       Future.value("");
 
   @override
+  Future<String?> resumeSpecialPlaceTheta({required String placeName}) =>
+      Future.value("");
+
+  @override
   Future<List<String>?> robotGetLocation() => Future.value([]);
 
   @override
@@ -81,6 +85,9 @@ class MockOrionstarRobotPlatform
   Future<String?> stopCruise() => Future.value('');
 
   @override
+  Future<String?> stopTTS() => Future.value('');
+
+  @override
   Future<String?> resetRequestResponse() => Future.value('');
 
   @override
@@ -112,11 +119,27 @@ class MockOrionstarRobotPlatform
   Future<String?> isRobotEstimate() => Future.value('');
 
   @override
-  Future<String?> isRobotInLocation({required String placeName}) =>Future.value('');
-
+  Future<String?> isRobotInLocation({required String placeName}) =>
+      Future.value('');
 
   @override
-  Future<String?> methodCallHandler(Future<String?> Function(MethodCall) helperHandler) =>Future.value('');
+  Future<String?> startNaviToAutoChargeAction() => Future.value('');
+
+  @override
+  Future<String?> stopChargingByApp() => Future.value('');
+
+  @override
+  Future<String?> methodCallHandler(
+          Future<String?> Function(MethodCall) helperHandler) =>
+      Future.value('');
+
+  @override
+  Future<String?> disableRecognizable() =>
+      Future.value('');
+
+  @override
+  Future<String?> enableRecognizable() =>
+      Future.value('');
 }
 
 void main() {

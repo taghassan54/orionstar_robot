@@ -32,6 +32,16 @@ class MethodChannelOrionstarRobot extends OrionstarRobotPlatform {
   }
 
   @override
+  Future<String?> startNaviToAutoChargeAction() async {
+    final result = await methodChannel.invokeMethod<String>('startNaviToAutoChargeAction');
+    return result;
+  }
+  @override
+  Future<String?> stopChargingByApp() async {
+    final result = await methodChannel.invokeMethod<String>('stopChargingByApp');
+    return result;
+  }
+  @override
   Future<String?> getPicture() async {
     final result = await methodChannel.invokeMethod<String>('getPicture');
     return result;
@@ -66,6 +76,13 @@ class MethodChannelOrionstarRobot extends OrionstarRobotPlatform {
   Future<String?> startNavigation({required String placeName}) async {
     final result =
         await methodChannel.invokeMethod<String>('startNavigation', placeName);
+    return result;
+  }
+
+  @override
+  Future<String?> resumeSpecialPlaceTheta({required String placeName}) async {
+    final result =
+        await methodChannel.invokeMethod<String>('resumeSpecialPlaceTheta', placeName);
     return result;
   }
 
@@ -167,6 +184,22 @@ class MethodChannelOrionstarRobot extends OrionstarRobotPlatform {
   @override
   Future<String?> stopCruise() async {
     final result = await methodChannel.invokeMethod<String>('stopCruise');
+    return result;
+  }
+
+  @override
+  Future<String?> stopTTS() async {
+    final result = await methodChannel.invokeMethod<String>('stopTTS');
+    return result;
+  }
+  @override
+  Future<String?> disableRecognizable() async {
+    final result = await methodChannel.invokeMethod<String>('disableRecognizable');
+    return result;
+  }
+  @override
+  Future<String?> enableRecognizable() async {
+    final result = await methodChannel.invokeMethod<String>('enableRecognizable');
     return result;
   }
 
