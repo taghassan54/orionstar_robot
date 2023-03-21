@@ -856,7 +856,7 @@ try {
             val text =
                 "New request:  type is:$reqType text is:$reqText reqParam = $reqParam"
             LogTools.info(text)
-            sendNavigationResult("success",1,"request:$reqType,text:$reqText,reqParam:$reqParam", resultMethodName)
+            sendNavigationResult("success",1,"{\"request\":\"$reqType\",\"text\":\"$reqText\",\"reqParam\":\"$reqParam\"}", resultMethodName)
 
             botReqType = (reqType)
             botReqText = (reqText)
