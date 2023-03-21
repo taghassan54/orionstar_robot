@@ -307,7 +307,6 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
     }
 
     fun sendNavigationResult(type: String, status: Int, data: String,methodName:String) {
-//        methodChannel!!.invokeMethod("openCaller", false)
         val handler = Handler(Looper.getMainLooper())
         handler.post {
             channel.invokeMethod(
@@ -856,7 +855,7 @@ try {
             val text =
                 "New request:  type is:$reqType text is:$reqText reqParam = $reqParam"
             LogTools.info(text)
-            sendNavigationResult("success",1,"{\"request\":\"$reqType\",\"text\":\"$reqText\",\"reqParam\":\"$reqParam\"}", resultMethodName)
+            sendNavigationResult("success",1,"{\"request\":\"${reqType}\",\"text\":\"${reqText}\",\"reqParam\":\"${reqParam}\"}", resultMethodName)
 
             botReqType = (reqType)
             botReqText = (reqText)
