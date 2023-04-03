@@ -312,7 +312,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
         handler.post {
             channel.invokeMethod(
                 methodName,
-                jsonObject,
+                jsonObject.toString(),
                 object : Result {
                     override fun success(@Nullable result: Any?) {
                         Log.i("fromInvoke", "success" + result.toString())
