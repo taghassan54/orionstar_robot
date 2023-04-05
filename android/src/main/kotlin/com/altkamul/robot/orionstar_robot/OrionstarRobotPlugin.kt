@@ -1095,65 +1095,9 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
         @Throws(RemoteException::class)
         override fun onError(errorCode: Int, errorString: String) {
-            when (errorCode) {
-                Definition.ERROR_NOT_ESTIMATE -> {
-
-//                    messages=("onError result: $errorCode(not estimate) message: $errorString")
-//                    messages = errorString
-                    sendNavigationResult("error", errorCode, errorString, resultMethodName)
-
-                    navigationResult = "NavigationResult:Code=$errorCode,message=$errorString"
-                    LogTools.info("onError result: $errorCode(not estimate) message: $errorString")
-                    LogTools.info("onError result: $errorCode(当前未定位) message: $errorString")
-                }
-                Definition.ERROR_IN_DESTINATION -> {
-                    //   messages=("onError result: $errorCode(in destination, no action) message: $errorString")
-//                    messages = errorString
-                    sendNavigationResult("error", errorCode, errorString, resultMethodName)
-
-                    navigationResult = "NavigationResult:Code=$errorCode,message=$errorString"
-                    LogTools.info("onError result: $errorCode(in destination, no action) message: $errorString")
-                    LogTools.info("onError result: $errorCode(当前机器人已经在目的地范围内) message: $errorString")
-                }
-                Definition.ERROR_DESTINATION_NOT_EXIST -> {
-                    //   messages=("onError result: $errorCode(destination not exist) message: $errorString")
-//                    messages = errorString
-                    sendNavigationResult("error", errorCode, errorString, resultMethodName)
-
-                    navigationResult = "NavigationResult:Code=$errorCode,message=$errorString"
-                    LogTools.info("onError result: $errorCode(destination not exist) message: $errorString")
-                    LogTools.info("onError result: $errorCode(导航目的地不存在) message: $errorString")
-                }
-                Definition.ERROR_DESTINATION_CAN_NOT_ARRAIVE -> {
-                    //   messages=("onError result: $errorCode(avoid timeout, can not arrive) message: $errorString")
-//                    messages = errorString
-                    sendNavigationResult("error", errorCode, errorString, resultMethodName)
-
-                    navigationResult = "NavigationResult:Code=$errorCode,message=$errorString"
-                    LogTools.info("onError result: $errorCode(avoid timeout, can not arrive) message: $errorString")
-                    LogTools.info("onError result: $errorCode(避障超时，目的地不能到达，超时时间通过参数设置) message: $errorString")
-                }
-                Definition.ACTION_RESPONSE_ALREADY_RUN -> {
-                    //   messages=("onError result: $errorCode(already started, please stop first) message: $errorString")
-//                    messages = errorString
-                    sendNavigationResult("error", errorCode, errorString, resultMethodName)
-
-                    navigationResult = "NavigationResult:Code=$errorCode,message=$errorString"
-                    LogTools.info("onError result: $errorCode(当前接口已经调用，请先停止，才能再次调用) message: $errorString")
-                }
-                Definition.ACTION_RESPONSE_REQUEST_RES_ERROR -> {
-                    //  messages=("onError result: $errorCode(wheels are busy for other actions, please stop first) message: $errorString")
-//                    messages = errorString
-                    sendNavigationResult("error", errorCode, errorString, resultMethodName)
-
-                    navigationResult = "NavigationResult:Code=$errorCode,message=$errorString"
-                    LogTools.info("onError result: $errorCode(已经有需要控制底盘的接口调用，请先停止，才能继续调用) message: $errorString")
-                }
-                else -> {
                     sendNavigationResult("success", errorCode, errorString, resultMethodName)
 
                     navigationResult = "NavigationResult:Code=$errorCode,message=$errorString"
-                }
             }
         }
 
