@@ -1095,10 +1095,11 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
         @Throws(RemoteException::class)
         override fun onError(errorCode: Int, errorString: String) {
+
                     sendNavigationResult("success", errorCode, errorString, resultMethodName)
 
                     navigationResult = "NavigationResult:Code=$errorCode,message=$errorString"
-            }
+
         }
 
         @Throws(RemoteException::class)
