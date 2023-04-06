@@ -1325,7 +1325,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
     }
 
     private fun stopFocusFollow() {
-        RobotApi.getInstance().stopFocusFollow(0)
+        RobotApi.getInstance().stopFocusFollow(reqId)
     }
 
     private fun startFocusFollow() {
@@ -1333,7 +1333,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
         if (person != null)
             RobotApi.getInstance()
-                .startFocusFollow(0, person.id, 120, 4F, mFocusListener)
+                .startFocusFollow(reqId++, person.id, 3500, 4F, mFocusListener)
     }
 
     private fun registerPerson(person: Person) {
