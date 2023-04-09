@@ -857,7 +857,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             sendNavigationResult(
                 "success",
                 1,
-                "{\"request\":\"${reqType}\",\"text\":\"${reqText}\",\"reqParam\":\"${reqParam}\"}",
+                reqParam,
                 resultMethodName
             )
 
