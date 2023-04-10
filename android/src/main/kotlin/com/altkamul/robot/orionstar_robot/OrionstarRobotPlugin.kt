@@ -329,6 +329,36 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
         }
 
     }
+    fun sendSpeechResultResult(type: String, status: Int, data: String, methodName: String) {
+
+//        val jsonObject =
+//            JSONObject("{\"type\":\"${type}\",\"status\":\"${status}\",\"data\":\"${data}\"}")
+        val handler = Handler(Looper.getMainLooper())
+        handler.post {
+            channel.invokeMethod(
+                methodName,
+                data.toString(),
+                object : Result {
+                    override fun success(@Nullable result: Any?) {
+                        Log.i("fromInvoke", "success" + result.toString())
+                    }
+
+                    override fun error(
+                        errorCode: String,
+                        @Nullable errorMessage: String?,
+                        @Nullable errorDetails: Any?
+                    ) {
+                        Log.i("fromInvoke", "failed$errorMessage")
+                    }
+
+                    override fun notImplemented() {
+                        Log.i("fromInvoke", "not implemented")
+                    }
+                }
+            )
+        }
+
+    }
 
     private fun stopCruise() {
         RobotApi.getInstance().stopCruise(reqId++)
@@ -855,7 +885,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             val text =
                 "New request:  type is:$reqType text is:$reqText reqParam = $reqParam"
             LogTools.info(text)
-            sendNavigationResult(
+            sendSpeechResultResult(
                 "success",
                 1,
                 reqParam,
