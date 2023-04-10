@@ -1,24 +1,18 @@
-class MethodHandlerResponse {
-  MethodHandlerResponse({
-      this.type, 
-      this.status, 
-      this.data,});
+import 'dart:convert';
 
-  MethodHandlerResponse.fromJson(dynamic json) {
-    type = json['type'];
-    status = json['status'];
-    data = json['data'];
+class RobotStatus {
+  final String type;
+  final int status;
+  final String data;
+
+  RobotStatus({required this.type, required this.status, required this.data});
+
+  factory RobotStatus.fromJson(String jsonString) {
+    final Map<String, dynamic> jsonData = json.decode(jsonString);
+    return RobotStatus(
+      type: jsonData['type'],
+      status: int.parse("${jsonData['status'] ?? 0}"),
+      data: jsonData['data'],
+    );
   }
-  String type;
-  String status;
-  String data;
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['type'] = type;
-    map['status'] = status;
-    map['data'] = data;
-    return map;
-  }
-
 }
