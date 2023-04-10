@@ -300,9 +300,9 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
     }
 
     fun sendNavigationResult(type: String, status: Int, data: String, methodName: String) {
-        val jsonData=JSONObject(data)
+
         val jsonObject =
-            JSONObject("{\"type\":\"${type}\",\"status\":\"${status}\",\"data\":\"${jsonData}\"}")
+            JSONObject("{\"type\":\"${type}\",\"status\":\"${status}\",\"data\":\"${data}\"}")
         val handler = Handler(Looper.getMainLooper())
         handler.post {
             channel.invokeMethod(
