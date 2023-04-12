@@ -901,7 +901,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
         @Throws(RemoteException::class)
         override fun onStatusUpdate(status: Int, data: String) {
-            sendNavigationResult("statusUpdate", status, data, resultMethodName)
+            sendNavigationResult("StatusUpdate", status, data, resultMethodName)
         }
     }
 
@@ -1011,7 +1011,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                                                 extraData: String
                                             ) {
                                                 sendNavigationResult(
-                                                    "success",
+                                                    "StatusUpdate",
                                                     status,
                                                     data,
                                                     resultMethodName
