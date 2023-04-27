@@ -592,6 +592,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 //        route.removeAt(1)
             val sb = java.lang.StringBuilder()
             for (pose in route) {
+                if(pose.name!="Charging Pole"||pose.name!="Charging Point")
                 sb.append(pose.name)
                 sb.append(',')
             }
