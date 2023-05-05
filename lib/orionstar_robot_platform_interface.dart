@@ -67,11 +67,11 @@ abstract class OrionstarRobotPlatform extends PlatformInterface {
     throw UnimplementedError('stopMove() has not been implemented.');
   }
 
-  Future<String?> turnLeft() {
+  Future<String?> turnLeft({required String speed}) {
     throw UnimplementedError('turnLeft() has not been implemented.');
   }
 
-  Future<String?> turnRight() {
+  Future<String?> turnRight({required String speed}) {
     throw UnimplementedError('turnRight() has not been implemented.');
   }
 

@@ -108,12 +108,12 @@ class OrionstarRobot {
     return OrionstarRobotPlatform.instance.stopMove();
   }
 
-  Future<String?> turnLeft() {
-    return OrionstarRobotPlatform.instance.turnLeft();
+  Future<String?> turnLeft({required String speed}) {
+    return OrionstarRobotPlatform.instance.turnLeft(speed:speed);
   }
 
-  Future<String?> turnRight() {
-    return OrionstarRobotPlatform.instance.turnRight();
+  Future<String?> turnRight({required String speed}) {
+    return OrionstarRobotPlatform.instance.turnRight(speed:speed);
   }
 
   Future<String?> mHeadDown() {
