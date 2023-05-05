@@ -222,11 +222,26 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                 result.success("stop Move")
             }
             "turnLeft" -> {
-                RobotApi.getInstance().turnLeft(reqId++, 0.2f, mMotionListener)
+
+                Log.d("call.arguments", "${call.arguments}")
+                if (call.arguments != null) {
+                    RobotApi.getInstance().turnLeft(reqId++, call.arguments.toFloat(), mMotionListener)
+                }else{
+                    RobotApi.getInstance().turnLeft(reqId++, 0.2f, mMotionListener)
+                }
+
+
                 result.success("turn Left")
             }
             "turnRight" -> {
-                RobotApi.getInstance().turnRight(reqId++, 0.2f, mMotionListener)
+
+                Log.d("call.arguments", "${call.arguments}")
+                if (call.arguments != null) {
+                    RobotApi.getInstance().turnRight(reqId++, call.arguments.toFloat(), mMotionListener)
+                }else{
+                    RobotApi.getInstance().turnRight(reqId++, 0.2f, mMotionListener)
+                }
+
                 result.success("turn Right")
             }
             "mHeadUp" -> {
