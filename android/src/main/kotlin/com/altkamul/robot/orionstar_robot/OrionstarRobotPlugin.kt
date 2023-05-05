@@ -225,7 +225,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
                 Log.d("call.arguments", "${call.arguments}")
                 if (call.arguments != null) {
-                    RobotApi.getInstance().turnLeft(reqId++, call.arguments.toFloat(), mMotionListener)
+                    RobotApi.getInstance().turnLeft(reqId++, "${call.arguments}".toFloat(), mMotionListener)
                 }else{
                     RobotApi.getInstance().turnLeft(reqId++, 0.2f, mMotionListener)
                 }
@@ -237,7 +237,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
                 Log.d("call.arguments", "${call.arguments}")
                 if (call.arguments != null) {
-                    RobotApi.getInstance().turnRight(reqId++, call.arguments.toFloat(), mMotionListener)
+                    RobotApi.getInstance().turnRight(reqId++, "${call.arguments}".toFloat(), mMotionListener)
                 }else{
                     RobotApi.getInstance().turnRight(reqId++, 0.2f, mMotionListener)
                 }
@@ -1268,3 +1268,11 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
 
 }
+
+
+/**
+ * Converts this [String] to a [Float] value.
+ *
+ * @throws NumberFormatException if the string is not a valid representation of a float number.
+ */
+fun String.toFloat(): Float = java.lang.Float.parseFloat(this)
