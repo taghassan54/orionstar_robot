@@ -228,7 +228,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                     Log.d("call.arguments", "${call.arguments}")
                     RobotApi.getInstance().turnLeft(reqId++, "${call.arguments}".toFloat(), mMotionListener)
                 }else{
-                    RobotApi.getInstance().turnLeft(reqId++, 0.4f, mMotionListener)
+                    RobotApi.getInstance().turnLeft(reqId++, 1.4f, mMotionListener)
                 }
 
 
@@ -241,7 +241,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                     Log.d("call.arguments", "${call.arguments}")
                     RobotApi.getInstance().turnRight(reqId++, "${call.arguments}".toFloat(), mMotionListener)
                 }else{
-                    RobotApi.getInstance().turnRight(reqId++, 0.4f, mMotionListener)
+                    RobotApi.getInstance().turnRight(reqId++, 1.4f, mMotionListener)
                 }
 
                 result.success("turn Right")
