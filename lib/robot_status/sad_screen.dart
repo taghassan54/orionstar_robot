@@ -3,14 +3,14 @@ import 'package:get/get.dart';
 
 import 'package:video_player/video_player.dart';
 
-class SadScreen extends StatefulWidget {
-  const SadScreen({Key? key}) : super(key: key);
+class RobotSadState extends StatefulWidget {
+  const RobotSadState({Key? key}) : super(key: key);
 
   @override
-  State<SadScreen> createState() => _SadScreenState();
+  State<RobotSadState> createState() => _SadScreenState();
 }
 
-class _SadScreenState extends State<SadScreen> {
+class _SadScreenState extends State<RobotSadState> {
   late VideoPlayerController _controller;
 
   @override

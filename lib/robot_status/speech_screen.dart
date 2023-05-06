@@ -3,14 +3,14 @@ import 'package:get/get.dart';
 
 import 'package:video_player/video_player.dart';
 
-class SpeechScreen extends StatefulWidget {
-  const SpeechScreen({Key? key}) : super(key: key);
+class RobotSpeechState extends StatefulWidget {
+  const RobotSpeechState({Key? key}) : super(key: key);
 
   @override
-  State<SpeechScreen> createState() => _SpeechScreenState();
+  State<RobotSpeechState> createState() => _SpeechScreenState();
 }
 
-class _SpeechScreenState extends State<SpeechScreen> {
+class _SpeechScreenState extends State<RobotSpeechState> {
   late VideoPlayerController _controller;
 
   @override
