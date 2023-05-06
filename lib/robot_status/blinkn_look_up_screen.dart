@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:orionstar_robot/generated/assets.dart';
 
 import 'package:video_player/video_player.dart';
 
@@ -17,7 +16,7 @@ class _BlinknLookUpScreenState extends State<RobotBlinknLookUpState> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset(Assets.videosMiniEmoBlinknlookup);
+    _controller = VideoPlayerController.asset("assets/videos/mini_emo_blinknlookup.mp4");
 
     _controller.addListener(() {
       setState(() {});

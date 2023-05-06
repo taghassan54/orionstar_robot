@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:orionstar_robot/generated/assets.dart';
 
 import 'package:video_player/video_player.dart';
 
@@ -17,7 +16,7 @@ class _SadScreenState extends State<RobotSadState> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset(Assets.videosMiniEmoSad);
+    _controller = VideoPlayerController.asset("assets/videos/sad_video.mp4");
 
     _controller.addListener(() {
       setState(() {});
