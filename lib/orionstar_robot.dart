@@ -176,4 +176,9 @@ class OrionstarRobot {
   Future<String?> enableRecognizable() {
     return OrionstarRobotPlatform.instance.enableRecognizable();
   }
+
+  double convertTextToDuration(String? answerText) {
+    return double.parse("${answerText!=null&&answerText.isNotEmpty? answerText.length/6:0.0}");
+  }
+
 }
