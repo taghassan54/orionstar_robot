@@ -3,14 +3,14 @@ import 'package:get/get.dart';
 
 import 'package:video_player/video_player.dart';
 
-class RobotLookLeftnRightState extends StatefulWidget {
-  const RobotLookLeftnRightState({Key? key}) : super(key: key);
+class RobotLookLeftRightState extends StatefulWidget {
+  const RobotLookLeftRightState({Key? key}) : super(key: key);
 
   @override
-  State<RobotLookLeftnRightState> createState() => _LookLeftnRightScreenState();
+  State<RobotLookLeftRightState> createState() => _LookLeftnRightScreenState();
 }
 
-class _LookLeftnRightScreenState extends State<RobotLookLeftnRightState> {
+class _LookLeftnRightScreenState extends State<RobotLookLeftRightState> {
   late VideoPlayerController _controller;
 
   @override

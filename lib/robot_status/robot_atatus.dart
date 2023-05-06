@@ -13,3 +13,4 @@ class SmileState extends RobotState{}
 class LikingState extends RobotState{}
 class BlinkLookUpState extends RobotState{}
 class TakePhotoState extends RobotState{}
+class LookLeftRightState extends RobotState{}
