@@ -318,7 +318,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
     }
 
-    fun sendNavigationResult(type: String, status: Int, data: String, methodName: String) {
+    fun sendNavigationResult(type: String, status: Int, data: String?, methodName: String) {
 
         try {
             val jsonObject =
@@ -917,17 +917,17 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
         @Throws(RemoteException::class)
         override fun onResult(status: Int, response: String) {
-//            sendNavigationResult("success", status, response, resultMethodName)
+            sendNavigationResult("success", status, response, resultMethodName)
         }
 
         @Throws(RemoteException::class)
-        override fun onError(errorCode: Int, errorString: String) {
-//            sendNavigationResult("error", errorCode, errorString, resultMethodName)
+        override fun onError(errorCode: Int, errorString: String?) {
+            sendNavigationResult("error", errorCode, errorString, resultMethodName)
         }
 
         @Throws(RemoteException::class)
         override fun onStatusUpdate(status: Int, data: String) {
-//            sendNavigationResult("StatusUpdate", status, data, resultMethodName)
+            sendNavigationResult("StatusUpdate", status, data, resultMethodName)
         }
     }
 
