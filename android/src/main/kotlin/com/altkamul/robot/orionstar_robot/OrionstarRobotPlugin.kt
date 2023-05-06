@@ -1156,7 +1156,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             super.onStart()
             LogTools.info("onStart")
             textListenerStatus = ("onStart")
-            sendNavigationResult("success", 1, "onStart", resultMethodName)
+//            sendNavigationResult("success", 1, "onStart", resultMethodName)
 
         }
 
@@ -1164,7 +1164,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             super.onStop()
             LogTools.info("onStop")
             textListenerStatus = ("onStop")
-            sendNavigationResult("success", 1, "onStop", resultMethodName)
+//            sendNavigationResult("success", 1, "onStop", resultMethodName)
 
         }
 
