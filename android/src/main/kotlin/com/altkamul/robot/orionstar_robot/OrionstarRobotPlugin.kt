@@ -226,8 +226,9 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
                 if (call.arguments != null) {
                     Log.d("call.arguments", "${call.arguments}")
-                    RobotApi.getInstance().turnLeft(reqId++, "${call.arguments}".toFloat(), mMotionListener)
-                }else{
+                    RobotApi.getInstance()
+                        .turnLeft(reqId++, "${call.arguments}".toFloat(), mMotionListener)
+                } else {
                     RobotApi.getInstance().turnLeft(reqId++, 1.4f, mMotionListener)
                 }
 
@@ -239,8 +240,9 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
                 if (call.arguments != null) {
                     Log.d("call.arguments", "${call.arguments}")
-                    RobotApi.getInstance().turnRight(reqId++, "${call.arguments}".toFloat(), mMotionListener)
-                }else{
+                    RobotApi.getInstance()
+                        .turnRight(reqId++, "${call.arguments}".toFloat(), mMotionListener)
+                } else {
                     RobotApi.getInstance().turnRight(reqId++, 1.4f, mMotionListener)
                 }
 
@@ -318,38 +320,39 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
     fun sendNavigationResult(type: String, status: Int, data: String, methodName: String) {
 
-   try {
-       val jsonObject =
-           JSONObject("{\"type\":\"${type}\",\"status\":\"${status}\",\"data\":\"${data}\"}")
-       val handler = Handler(Looper.getMainLooper())
-       handler.post {
-           channel.invokeMethod(
-               methodName,
-               jsonObject.toString(),
-               object : Result {
-                   override fun success(@Nullable result: Any?) {
-                       Log.i("fromInvoke", "success" + result.toString())
-                   }
+        try {
+            val jsonObject =
+                JSONObject("{\"type\":\"${type}\",\"status\":\"${status}\",\"data\":\"${data}\"}")
+            val handler = Handler(Looper.getMainLooper())
+            handler.post {
+                channel.invokeMethod(
+                    methodName,
+                    jsonObject.toString(),
+                    object : Result {
+                        override fun success(@Nullable result: Any?) {
+                            Log.i("fromInvoke", "success" + result.toString())
+                        }
 
-                   override fun error(
-                       errorCode: String,
-                       @Nullable errorMessage: String?,
-                       @Nullable errorDetails: Any?
-                   ) {
-                       Log.i("fromInvoke", "failed$errorMessage")
-                   }
+                        override fun error(
+                            errorCode: String,
+                            @Nullable errorMessage: String?,
+                            @Nullable errorDetails: Any?
+                        ) {
+                            Log.i("fromInvoke", "failed$errorMessage")
+                        }
 
-                   override fun notImplemented() {
-                       Log.i("fromInvoke", "not implemented")
-                   }
-               }
-           )
-       }
-   } catch (e: JSONException) {
-       e.printStackTrace()
-   }
+                        override fun notImplemented() {
+                            Log.i("fromInvoke", "not implemented")
+                        }
+                    }
+                )
+            }
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
 
     }
+
     fun sendSpeechResultResult(type: String, status: Int, data: String, methodName: String) {
 
 //        val jsonObject =
@@ -613,8 +616,8 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 //        route.removeAt(1)
             val sb = java.lang.StringBuilder()
             for (pose in route) {
-                if(pose.name!="Charging Pole"||pose.name!="Charging Point")
-                sb.append(pose.name)
+                if (pose.name != "Charging Pole" || pose.name != "Charging Point")
+                    sb.append(pose.name)
                 sb.append(',')
             }
             LogTools.info("Place list:$sb")
@@ -911,19 +914,20 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
     private val mFocusListener: ActionListener = object : ActionListener() {
         val resultMethodName: String = "focusResultEvent"
+
         @Throws(RemoteException::class)
         override fun onResult(status: Int, response: String) {
-            sendNavigationResult("success", status, response, resultMethodName)
+//            sendNavigationResult("success", status, response, resultMethodName)
         }
 
         @Throws(RemoteException::class)
         override fun onError(errorCode: Int, errorString: String) {
-            sendNavigationResult("error", errorCode, errorString, resultMethodName)
+//            sendNavigationResult("error", errorCode, errorString, resultMethodName)
         }
 
         @Throws(RemoteException::class)
         override fun onStatusUpdate(status: Int, data: String) {
-            sendNavigationResult("StatusUpdate", status, data, resultMethodName)
+//            sendNavigationResult("StatusUpdate", status, data, resultMethodName)
         }
     }
 
