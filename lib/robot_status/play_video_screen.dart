@@ -8,31 +8,38 @@ enum RobotVideoType{network,local}
 class RobotPlayVideoState extends StatefulWidget {
   final String videoPath;
   final RobotVideoType robotVideoType;
-  const RobotPlayVideoState({Key? key,required this.videoPath,required this.robotVideoType}) : super(key: key);
+  VideoPlayerController videoController;
+   RobotPlayVideoState({Key? key,required this.videoController ,required this.videoPath,required this.robotVideoType}) : super(key: key);
 
   @override
   State<RobotPlayVideoState> createState() => _RobotPlayVideoStateState();
 }
 
 class _RobotPlayVideoStateState extends State<RobotPlayVideoState> {
-  late VideoPlayerController _controller;
+
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset(widget.videoPath);
 
-    _controller.addListener(() {
+    if (widget.videoController.value.isInitialized) {
+      widget.videoController.pause();
+    }
+
+    widget.videoController = VideoPlayerController.asset(widget.videoPath);
+
+    widget.videoController.addListener(() {
       setState(() {});
     });
-    _controller.setLooping(true);
-    _controller.initialize().then((_) => setState(() {}));
-    _controller.play();
+
+    widget.videoController.setLooping(true);
+    widget.videoController.initialize().then((_) => setState(() {}));
+    widget.videoController.play();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    widget.videoController.dispose();
     super.dispose();
   }
 
@@ -46,7 +53,7 @@ class _RobotPlayVideoStateState extends State<RobotPlayVideoState> {
           onTap: () {
             Get.back();
           },
-          child: VideoPlayer(_controller),
+          child: VideoPlayer(widget.videoController),
         ),
       ),
     );
