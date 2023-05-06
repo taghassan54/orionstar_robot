@@ -666,7 +666,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             }
 
             @Throws(RemoteException::class)
-            override fun onError(errorCode: Int, errorString: String) {
+            override fun onError(errorCode: Int, errorString: String?) {
                 sendNavigationResult("error", errorCode, errorString, resultMethodName)
             }
 
@@ -901,7 +901,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
         }
 
         @Throws(RemoteException::class)
-        override fun onError(errorCode: Int, errorString: String) {
+        override fun onError(errorCode: Int, errorString: String?) {
             sendNavigationResult("error", errorCode, errorString, resultMethodName)
         }
 
@@ -1130,7 +1130,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
         }
 
         @Throws(RemoteException::class)
-        override fun onError(errorCode: Int, errorString: String) {
+        override fun onError(errorCode: Int, errorString: String?) {
             LogTools.info("startCruise onError : $errorCode || $errorString")
             messages = ("startCruise onError : $errorCode || $errorString")
             sendNavigationResult("error", errorCode, errorString, resultMethodName)
