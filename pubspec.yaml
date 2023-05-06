@@ -8,6 +8,8 @@ dependencies:
   plugin_platform_interface: ^2.0.2
   logger: ^1.2.2
   permission_handler: ^10.2.0
+  video_player: ^2.6.1
+  get: ^4.6.5
 dev_dependencies:
   flutter_test: {sdk: flutter}
   flutter_lints: ^2.0.0
@@ -15,5 +17,5 @@ flutter:
   plugin:
     platforms:
       android: {package: com.altkamul.robot.orionstar_robot, pluginClass: OrionstarRobotPlugin}
-  assets: []
+  assets: [    assets/videos/ ]
   fonts: []

@@ -54,10 +54,10 @@ class MockOrionstarRobotPlatform
   Future<String?> stopMove() => Future.value("");
 
   @override
-  Future<String?> turnLeft() => Future.value("");
+  Future<String?> turnLeft({required String speed}) => Future.value("");
 
   @override
-  Future<String?> turnRight() => Future.value("");
+  Future<String?> turnRight({required String speed}) => Future.value("");
 
   @override
   Future<PersonResDataModel?> getPerson() => Future.value(null);
