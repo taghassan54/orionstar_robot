@@ -318,32 +318,36 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
     fun sendNavigationResult(type: String, status: Int, data: String, methodName: String) {
 
-        val jsonObject =
-            JSONObject("{\"type\":\"${type}\",\"status\":\"${status}\",\"data\":\"${data}\"}")
-        val handler = Handler(Looper.getMainLooper())
-        handler.post {
-            channel.invokeMethod(
-                methodName,
-                jsonObject.toString(),
-                object : Result {
-                    override fun success(@Nullable result: Any?) {
-                        Log.i("fromInvoke", "success" + result.toString())
-                    }
+   try {
+       val jsonObject =
+           JSONObject("{\"type\":\"${type}\",\"status\":\"${status}\",\"data\":\"${data}\"}")
+       val handler = Handler(Looper.getMainLooper())
+       handler.post {
+           channel.invokeMethod(
+               methodName,
+               jsonObject.toString(),
+               object : Result {
+                   override fun success(@Nullable result: Any?) {
+                       Log.i("fromInvoke", "success" + result.toString())
+                   }
 
-                    override fun error(
-                        errorCode: String,
-                        @Nullable errorMessage: String?,
-                        @Nullable errorDetails: Any?
-                    ) {
-                        Log.i("fromInvoke", "failed$errorMessage")
-                    }
+                   override fun error(
+                       errorCode: String,
+                       @Nullable errorMessage: String?,
+                       @Nullable errorDetails: Any?
+                   ) {
+                       Log.i("fromInvoke", "failed$errorMessage")
+                   }
 
-                    override fun notImplemented() {
-                        Log.i("fromInvoke", "not implemented")
-                    }
-                }
-            )
-        }
+                   override fun notImplemented() {
+                       Log.i("fromInvoke", "not implemented")
+                   }
+               }
+           )
+       }
+   } catch (e: JSONException) {
+       e.printStackTrace()
+   }
 
     }
     fun sendSpeechResultResult(type: String, status: Int, data: String, methodName: String) {
