@@ -7,10 +7,14 @@ import 'orionstar_robot_platform_interface.dart';
 class OrionstarRobot {
 
   Future<String?> initRobot() async {
-    var status = await Permission.storage.status;
-    if (!status.isGranted) {
-      await Permission.storage.request();
-    }
+try{
+  var status = await Permission.storage.status;
+  if (!status.isGranted) {
+    await Permission.storage.request();
+  }
+}catch(e){
+  rethrow;
+}
     return OrionstarRobotPlatform.instance.checkInit();
   }
 
