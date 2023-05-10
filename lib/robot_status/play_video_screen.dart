@@ -71,9 +71,9 @@ class _RobotPlayVideoStateState extends State<RobotPlayVideoState> {
         height: Get.height,
         child: GestureDetector(
           onTap: () {
-            Get.back();
+            // Get.back();
           },
-          child: VideoPlayer(widget.videoController!),
+          child:widget.videoController!=null? VideoPlayer(widget.videoController!):const Center(child: Text("No Video Controller Found !")),
         ),
       ),
     );
