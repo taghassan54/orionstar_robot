@@ -55,10 +55,9 @@ class _RobotPlayVideoStateState extends State<RobotPlayVideoState> {
 
   @override
   void dispose() {
-    if( widget.videoController!=null)
-    {
-      widget.videoController.dispose();
-    }
+
+      // widget.videoController.dispose();
+    
     super.dispose();
   }
 
