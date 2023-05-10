@@ -8,11 +8,11 @@ enum RobotVideoType { network, local }
 class RobotPlayVideoState extends StatefulWidget {
   final String videoPath;
   final RobotVideoType robotVideoType;
-  VideoPlayerController videoController;
+  VideoPlayerController? videoController;
 
   RobotPlayVideoState(
       {Key? key,
-      required this.videoController,
+      this.videoController,
       required this.videoPath,
       required this.robotVideoType})
       : super(key: key);
@@ -26,8 +26,15 @@ class _RobotPlayVideoStateState extends State<RobotPlayVideoState> {
   void initState() {
     super.initState();
 
-    if (widget.videoController.value.isInitialized) {
-      widget.videoController.pause();
+    if (widget.videoController != null) {
+      if (widget.videoController!.value.isInitialized) {
+        widget.videoController!.pause();
+      }
+    }else{
+      VideoPlayerController? videoPlayerController;
+      setState(() {
+        widget.videoController=videoPlayerController;
+      });
     }
     switch (widget.robotVideoType) {
       case RobotVideoType.network:
@@ -39,18 +46,18 @@ class _RobotPlayVideoStateState extends State<RobotPlayVideoState> {
         break;
     }
 
-    widget.videoController.addListener(() {
+    widget.videoController?.addListener(() {
       setState(() {});
     });
 
-    widget.videoController.setLooping(true);
-    widget.videoController.initialize().then((_) => setState(() {}));
-    widget.videoController.play();
+    widget.videoController?.setLooping(true);
+    widget.videoController?.initialize().then((_) => setState(() {}));
+    widget.videoController?.play();
   }
 
   @override
   void dispose() {
-    widget.videoController.dispose();
+    widget.videoController?.dispose();
     super.dispose();
   }
 
@@ -64,7 +71,7 @@ class _RobotPlayVideoStateState extends State<RobotPlayVideoState> {
           onTap: () {
             Get.back();
           },
-          child: VideoPlayer(widget.videoController),
+          child: VideoPlayer(widget.videoController!),
         ),
       ),
     );
