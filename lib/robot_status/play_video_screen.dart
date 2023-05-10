@@ -8,11 +8,11 @@ enum RobotVideoType { network, local }
 class RobotPlayVideoState extends StatefulWidget {
   final String videoPath;
   final RobotVideoType robotVideoType;
-  VideoPlayerController? videoController;
+  VideoPlayerController videoController;
 
   RobotPlayVideoState(
       {Key? key,
-      this.videoController,
+      required this.videoController,
       required this.videoPath,
       required this.robotVideoType})
       : super(key: key);
@@ -27,15 +27,10 @@ class _RobotPlayVideoStateState extends State<RobotPlayVideoState> {
     super.initState();
 
     if (widget.videoController != null) {
-      if (widget.videoController!.value.isInitialized) {
-        widget.videoController!.pause();
+      if (widget.videoController.value.isInitialized) {
+        widget.videoController.pause();
       }
-    }else{
-      VideoPlayerController? videoPlayerController;
-      setState(() {
-        widget.videoController=videoPlayerController;
-      });
-    }
+
     switch (widget.robotVideoType) {
       case RobotVideoType.network:
         widget.videoController =
@@ -46,20 +41,24 @@ class _RobotPlayVideoStateState extends State<RobotPlayVideoState> {
         break;
     }
 
-    widget.videoController?.addListener(() {
+    widget.videoController.addListener(() {
       if(mounted) {
         setState(() {});
       }
     });
 
-    widget.videoController?.setLooping(true);
-    widget.videoController?.initialize().then((_) => setState(() {}));
-    widget.videoController?.play();
+    widget.videoController.setLooping(true);
+    widget.videoController.initialize().then((_) => setState(() {}));
+    widget.videoController.play();
+    }
   }
 
   @override
   void dispose() {
-    widget.videoController?.dispose();
+    if( widget.videoController!=null)
+    {
+      widget.videoController.dispose();
+    }
     super.dispose();
   }
 
@@ -73,7 +72,7 @@ class _RobotPlayVideoStateState extends State<RobotPlayVideoState> {
           onTap: () {
             // Get.back();
           },
-          child:widget.videoController!=null? VideoPlayer(widget.videoController!):const Center(child: Text("No Video Controller Found !")),
+          child: VideoPlayer(widget.videoController),
         ),
       ),
     );
