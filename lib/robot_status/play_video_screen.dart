@@ -47,7 +47,9 @@ class _RobotPlayVideoStateState extends State<RobotPlayVideoState> {
     }
 
     widget.videoController?.addListener(() {
-      setState(() {});
+      if(mounted) {
+        setState(() {});
+      }
     });
 
     widget.videoController?.setLooping(true);
