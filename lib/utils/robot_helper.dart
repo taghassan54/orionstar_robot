@@ -11,6 +11,10 @@ class RobotHelper {
     return orionStarRobot.initRobot();
   }
 
+  static Future<String?> initRobotApi() {
+    return orionStarRobot.initRobotApi();
+  }
+
   static Future<String?> getPlatformVersion() {
     return orionStarRobot.getPlatformVersion();
   }
