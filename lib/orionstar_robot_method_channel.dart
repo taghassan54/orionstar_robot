@@ -20,6 +20,12 @@ class MethodChannelOrionstarRobot extends OrionstarRobotPlatform {
   }
 
   @override
+  Future<String?> initRobotApi() async {
+    final result = await methodChannel.invokeMethod<String>('initRobotApi');
+    return result;
+  }
+
+  @override
   Future<String?> getPlatformVersion() async {
     final result =
         await methodChannel.invokeMethod<String>('getPlatformVersion');

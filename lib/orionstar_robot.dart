@@ -5,19 +5,21 @@ import 'package:permission_handler/permission_handler.dart';
 import 'orionstar_robot_platform_interface.dart';
 
 class OrionstarRobot {
-
   Future<String?> initRobot() async {
-try{
-  var status = await Permission.storage.status;
-  if (!status.isGranted) {
-    await Permission.storage.request();
-  }
-}catch(e){
-  rethrow;
-}
+    try {
+      var status = await Permission.storage.status;
+      if (!status.isGranted) {
+        await Permission.storage.request();
+      }
+    } catch (e) {
+      rethrow;
+    }
     return OrionstarRobotPlatform.instance.checkInit();
   }
 
+  Future<String?> initRobotApi() {
+    return OrionstarRobotPlatform.instance.initRobotApi();
+  }
   Future<String?> getPlatformVersion() {
     return OrionstarRobotPlatform.instance.getPlatformVersion();
   }
@@ -34,6 +36,7 @@ try{
   Future<String?> startNaviToAutoChargeAction() {
     return OrionstarRobotPlatform.instance.startNaviToAutoChargeAction();
   }
+
   Future<String?> stopChargingByApp() {
     return OrionstarRobotPlatform.instance.stopChargingByApp();
   }
@@ -71,6 +74,7 @@ try{
     return OrionstarRobotPlatform.instance
         .resumeSpecialPlaceTheta(placeName: placeName);
   }
+
   Future<String?> startNavigation({required String placeName}) {
     return OrionstarRobotPlatform.instance
         .startNavigation(placeName: placeName);
@@ -114,11 +118,11 @@ try{
   }
 
   Future<String?> turnLeft({required String speed}) {
-    return OrionstarRobotPlatform.instance.turnLeft(speed:speed);
+    return OrionstarRobotPlatform.instance.turnLeft(speed: speed);
   }
 
   Future<String?> turnRight({required String speed}) {
-    return OrionstarRobotPlatform.instance.turnRight(speed:speed);
+    return OrionstarRobotPlatform.instance.turnRight(speed: speed);
   }
 
   Future<String?> mHeadDown() {
@@ -174,15 +178,17 @@ try{
   Future<String?> stopTTS() {
     return OrionstarRobotPlatform.instance.stopTTS();
   }
+
   Future<String?> disableRecognizable() {
     return OrionstarRobotPlatform.instance.disableRecognizable();
   }
+
   Future<String?> enableRecognizable() {
     return OrionstarRobotPlatform.instance.enableRecognizable();
   }
 
   double convertTextToDuration(String? answerText) {
-    return double.parse("${answerText!=null&&answerText.isNotEmpty? answerText.length/6:0.0}");
+    return double.parse(
+        "${answerText != null && answerText.isNotEmpty ? answerText.length / 6 : 0.0}");
   }
-
 }

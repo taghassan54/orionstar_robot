@@ -66,6 +66,9 @@ class MockOrionstarRobotPlatform
   Future<String?> checkInit() => Future.value("");
 
   @override
+  Future<String?> initRobotApi() => Future.value("");
+
+  @override
   Future<String?> startCruise() => Future.value("");
 
   @override

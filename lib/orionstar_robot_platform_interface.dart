@@ -36,6 +36,10 @@ abstract class OrionstarRobotPlatform extends PlatformInterface {
     throw UnimplementedError('checkInit() has not been implemented.');
   }
 
+  Future<String?> initRobotApi() {
+    throw UnimplementedError('initRobotApi() has not been implemented.');
+  }
+
   Future<String?> getPicture() {
     throw UnimplementedError('getPicture() has not been implemented.');
   }
