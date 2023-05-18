@@ -85,7 +85,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                    checkTimes = 0
 
                    init()
-
+                   initRobotApi()
                    checkInit()
 
                    result.success("Api Connected Service Successfully !")
@@ -450,7 +450,6 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
     private fun initRobotApi() {
 
         try {
-
             RobotApi.getInstance().connectServer(applicationContext, object : ApiListener {
                 override fun handleApiDisabled() {
                     Log.i(TAG, "handleApiDisabled")
