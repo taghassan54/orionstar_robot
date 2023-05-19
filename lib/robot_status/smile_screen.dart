@@ -19,10 +19,12 @@ class _SmileScreenState extends State<RobotSmileState> {
     _controller = VideoPlayerController.asset("assets/videos/mini_emo_smile.mp4");
 
     _controller.addListener(() {
-      setState(() {});
+      if(mounted) {
+        setState(() {});
+      }
     });
     _controller.setLooping(true);
-    _controller.initialize().then((_) => setState(() {}));
+    _controller.initialize().then((_) => mounted ? setState(() {}) : null);
     _controller.play();
   }
 

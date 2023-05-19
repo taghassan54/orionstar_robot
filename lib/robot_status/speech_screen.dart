@@ -19,10 +19,12 @@ class _SpeechScreenState extends State<RobotSpeechState> {
     _controller = VideoPlayerController.asset("assets/videos/welcome_speach.mp4");
 
     _controller.addListener(() {
-      setState(() {});
+      if(mounted) {
+        setState(() {});
+      }
     });
     _controller.setLooping(true);
-    _controller.initialize().then((_) => setState(() {}));
+    _controller.initialize().then((_) => mounted ? setState(() {}) : null);
     _controller.play();
   }
 
