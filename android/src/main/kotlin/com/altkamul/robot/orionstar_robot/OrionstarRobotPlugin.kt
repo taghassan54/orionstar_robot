@@ -784,7 +784,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
         @Throws(RemoteException::class)
         override fun onSpeechParResult(s: String) {
             LogTools.info("$TAG onSpeechParResult:$s")
-            sendSpeechResultResult("onSpeechParResult", 1, asrResult, "onSpeechParResult")
+            sendSpeechResultResult("onSpeechParResult", 1, s, "onSpeechParResult")
         }
 
         @Throws(RemoteException::class)
