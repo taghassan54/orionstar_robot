@@ -483,7 +483,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                     "handleApiDisconnected"
                 )
             }
-        })
+        },applicationContext)
 //        Timer().schedule(timerTask {
 //            try {
 //                RobotApi.getInstance().connectServer(applicationContext, object : ApiListener {

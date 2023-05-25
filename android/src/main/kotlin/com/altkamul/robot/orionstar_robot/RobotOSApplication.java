@@ -58,8 +58,8 @@ public class RobotOSApplication extends Application {
         return mApplication;
     }
 
-    public void initRobotApi(ApiListener apiListener) {
-        RobotApi.getInstance().connectServer(mContext, apiListener);
+    public void initRobotApi(ApiListener apiListener,Context applicationContext) {
+        RobotApi.getInstance().connectServer(applicationContext, apiListener);
     }
 
     private void addApiCallBack() {
