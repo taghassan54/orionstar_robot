@@ -452,79 +452,79 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
     private fun initRobotApi() {
 
-        var robot = RobotOSApplication()
-
-        robot.initRobotApi(object :ApiListener {
-            override fun handleApiDisabled() {
-                Log.i(TAG, "handleApiDisabled")
-            }
-
-            /**
-             * Server connected, set callback to handle message
-             * Server已连接，设置接收请求的回调，包含语音指令、系统事件等
-             *
-             * Start connect RobotOS, init and make it ready to usex
-             * 启动与RobotOS连接，这里可以做一些初始化的工作 例如连接语音,本地服务等
-             */
-            override fun handleApiConnected() {
-                Log.i(
-                    TAG,
-                    "handleApiConnected"
-                )
-                addApiCallBack()
-                initSkillApi()
-            }
-
-            /**
-             * Disconnect RobotOS
-             * 连接已断开
-             */
-            override fun handleApiDisconnected() {
-                Log.i(
-                    TAG,
-                    "handleApiDisconnected"
-                )
-            }
-        },applicationContext)
-
-//        Timer().schedule(timerTask {
-//            try {
-//                RobotApi.getInstance().connectServer(applicationContext, object : ApiListener {
-//                    override fun handleApiDisabled() {
-//                        Log.i(TAG, "handleApiDisabled")
-//                    }
+//        var robot = RobotOSApplication()
 //
-//                    /**
-//                     * Server connected, set callback to handle message
-//                     * Server已连接，设置接收请求的回调，包含语音指令、系统事件等
-//                     *
-//                     * Start connect RobotOS, init and make it ready to usex
-//                     * 启动与RobotOS连接，这里可以做一些初始化的工作 例如连接语音,本地服务等
-//                     */
-//                    override fun handleApiConnected() {
-//                        Log.i(
-//                            TAG,
-//                            "handleApiConnected"
-//                        )
-//                        addApiCallBack()
-//                        initSkillApi()
-//                    }
-//
-//                    /**
-//                     * Disconnect RobotOS
-//                     * 连接已断开
-//                     */
-//                    override fun handleApiDisconnected() {
-//                        Log.i(
-//                            TAG,
-//                            "handleApiDisconnected"
-//                        )
-//                    }
-//                })
-//            }catch (ex:Exception){
-//                LogTools.info(ex.toString());
+//        robot.initRobotApi(object :ApiListener {
+//            override fun handleApiDisabled() {
+//                Log.i(TAG, "handleApiDisabled")
 //            }
-//        }, 2000)
+//
+//            /**
+//             * Server connected, set callback to handle message
+//             * Server已连接，设置接收请求的回调，包含语音指令、系统事件等
+//             *
+//             * Start connect RobotOS, init and make it ready to usex
+//             * 启动与RobotOS连接，这里可以做一些初始化的工作 例如连接语音,本地服务等
+//             */
+//            override fun handleApiConnected() {
+//                Log.i(
+//                    TAG,
+//                    "handleApiConnected"
+//                )
+//                addApiCallBack()
+//                initSkillApi()
+//            }
+//
+//            /**
+//             * Disconnect RobotOS
+//             * 连接已断开
+//             */
+//            override fun handleApiDisconnected() {
+//                Log.i(
+//                    TAG,
+//                    "handleApiDisconnected"
+//                )
+//            }
+//        },applicationContext)
+
+        Timer().schedule(timerTask {
+            try {
+                RobotApi.getInstance().connectServer(applicationContext, object : ApiListener {
+                    override fun handleApiDisabled() {
+                        Log.i(TAG, "handleApiDisabled")
+                    }
+
+                    /**
+                     * Server connected, set callback to handle message
+                     * Server已连接，设置接收请求的回调，包含语音指令、系统事件等
+                     *
+                     * Start connect RobotOS, init and make it ready to usex
+                     * 启动与RobotOS连接，这里可以做一些初始化的工作 例如连接语音,本地服务等
+                     */
+                    override fun handleApiConnected() {
+                        Log.i(
+                            TAG,
+                            "handleApiConnected"
+                        )
+                        addApiCallBack()
+                        initSkillApi()
+                    }
+
+                    /**
+                     * Disconnect RobotOS
+                     * 连接已断开
+                     */
+                    override fun handleApiDisconnected() {
+                        Log.i(
+                            TAG,
+                            "handleApiDisconnected"
+                        )
+                    }
+                })
+            }catch (ex:Exception){
+                LogTools.info(ex.toString());
+            }
+        }, 2000)
 
 
     }
