@@ -28,9 +28,8 @@ import com.ainirobot.coreservice.client.speech.SkillApi;
 
 public class RobotOSApplication extends Application {
 
-    private static final String TAG = RobotOSApplication.class.getName();
-
-    public static void initRobotApi(ApiListener apiListener,Context applicationContext) {
+    public void initRobotApi(ApiListener apiListener,Context applicationContext) {
         RobotApi.getInstance().connectServer(applicationContext, apiListener);
     }
+
 }
