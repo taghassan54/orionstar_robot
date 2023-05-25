@@ -452,7 +452,9 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
     private fun initRobotApi() {
 
-        RobotOSApplication.initRobotApi(object :ApiListener {
+        var robot = RobotOSApplication()
+
+        robot.initRobotApi(object :ApiListener {
             override fun handleApiDisabled() {
                 Log.i(TAG, "handleApiDisabled")
             }
