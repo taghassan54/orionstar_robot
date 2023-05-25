@@ -30,76 +30,7 @@ public class RobotOSApplication extends Application {
 
     private static final String TAG = RobotOSApplication.class.getName();
 
-    private Context mContext;
-    private SkillApi mSkillApi;
-
-    private SpeechCallback mSkillCallback;
-    private HandlerThread mApiCallbackThread;
-    private ModuleCallbackApi mModuleCallback;
-    private static RobotOSApplication mApplication;
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        mContext = this;
-        mApplication = this;
-        init();
-//        initRobotApi();
-    }
-
-    public void init() {
-        mSkillCallback = new SpeechCallback();
-        mModuleCallback = new ModuleCallback();
-        mApiCallbackThread = new HandlerThread("RobotOSDemo");
-        mApiCallbackThread.start();
-    }
-
-    public static RobotOSApplication getInstance() {
-        return mApplication;
-    }
-
-    public void initRobotApi(ApiListener apiListener,Context applicationContext) {
+    public static void initRobotApi(ApiListener apiListener,Context applicationContext) {
         RobotApi.getInstance().connectServer(applicationContext, apiListener);
-    }
-
-    private void addApiCallBack() {
-        Log.d(TAG, "CoreService connected ");
-        RobotApi.getInstance().setCallback(mModuleCallback);
-        RobotApi.getInstance().setResponseThread(mApiCallbackThread);
-    }
-
-    private void initSkillApi() {
-        mSkillApi = new SkillApi();
-        ApiListener apiListener = new ApiListener() {
-            @Override
-            public void handleApiDisabled() {
-            }
-
-            /**
-             * Handle speech service
-             * 语音服务连接成功，注册语音回调
-             */
-            @Override
-            public void handleApiConnected() {
-                mSkillApi.registerCallBack(mSkillCallback);
-            }
-
-            /**
-             * Disconnect speech service
-             * 语音服务已断开
-             */
-            @Override
-            public void handleApiDisconnected() {
-            }
-        };
-        mSkillApi.addApiEventListener(apiListener);
-        mSkillApi.connectApi(mContext);
-    }
-
-    public SkillApi getSkillApi() {
-        if (mSkillApi.isApiConnectedService()) {
-            return mSkillApi;
-        }
-        return null;
     }
 }

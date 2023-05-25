@@ -451,8 +451,8 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
     }
 
     private fun initRobotApi() {
-        val robot=RobotOSApplication.getInstance()
-        robot.initRobotApi(object :ApiListener {
+
+        RobotOSApplication.initRobotApi(object :ApiListener {
             override fun handleApiDisabled() {
                 Log.i(TAG, "handleApiDisabled")
             }
@@ -484,6 +484,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                 )
             }
         },applicationContext)
+
 //        Timer().schedule(timerTask {
 //            try {
 //                RobotApi.getInstance().connectServer(applicationContext, object : ApiListener {
