@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:orionstar_robot/robot_status/play_video_screen.dart';
 
 import 'package:video_player/video_player.dart';
 
@@ -36,17 +37,7 @@ class _SadScreenState extends State<RobotSadState> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SizedBox(
-        width: Get.width,
-        height: Get.height,
-        child: GestureDetector(
-          onTap: () {
-            Get.back();
-          },
-          child: VideoPlayer(_controller),
-        ),
-      ),
-    );
+    return RobotPlayVideoState(videoController: _controller, videoPath: "assets/videos/sad_video.mp4", robotVideoType: RobotVideoType.local);
+
   }
 }

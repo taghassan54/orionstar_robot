@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:orionstar_robot/robot_status/play_video_screen.dart';
 
 import 'package:video_player/video_player.dart';
 
 class RobotLookLeftRightState extends StatefulWidget {
+
   const RobotLookLeftRightState({Key? key}) : super(key: key);
 
   @override
@@ -29,6 +31,8 @@ class _LookLeftnRightScreenState extends State<RobotLookLeftRightState> {
     _controller.play();
   }
 
+
+
   @override
   void dispose() {
     _controller.dispose();
@@ -37,17 +41,6 @@ class _LookLeftnRightScreenState extends State<RobotLookLeftRightState> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SizedBox(
-        width: Get.width,
-        height: Get.height,
-        child: GestureDetector(
-          onTap: () {
-            Get.back();
-          },
-          child: VideoPlayer(_controller),
-        ),
-      ),
-    );
+    return RobotPlayVideoState(videoController: _controller, videoPath: "assets/videos/mini_emo_lookleftnright.mp4", robotVideoType: RobotVideoType.local);
   }
 }
