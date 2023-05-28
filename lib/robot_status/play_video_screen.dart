@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:orionstar_robot/robot_status/state_video_controller/video_controller_logic.dart';
 
 import 'package:video_player/video_player.dart';
 
 enum RobotVideoType { network, local }
 
-class RobotPlayVideoState extends StatelessWidget {
+class RobotPlayVideoState extends GetView<VideoControllerLogic> {
   final String videoPath;
   final RobotVideoType robotVideoType;
   final VideoPlayerController videoController;
@@ -22,7 +23,7 @@ class RobotPlayVideoState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SizedBox(
+      body: GetBuilder<VideoControllerLogic>(builder: (controller) => SizedBox(
         width: Get.width,
         height: Get.height,
         child: GestureDetector(
@@ -31,7 +32,7 @@ class RobotPlayVideoState extends StatelessWidget {
           },
           child: VideoPlayer(videoController),
         ),
-      ),
+      ),)
     );
   }
 }
