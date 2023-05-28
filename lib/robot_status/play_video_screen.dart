@@ -23,7 +23,7 @@ class RobotPlayVideoState extends GetView<VideoControllerLogic> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GetBuilder<VideoControllerLogic>(builder: (controller) => SizedBox(
+      body: SizedBox(
         width: Get.width,
         height: Get.height,
         child: GestureDetector(
@@ -32,7 +32,7 @@ class RobotPlayVideoState extends GetView<VideoControllerLogic> {
           },
           child: VideoPlayer(videoController),
         ),
-      ),)
+      ),
     );
   }
 }
