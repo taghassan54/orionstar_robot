@@ -1204,7 +1204,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
     private fun playText(text: String) {
         if (mSkillApi != null) {
             try{
-                connectApi()
+//                connectApi()
                 LogTools.info("text $text")
                 mSkillApi!!.playText(TTSEntity("sid-1234567890", text), mTextListener)
             }catch (e:Exception){
