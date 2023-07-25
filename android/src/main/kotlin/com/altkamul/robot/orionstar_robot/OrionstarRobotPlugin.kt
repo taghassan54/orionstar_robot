@@ -452,40 +452,6 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
     private fun initRobotApi() {
 
-//        var robot = RobotOSApplication()
-//
-//        robot.initRobotApi(object :ApiListener {
-//            override fun handleApiDisabled() {
-//                Log.i(TAG, "handleApiDisabled")
-//            }
-//
-//            /**
-//             * Server connected, set callback to handle message
-//             * Server已连接，设置接收请求的回调，包含语音指令、系统事件等
-//             *
-//             * Start connect RobotOS, init and make it ready to usex
-//             * 启动与RobotOS连接，这里可以做一些初始化的工作 例如连接语音,本地服务等
-//             */
-//            override fun handleApiConnected() {
-//                Log.i(
-//                    TAG,
-//                    "handleApiConnected"
-//                )
-//                addApiCallBack()
-//                initSkillApi()
-//            }
-//
-//            /**
-//             * Disconnect RobotOS
-//             * 连接已断开
-//             */
-//            override fun handleApiDisconnected() {
-//                Log.i(
-//                    TAG,
-//                    "handleApiDisconnected"
-//                )
-//            }
-//        },applicationContext)
 
         Timer().schedule(timerTask {
             try {
@@ -524,7 +490,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             }catch (ex:Exception){
                 LogTools.info(ex.toString());
             }
-        }, 2000)
+        }, 1000)
 
 
     }
@@ -608,7 +574,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                         val status = json.optString("status")
                         //get photos successfully
                         if (Definition.RESPONSE_OK == status) {
-                            val pictures = json.optJSONArray("pictures")
+                            val pictures = json.optJSONArray("pictures")§
                             if (!TextUtils.isEmpty(pictures.optString(0))) {
                                 //Photo storage local full path
                                 val picturePath = pictures.optString(0)
@@ -1132,7 +1098,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
         if (person != null)
             RobotApi.getInstance()
-                .startFocusFollow(reqId++, person.id, 5000, 2F, mFocusListener)
+                .startFocusFollow(reqId++, person.id, 8000, 1F, mFocusListener)
     }
 
     private fun registerPerson(person: Person) {
