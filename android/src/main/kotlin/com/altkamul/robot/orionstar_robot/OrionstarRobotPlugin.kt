@@ -574,7 +574,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                         val status = json.optString("status")
                         //get photos successfully
                         if (Definition.RESPONSE_OK == status) {
-                            val pictures = json.optJSONArray("pictures")§
+                            val pictures = json.optJSONArray("pictures")
                             if (!TextUtils.isEmpty(pictures.optString(0))) {
                                 //Photo storage local full path
                                 val picturePath = pictures.optString(0)
