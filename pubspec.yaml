@@ -6,7 +6,7 @@ environment: {sdk: '>=2.19.0 <3.0.0', flutter: '>=2.5.0'}
 dependencies:
   flutter: {sdk: flutter}
   plugin_platform_interface: ^2.0.2
-  logger: ^1.2.2
+  logger: ^2.0.1
   permission_handler: ^10.2.0
   video_player: ^2.6.1
   get: ^4.6.5
