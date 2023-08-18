@@ -157,6 +157,32 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
                 result.success("play Text success")
             }
+            "setRecognizeModeContinue" -> {
+
+                setRecognizeModeContinue()
+
+                result.success("set Recognize Mode Continue success")
+            }
+            "setRecognizeModeSingle" -> {
+
+                setRecognizeModeSingle()
+
+                result.success("set Recognize Mode Single success")
+            }
+
+            "setRecognizableTrue"->{
+
+                setRecognizableTrue()
+
+                result.success("set Recognize True success")
+            }
+            "setRecognizableFalse"->{
+
+                setRecognizableFalse()
+
+                result.success("set Recognize False success")
+            }
+
             "getPerson" -> {
                 val person = PersonApi.getInstance().focusPerson
                 result.success("$person")
@@ -724,8 +750,10 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                 RobotApi.getInstance().startNavigation(
                     0,
                     placeName,
-                    1.5,
+                    1.0,
                     (10 * 1000).toLong(),
+//                    2.0,
+//                    2.0,
                     mNavigationListener
                 )
             } catch (ex: Exception) {
@@ -1177,13 +1205,57 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
         }
     }
 
+    private  fun setRecognizeModeContinue(){
+
+        if (mSkillApi != null) {
+            try{
+                mSkillApi!!.setRecognizeMode(true);
+            }catch (e:Exception){
+                LogTools.info("set Recognize Mode Error $e")
+            }
+        }
+    }
+
+    private  fun setRecognizeModeSingle(){
+
+        if (mSkillApi != null) {
+            try{
+                mSkillApi!!.setRecognizeMode(false)
+            }catch (e:Exception){
+                LogTools.info("set Recognize Mode Error $e")
+            }
+        }
+    }
+
+    private  fun setRecognizableTrue(){
+
+        if (mSkillApi != null) {
+            try{
+                mSkillApi!!.setRecognizable(true)
+            }catch (e:Exception){
+                LogTools.info("set Recognize Mode Error $e")
+            }
+        }
+    }
+    private  fun setRecognizableFalse(){
+
+        if (mSkillApi != null) {
+            try{
+                mSkillApi!!.setRecognizable(false)
+            }catch (e:Exception){
+                LogTools.info("set Recognize Mode Error $e")
+            }
+        }
+    }
+
+
     private val mTextListener: TextListener = object : TextListener() {
         val resultMethodName: String = "textListenerResultEvent"
         override fun onStart() {
             super.onStart()
             LogTools.info("onStart")
             textListenerStatus = ("onStart")
-//            sendNavigationResult("success", 1, "onStart", resultMethodName)
+            sendNavigationResult("success", 1, "onStart", resultMethodName)
 
         }
 
@@ -1191,7 +1263,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             super.onStop()
             LogTools.info("onStop")
             textListenerStatus = ("onStop")
-//            sendNavigationResult("success", 1, "onStop", resultMethodName)
+            sendNavigationResult("success", 1, "onStop", resultMethodName)
 
         }
 
@@ -1204,7 +1276,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             super.onError()
             LogTools.info("onError")
             textListenerStatus = ("onError")
-//            sendNavigationResult("success", 0, "onError", resultMethodName)
+            sendNavigationResult("success", 0, "onError", resultMethodName)
 
         }
     }
