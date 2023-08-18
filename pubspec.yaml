@@ -17,5 +17,5 @@ flutter:
   plugin:
     platforms:
       android: {package: com.altkamul.robot.orionstar_robot, pluginClass: OrionstarRobotPlugin}
-  assets: [  assets/videos/ ]
+  assets: [   ]
   fonts: []

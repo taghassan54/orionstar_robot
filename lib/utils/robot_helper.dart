@@ -163,4 +163,16 @@ class RobotHelper {
   static convertTextToDuration(String? answerText){
     return orionStarRobot.convertTextToDuration(answerText);
   }
+
+  void notPoseEstimate() {
+    orionStarRobot.playText(
+        textToPlay:
+        " push me to the charging pool first ,and try again please");
+  }
+
+  void destinationNotExist() {
+    orionStarRobot.playText(
+        textToPlay: "sorry your Destination not exist ,try again please");
+  }
+
 }
