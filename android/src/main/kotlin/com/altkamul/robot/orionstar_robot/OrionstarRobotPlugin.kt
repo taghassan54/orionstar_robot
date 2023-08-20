@@ -359,6 +359,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
     fun sendNavigationResult(type: String, status: Int, data: String?, methodName: String) {
 
         try {
+            Log.i("NavigationResult","{\"type\":\"${type}\",\"status\":\"${status}\",\"data\":\"${data}\"}")
             val jsonObject =
                 JSONObject("{\"type\":\"${type}\",\"status\":\"${status}\",\"data\":\"${data}\"}")
             val handler = Handler(Looper.getMainLooper())
@@ -387,6 +388,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             }
         } catch (e: JSONException) {
             e.printStackTrace()
+            Log.e("NavigationResultError",e.message.toString())
         }
 
     }
