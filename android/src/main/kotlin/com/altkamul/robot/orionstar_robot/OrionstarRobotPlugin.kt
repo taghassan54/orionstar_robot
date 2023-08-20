@@ -27,7 +27,6 @@ import com.ainirobot.coreservice.client.robotsetting.RobotSettingApi
 import com.ainirobot.coreservice.client.speech.SkillApi
 import com.ainirobot.coreservice.client.speech.SkillCallback
 import com.ainirobot.coreservice.client.speech.entity.TTSEntity
-import com.altkamul.robot.orionstar_robot.application.RobotOSApplication
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -35,6 +34,9 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import org.json.JSONException
 import org.json.JSONObject
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.concurrent.timerTask
 
 
 /** OrionstarRobotPlugin */
@@ -82,17 +84,17 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
         when (call.method) {
 
             "checkInit" -> {
-               try {
-                   checkTimes = 0
+                try {
+                    checkTimes = 0
 
-                   init()
-                   initRobotApi()
-                   checkInit()
+                    init()
+                    initRobotApi()
+                    checkInit()
 
-                   result.success("Api Connected Service Successfully !")
-               }catch (ex:Exception){
-                   result.success(ex.toString());
-               }
+                    result.success("Api Connected Service Successfully !")
+                }catch (ex:Exception){
+                    result.success(ex.toString());
+                }
             }
             "initRobotApi" -> {
                 initRobotApi()
@@ -157,32 +159,6 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
                 result.success("play Text success")
             }
-            "setRecognizeModeContinue" -> {
-
-                setRecognizeModeContinue()
-
-                result.success("set Recognize Mode Continue success")
-            }
-            "setRecognizeModeSingle" -> {
-
-                setRecognizeModeSingle()
-
-                result.success("set Recognize Mode Single success")
-            }
-
-            "setRecognizableTrue"->{
-
-                setRecognizableTrue()
-
-                result.success("set Recognize True success")
-            }
-            "setRecognizableFalse"->{
-
-                setRecognizableFalse()
-
-                result.success("set Recognize False success")
-            }
-
             "getPerson" -> {
                 val person = PersonApi.getInstance().focusPerson
                 result.success("$person")
@@ -359,7 +335,6 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
     fun sendNavigationResult(type: String, status: Int, data: String?, methodName: String) {
 
         try {
-            Log.i("NavigationResult","{\"type\":\"${type}\",\"status\":\"${status}\",\"data\":\"${data}\"}")
             val jsonObject =
                 JSONObject("{\"type\":\"${type}\",\"status\":\"${status}\",\"data\":\"${data}\"}")
             val handler = Handler(Looper.getMainLooper())
@@ -388,7 +363,6 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             }
         } catch (e: JSONException) {
             e.printStackTrace()
-            Log.e("NavigationResultError",e.message.toString())
         }
 
     }
@@ -477,46 +451,46 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
     }
 
     private fun initRobotApi() {
-        val mContext: Context? = applicationContext
-        RobotOSApplication.getInstance().initRobotApi()
-//
-//            try {
-//                RobotApi.getInstance().connectServer(applicationContext, object : ApiListener {
-//                    override fun handleApiDisabled() {
-//                        Log.i(TAG, "handleApiDisabled")
-//                    }
-//
-//                    /**
-//                     * Server connected, set callback to handle message
-//                     * Server已连接，设置接收请求的回调，包含语音指令、系统事件等
-//                     *
-//                     * Start connect RobotOS, init and make it ready to usex
-//                     * 启动与RobotOS连接，这里可以做一些初始化的工作 例如连接语音,本地服务等
-//                     */
-//                    override fun handleApiConnected() {
-//                        Log.i(
-//                            TAG,
-//                            "handleApiConnected"
-//                        )
-//                        addApiCallBack()
-//                        initSkillApi()
-//                    }
-//
-//                    /**
-//                     * Disconnect RobotOS
-//                     * 连接已断开
-//                     */
-//                    override fun handleApiDisconnected() {
-//                        Log.i(
-//                            TAG,
-//                            "handleApiDisconnected"
-//                        )
-//                    }
-//                })
-//            }catch (ex:Exception){
-//                LogTools.info(ex.toString());
-//            }
-//
+
+
+        Timer().schedule(timerTask {
+            try {
+                RobotApi.getInstance().connectServer(applicationContext, object : ApiListener {
+                    override fun handleApiDisabled() {
+                        Log.i(TAG, "handleApiDisabled")
+                    }
+
+                    /**
+                     * Server connected, set callback to handle message
+                     * Server已连接，设置接收请求的回调，包含语音指令、系统事件等
+                     *
+                     * Start connect RobotOS, init and make it ready to usex
+                     * 启动与RobotOS连接，这里可以做一些初始化的工作 例如连接语音,本地服务等
+                     */
+                    override fun handleApiConnected() {
+                        Log.i(
+                            TAG,
+                            "handleApiConnected"
+                        )
+                        addApiCallBack()
+                        initSkillApi()
+                    }
+
+                    /**
+                     * Disconnect RobotOS
+                     * 连接已断开
+                     */
+                    override fun handleApiDisconnected() {
+                        Log.i(
+                            TAG,
+                            "handleApiDisconnected"
+                        )
+                    }
+                })
+            }catch (ex:Exception){
+                LogTools.info(ex.toString());
+            }
+        }, 1000)
 
 
     }
@@ -752,10 +726,8 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                 RobotApi.getInstance().startNavigation(
                     0,
                     placeName,
-                    1.0,
+                    1.5,
                     (10 * 1000).toLong(),
-//                    2.0,
-//                    2.0,
                     mNavigationListener
                 )
             } catch (ex: Exception) {
@@ -1206,50 +1178,6 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             }
         }
     }
-
-    private  fun setRecognizeModeContinue(){
-
-        if (mSkillApi != null) {
-            try{
-                mSkillApi!!.setRecognizeMode(true);
-            }catch (e:Exception){
-                LogTools.info("set Recognize Mode Error $e")
-            }
-        }
-    }
-
-    private  fun setRecognizeModeSingle(){
-
-        if (mSkillApi != null) {
-            try{
-                mSkillApi!!.setRecognizeMode(false)
-            }catch (e:Exception){
-                LogTools.info("set Recognize Mode Error $e")
-            }
-        }
-    }
-
-    private  fun setRecognizableTrue(){
-
-        if (mSkillApi != null) {
-            try{
-                mSkillApi!!.setRecognizable(true)
-            }catch (e:Exception){
-                LogTools.info("set Recognize Mode Error $e")
-            }
-        }
-    }
-    private  fun setRecognizableFalse(){
-
-        if (mSkillApi != null) {
-            try{
-                mSkillApi!!.setRecognizable(false)
-            }catch (e:Exception){
-                LogTools.info("set Recognize Mode Error $e")
-            }
-        }
-    }
-
 
     private val mTextListener: TextListener = object : TextListener() {
         val resultMethodName: String = "textListenerResultEvent"
