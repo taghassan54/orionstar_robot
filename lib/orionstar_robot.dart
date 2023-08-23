@@ -110,7 +110,7 @@ class OrionstarRobot {
   }
 
   Future<int?> register() {
-    return OrionstarRobotPlatform.instance.findPeople();
+    return OrionstarRobotPlatform.instance.register();
   }
 
   Future<String?> stopMove() {
