@@ -14,4 +14,6 @@ class LoggerHelper {
   static error(String message) => logger.e(message);
 
   static wtf(String message) => logger.wtf(message);
+
+  static infoStars(String message) => logger.i("******************************** $message********************************");
 }
