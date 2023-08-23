@@ -1035,7 +1035,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                                                     val json = JSONObject(message)
                                                     val info = json.getJSONObject("data")
                                                         .getJSONObject("people")
-                                                    Log.d("info",info)
+                                                    Log.d("info",info.toString())
                                                     if (!info.has("user_id") && StringUtil.isNullOrEmpty(info.getString("user_id"))) {
                                                         LogTools.info(
                                                             "Person Unregister | gender:" + info.getString(
