@@ -97,7 +97,7 @@ class RobotHelper {
   }
 
   static Future<int?> register() {
-    return orionStarRobot.findPeople();
+    return orionStarRobot.register();
   }
 
   static Future<String?> stopMove() {
