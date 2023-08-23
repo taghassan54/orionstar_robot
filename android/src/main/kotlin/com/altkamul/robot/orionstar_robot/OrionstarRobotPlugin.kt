@@ -188,7 +188,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             "register" -> {
                 action = REGISTER
                 registerPersonListener()
-                result.success("register success")
+                result.success(1)
             }
             "isRobotInLocation" -> {
                 var isInLocation = false
