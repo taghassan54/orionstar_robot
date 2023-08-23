@@ -566,30 +566,37 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
     }
 
     private fun getPictureById() {
-        RobotApi.getInstance()
-            .getPictureById(reqId, reqId++, 10, object : CommandListener() {
-                override fun onResult(result: Int, message: String) {
-                    try {
-                        val json = JSONObject(message)
-                        val status = json.optString("status")
-                        //get photos successfully
-                        if (Definition.RESPONSE_OK == status) {
-                            val pictures = json.optJSONArray("pictures")
-                            if (!TextUtils.isEmpty(pictures.optString(0))) {
-                                //Photo storage local full path
-                                val picturePath = pictures.optString(0)
-                                picture = picturePath
+        val person = PersonApi.getInstance().focusPerson
+        if(person!=null)
+        {
+            RobotApi.getInstance()
+                .getPictureById(reqId, person.id, 10, object : CommandListener() {
+                    override fun onResult(result: Int, message: String) {
+                        try {
+                            val json = JSONObject(message)
+                            val status = json.optString("status")
+                            //get photos successfully
+                            if (Definition.RESPONSE_OK == status) {
+                                val pictures = json.optJSONArray("pictures")
+                                if (!TextUtils.isEmpty(pictures.optString(0))) {
+                                    //Photo storage local full path
+                                    val picturePath = pictures.optString(0)
+                                    Log.d("getPictureById",picturePath)
+                                    picture = picturePath
+                                }
                             }
+                        } catch (e: JSONException) {
+                            e.printStackTrace()
+                            picture=e.message
+                        } catch (e: java.lang.NullPointerException) {
+                            e.printStackTrace()
+                            picture=e.message
                         }
-                    } catch (e: JSONException) {
-                        e.printStackTrace()
-                        picture=e.message
-                    } catch (e: java.lang.NullPointerException) {
-                        e.printStackTrace()
-                        picture=e.message
                     }
-                }
-            })
+                })
+        }else{
+            picture ="noPersonFound";
+        }
     }
 
     private fun setLocation(placeName: String) {
