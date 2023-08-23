@@ -429,10 +429,10 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
 
     private fun registerById() {
         val person = PersonApi.getInstance().focusPerson
-        person.id=1000
-        person.name="tajEldeen"
-        person.age=27
-        person.isStaff=true
+//        person.id=1000
+//        person.name="tajEldeen"
+//        person.age=27
+//        person.isStaff=true
         if (person != null) {
             PersonApi.getInstance()
                 .registerById(person.id, "register By Id", object : CommandListener() {
