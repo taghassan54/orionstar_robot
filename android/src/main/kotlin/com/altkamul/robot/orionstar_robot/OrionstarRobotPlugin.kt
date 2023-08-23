@@ -583,8 +583,10 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                         }
                     } catch (e: JSONException) {
                         e.printStackTrace()
+                        picture=e.message
                     } catch (e: java.lang.NullPointerException) {
                         e.printStackTrace()
+                        picture=e.message
                     }
                 }
             })
