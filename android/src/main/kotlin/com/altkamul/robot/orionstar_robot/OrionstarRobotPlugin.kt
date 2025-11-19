@@ -188,7 +188,7 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
             "register" -> {
                 action = REGISTER
                 registerPersonListener()
-                result.success("register success")
+                result.success(1)
             }
             "isRobotInLocation" -> {
                 var isInLocation = false
@@ -1035,7 +1035,14 @@ class OrionstarRobotPlugin : FlutterPlugin, MethodCallHandler {
                                                     val json = JSONObject(message)
                                                     val info = json.getJSONObject("data")
                                                         .getJSONObject("people")
-                                                    if (StringUtil.isNullOrEmpty(info.getString("user_id"))) {
+                                                    Log.d("info",info.toString())
+
+                                                    if (action === REGISTER) {
+                                                        registerPerson(person)
+                                                        return
+                                                    }
+
+                                                    if ( !info.has("user_id") && StringUtil.isNullOrEmpty(info.getString("user_id"))) {
                                                         LogTools.info(
                                                             "Person Unregister | gender:" + info.getString(
                                                                 "gender"
